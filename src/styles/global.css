@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+    --font-titan: 'Titan One', cursive;
+    --font-tuffy: 'Tuffy', sans-serif;
+
+    --bordeaux: #490600;
+    --white: #fcd4b4;
+    --yellow: #e99f22;
+    --beige: #f8bd68;
+    --marron: #793008;
+    --mocha: #a07541;
+    --orange: #d57c04;
+    --paprika: #da4b05;
+    --white-bk: #f6e3d4;
+}

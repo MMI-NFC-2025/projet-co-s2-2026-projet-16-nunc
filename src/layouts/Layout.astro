@@ -1,3 +1,9 @@
+---
+import '../styles/global.css';
+import '@fontsource/tuffy';
+import '@fontsource/titan-one';
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -7,16 +13,7 @@
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro Basics</title>
 	</head>
-	<body>
+	<body class="bg-white-bk font-tuffy">
 		<slot />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
