@@ -4,13 +4,15 @@
     --font-titan: 'Titan One', cursive;
     --font-tuffy: 'Tuffy', sans-serif;
 
-    --bordeaux: #490600;
-    --white: #fcd4b4;
-    --yellow: #e99f22;
-    --beige: #f8bd68;
-    --marron: #793008;
-    --mocha: #a07541;
-    --orange: #d57c04;
-    --paprika: #da4b05;
-    --white-bk: #f6e3d4;
+    --text-40: 2.5rem;
+    
+    --color-bordeaux-c: #490600;
+    --color-white-c: #fcd4b4;
+    --color-yellow-c: #e99f22;
+    --color-beige-c: #f8bd68;
+    --color-marron-c: #793008;
+    --color-mocha-c: #a07541;
+    --color-orange-c: #d57c04;
+    --color-paprika-c: #da4b05;
+    --color-white-bk: #f6e3d4;
 }
