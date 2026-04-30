@@ -1,0 +1,47 @@
+---
+import Home from '../assets/home.svg';
+import Carte from '../assets/carte.svg';
+import Sortie from '../assets/sortie.svg';
+import Profil from '../assets/profil.svg';
+
+const path = Astro.url.pathname;
+
+const isHome = path === '/';
+const isCarte = path.startsWith('/carte');
+const isSortie = path.startsWith('/sortie');
+const isProfil = path.startsWith('/profil');
+---
+
+<nav class="fixed bottom-0 left-0 w-full bg-white-c border-t border-yellow-c z-50">
+  <ul class="grid grid-cols-4 py-3">
+
+    <li>
+      <a href="/" class={`flex flex-col items-center ${isHome ? 'text-paprika-c' : 'text-marron-c'}`}>
+        <Home class="w-8 h-8" />
+        <span class="text-xs font-bold">Accueil</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="/carte" class={`flex flex-col items-center ${isCarte ? 'text-paprika-c' : 'text-marron-c'}`}>
+        <Carte class="w-8 h-8" />
+        <span class="text-xs font-bold">Carte</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="/sortie" class={`flex flex-col items-center ${isSortie ? 'text-paprika-c' : 'text-marron-c'}`}>
+        <Sortie class="w-8 h-8" />
+        <span class="text-xs font-bold">Sortie</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="/profil" class={`flex flex-col items-center ${isProfil ? 'text-paprika-c' : 'text-marron-c'}`}>
+        <Profil class="w-8 h-8" />
+        <span class="text-xs font-bold">Profil</span>
+      </a>
+    </li>
+
+  </ul>
+</nav>

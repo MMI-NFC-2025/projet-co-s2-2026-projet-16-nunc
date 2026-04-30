@@ -1,0 +1,137 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Inscription">
+    <main class="flex items-center justify-center px-6 py-10">
+        <div class="w-full max-w-2xl">
+            <div class="mb-10 rounded-3xl bg-white-c px-5 py-5">
+                <h1 class="text-xl font-titan text-paprika-c">
+                    Inscris-toi !
+                </h1>
+            </div>
+
+            <form id="form-register" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6 text-sm">
+
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <label>
+                        <span class="block mb-2">Nom</span>
+                        <input id="nom" name="nom" type="text" required class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 outline-none focus:border-paprika-c" />
+                    </label>
+
+                    <label>
+                        <span class="block mb-2">Prénom</span>
+                        <input id="prenom" name="prenom" type="text" required class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 outline-none focus:border-paprika-c" />
+                    </label>
+                </div>
+
+                <label>
+                    <span class="block mb-2">Pseudonyme</span>
+                    <input id="username" name="username" type="text" required placeholder="Ex: Nunc_participant023" class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c" />
+                </label>
+
+                <label>
+                    <span class="block mb-2">Email</span>
+                    <input id="email" name="email" type="email" required placeholder="Ex : Nunc@participant.fr" class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c" />
+                </label>
+
+                <label>
+                    <span class="block mb-2">Mot de passe</span>
+
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        minlength="8"
+                        maxlength="20"
+                        placeholder="Max 20 caractères"
+                        class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                    />
+
+                    <p class="text-xs mt-2 text-mocha-c">
+                        Le mot de passe doit contenir au moins 8 caractères.
+                    </p>
+                </label>
+
+                <div id="retour-register" class="hidden text-sm font-semibold px-4 py-3 rounded-xl"></div>
+
+                <button
+                    type="submit"
+                    id="btn-register"
+                    class="w-full mt-4 rounded-full bg-paprika-c py-4 text-lg font-bold text-white hover:bg-orange-700 transition"
+                >
+                    Me connecter
+                </button>
+            </form>
+
+            <p class="mt-6 text-center text-marron-c">
+                <a href="/connexion" class="underline">J’ai déjà un compte</a>
+            </p>
+        </div>
+    </main>
+</Layout>
+
+<script>
+    import pb from "../../backend/backend.mjs";
+
+    const form = document.getElementById("form-register");
+    const retour = document.getElementById("retour-register");
+    const btn = document.getElementById("btn-register");
+
+    function showRetour(ok, msg) {
+        retour.textContent = msg;
+        retour.className = ok
+            ? "text-sm font-semibold px-4 py-3 rounded-xl bg-green-100 text-green-700"
+            : "text-sm font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700";
+
+        retour.classList.remove("hidden");
+    }
+
+    if (pb.authStore.isValid) {
+        window.location.href = "/";
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const fd = new FormData(form);
+
+        const nom = fd.get("nom");
+        const prenom = fd.get("prenom");
+        const username = fd.get("username");
+        const email = fd.get("email");
+        const password = fd.get("password");
+
+        btn.disabled = true;
+        btn.textContent = "Création...";
+
+        try {
+            await pb.collection("users").create({
+                email: email,
+                password: password,
+                passwordConfirm: password,
+                username: username,
+                nom: nom,
+                prenom: prenom
+            });
+
+            await pb.collection("users").authWithPassword(email, password);
+
+            showRetour(true, "Compte créé. Redirection...");
+
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 800);
+
+        } catch (err) {
+            console.error(err);
+            console.error(err?.data);
+
+            showRetour(false, err?.data?.message || "Erreur lors de l'inscription.");
+
+            btn.disabled = false;
+            btn.textContent = "Me connecter";
+        }
+    });
+</script>

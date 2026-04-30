@@ -5,6 +5,7 @@ import '@fontsource/titan-one';
 
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Menu from "../components/Menu.astro";
 
 const { title, description } = Astro.props;
 ---
@@ -24,5 +25,6 @@ const { title, description } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <Menu />
   </body>
 </html>

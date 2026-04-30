@@ -1,0 +1,115 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Connexion">
+    <main class="flex items-center justify-center px-6 py-10">
+        <section class="w-full max-w-xl">
+            <div class="mb-10 rounded-3xl bg-white-c px-5 py-5">
+                <h1 class="text-xl font-titan text-paprika-c">
+                    Connecte-toi !
+                </h1>
+            </div>
+
+            <form id="form-login" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6 text-sm">
+
+                <label>
+                    <span class="block mb-2">
+                        Email ou pseudo
+                    </span>
+                    <input
+                        id="identity"
+                        name="identity"
+                        type="text"
+                        required
+                        placeholder="Email ou pseudo"
+                        class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                    />
+                </label>
+
+                <label>
+                    <span class="block mb-2">
+                        Mot de passe
+                    </span>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                    />
+                </label>
+
+                <div id="retour-login" class="hidden text-sm font-semibold px-4 py-3 rounded-xl"></div>
+
+                <button
+                    type="submit"
+                    id="btn-login"
+                    class="w-full mt-4 rounded-full bg-paprika-c py-4 text-lg font-bold text-white hover:bg-orange-700 transition"
+                >
+                    Se connecter
+                </button>
+
+            </form>
+
+            <p class="mt-6 text-center text-marron-c">
+                Pas encore de compte ?
+                <a href="/inscription" class="underline">
+                    Inscris-toi
+                </a>
+            </p>
+        </section>
+    </main>
+</Layout>
+
+<script>
+    import pb from "../../backend/backend.mjs";
+
+    const form = document.getElementById("form-login");
+    const retour = document.getElementById("retour-login");
+    const btn = document.getElementById("btn-login");
+
+    function showRetour(ok, msg) {
+        retour.textContent = msg;
+        retour.className = ok
+            ? "text-sm font-semibold px-4 py-3 rounded-xl bg-green-100 text-green-700"
+            : "text-sm font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700";
+
+        retour.classList.remove("hidden");
+    }
+
+    if (pb.authStore.isValid) {
+        window.location.href = "/";
+    }
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const identity = document.getElementById("identity").value;
+        const password = document.getElementById("password").value;
+
+        btn.disabled = true;
+        btn.textContent = "Connexion...";
+
+        try {
+            // détection simple
+            const loginField = identity.includes("@") ? "email" : "username";
+
+            await pb.collection("users").authWithPassword(identity, password);
+
+            showRetour(true, "Connexion réussie. Redirection...");
+
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 800);
+
+        } catch (err) {
+            console.error(err);
+
+            showRetour(false, "Identifiants incorrects");
+
+            btn.disabled = false;
+            btn.textContent = "Se connecter";
+        }
+    });
+</script>
