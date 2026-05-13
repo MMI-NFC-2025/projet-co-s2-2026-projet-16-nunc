@@ -3,12 +3,18 @@ import Layout from '../layouts/Layout.astro';
 import Fleche from '../assets/fleche.svg';
 import Flechegauche from '../assets/fleche-gauche.svg';
 import Flechedroite from '../assets/fleche-droite.svg';
+import Mail from '../assets/mail.svg';
+import Telephone from '../assets/telephone.svg';
+import Localisation from '../assets/carte.svg';
+import Instagram from '../assets/instagram.svg';
+import Tiktok from '../assets/tiktok.svg';
+import Facebook from '../assets/facebook.svg';
+
 import { Image } from 'astro:assets';
 ---
 
 <Layout title="Contact">
     <main class="px-8 py-10">
-
         <a
             href="/"
             class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
@@ -23,7 +29,6 @@ import { Image } from 'astro:assets';
         </a>
 
         <section class="mt-16">
-
             <h2 class="text-paprika-c">
                 Contactez-nous
             </h2>
@@ -32,11 +37,9 @@ import { Image } from 'astro:assets';
                 Une question, une suggestion ou besoin d'aide ? N'hésitez pas à nous contacter.
                 Notre équipe vous répondra dans les plus brefs délais.
             </p>
-
         </section>
 
         <section class="mt-16 rounded-lg border border-mocha-c bg-white-c px-6 py-8">
-
             <form
                 id="contact-form"
                 class="flex flex-col gap-8"
@@ -114,13 +117,101 @@ import { Image } from 'astro:assets';
                         alt=""
                         class="w-10 h-10"
                     />
-
                 </button>
-
             </form>
-
         </section>
 
+        <section class="mt-16 flex flex-col gap-12">
+            <article class="rounded-2xl bg-white-c px-8 py-6 flex gap-6 items-start">
+
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-c">
+                    <Image
+                        src={Mail}
+                        alt=""
+                        class="w-6 h-6"
+                    />
+                </div>
+
+                <div>
+                    <p>Email</p>
+
+                    <small class="mt-4 text-marron-c leading-relaxed">
+                        contact@nunc.app<br />
+                        support@nunc.app
+                    </small>
+                </div>
+            </article>
+
+            <article class="rounded-2xl bg-white-c px-8 py-6 flex gap-6 items-start">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-c">
+                    <Image
+                        src={Telephone}
+                        alt=""
+                        class="w-6 h-6"
+                    />
+                </div>
+
+                <div>
+    <p>Téléphone</p>
+
+    <small class="mt-4 block leading-relaxed text-marron-c">
+        +33 1 23 45 67 89
+    </small>
+
+    <small class="mt-2 block text-marron-c">
+        Du lundi au vendredi, 9h - 18h
+    </small>
+</div>
+            </article>
+
+            <article class="rounded-2xl bg-white-c px-8 py-6 flex gap-6 items-start">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-c">
+                    <Localisation class="w-6 h-6 text-white" />
+                </div>
+
+                <div>
+                    <p>Adresse</p>
+
+                    <small class="mt-4 text-marron-c leading-relaxed">
+                        123 Avenue des Champs-Élysées<br />
+                        75008 Paris, France
+                    </small>
+                </div>
+            </article>
+        </section>
+
+        <section class="mt-28 rounded-2xl bg-yellow-c px-8 py-12 text-center">
+            <h3 class="text-bordeaux-c">
+                Réseaux sociaux
+            </h3>
+
+            <small class="mt-8 leading-relaxed text-bordeaux-c">
+                Suivez-nous pour rester informé des dernières nouveautés !
+            </small>
+
+            <div class="mt-10 flex justify-center gap-6">
+                <a
+                    href="/"
+                    class="flex h-15 w-15 items-center justify-center rounded-2xl bg-paprika-c"
+                >
+                    <Instagram class="h-11 w-11 text-white" />
+                </a>
+
+                <a
+                    href="/"
+                    class="flex h-15 w-15 items-center justify-center rounded-2xl bg-paprika-c"
+                >
+                    <Tiktok class="h-11 w-11 text-white" />
+                </a>
+
+                <a
+                    href="/"
+                    class="flex h-15 w-15 items-center justify-center rounded-2xl bg-paprika-c"
+                >
+                    <Facebook class="h-11 w-11 text-white" />
+                </a>
+            </div>
+        </section>
     </main>
 </Layout>
 
