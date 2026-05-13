@@ -1,64 +1,93 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Eye from "../assets/eye-open.svg";
+import EyeClose from "../assets/eye-close.svg";
+import { Image } from "astro:assets";
 ---
 
 <Layout title="Connexion">
     <main class="flex items-center justify-center px-6 py-10">
+
         <section class="w-full max-w-xl">
+
             <div class="mb-10 rounded-3xl bg-white-c px-5 py-5">
-                <h1 class="text-xl font-titan text-paprika-c">
+                <h3 class="text-paprika-c">
                     Connecte-toi !
-                </h1>
+                </h3>
             </div>
 
-            <form id="form-login" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6 text-sm">
+            <form
+                id="form-login"
+                class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6"
+            >
 
-                <label>
-                    <span class="block mb-2">
-                        Email ou pseudo
-                    </span>
+                <label class="block">
+                    Email
+
                     <input
-                        id="identity"
-                        name="identity"
-                        type="text"
+                        id="email"
+                        name="email"
+                        type="email"
                         required
-                        placeholder="Email ou pseudo"
-                        class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                        placeholder="Ex : Nunc@participant.fr"
+                        class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
                     />
                 </label>
 
-                <label>
-                    <span class="block mb-2">
-                        Mot de passe
-                    </span>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        required
-                        class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
-                    />
+                <label class="block">
+                    Mot de passe
+
+                    <div class="relative mt-2">
+
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 pr-14 outline-none focus:border-paprika-c"
+                        />
+
+                        <button
+                            type="button"
+                            id="toggle-password"
+                            class="absolute right-4 top-1/2 -translate-y-1/2"
+                        >
+                            <Image
+                                id="eye-icon"
+                                src={Eye}
+                                alt=""
+                                class="w-5 h-5"
+                            />
+                        </button>
+
+                    </div>
+
                 </label>
 
-                <div id="retour-login" class="hidden text-sm font-semibold px-4 py-3 rounded-xl"></div>
+                <div
+                    id="retour-login"
+                    class="hidden font-semibold px-4 py-3 rounded-xl"
+                ></div>
 
                 <button
                     type="submit"
                     id="btn-login"
-                    class="w-full mt-4 rounded-full bg-paprika-c py-4 text-lg font-bold text-white hover:bg-orange-700 transition"
+                    class="w-full mt-4 rounded-full bg-paprika-c py-4 text-white-bk font-bold hover:bg-orange-700 transition"
                 >
                     Se connecter
                 </button>
 
             </form>
 
-            <p class="mt-6 text-center text-marron-c">
+            <p class="mt-6 text-center">
                 Pas encore de compte ?
                 <a href="/inscription" class="underline">
                     Inscris-toi
                 </a>
             </p>
+
         </section>
+
     </main>
 </Layout>
 
@@ -69,11 +98,27 @@ import Layout from "../layouts/Layout.astro";
     const retour = document.getElementById("retour-login");
     const btn = document.getElementById("btn-login");
 
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("toggle-password");
+    const eyeIcon = document.getElementById("eye-icon");
+
+    togglePassword.addEventListener("click", () => {
+
+        const isPassword = passwordInput.type === "password";
+
+        passwordInput.type = isPassword ? "text" : "password";
+
+        eyeIcon.src = isPassword
+            ? "/src/assets/eye-close.svg"
+            : "/src/assets/eye-open.svg";
+    });
+
     function showRetour(ok, msg) {
         retour.textContent = msg;
+
         retour.className = ok
-            ? "text-sm font-semibold px-4 py-3 rounded-xl bg-green-100 text-green-700"
-            : "text-sm font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700";
+            ? "font-semibold px-4 py-3 rounded-xl bg-green-100 text-green-700"
+            : "font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700";
 
         retour.classList.remove("hidden");
     }
@@ -85,17 +130,18 @@ import Layout from "../layouts/Layout.astro";
     form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        const identity = document.getElementById("identity").value;
+        const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
         btn.disabled = true;
         btn.textContent = "Connexion...";
 
         try {
-            // détection simple
-            const loginField = identity.includes("@") ? "email" : "username";
 
-            await pb.collection("users").authWithPassword(identity, password);
+            await pb.collection("users").authWithPassword(
+                email,
+                password
+            );
 
             showRetour(true, "Connexion réussie. Redirection...");
 
@@ -104,6 +150,7 @@ import Layout from "../layouts/Layout.astro";
             }, 800);
 
         } catch (err) {
+
             console.error(err);
 
             showRetour(false, "Identifiants incorrects");

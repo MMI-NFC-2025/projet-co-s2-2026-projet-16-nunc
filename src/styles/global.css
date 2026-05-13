@@ -16,3 +16,42 @@
     --color-paprika-c: #da4b05;
     --color-white-bk: #f6e3d4;
 }
+@layer base {
+
+    body {
+        @apply font-tuffy text-bordeaux-c;
+    }
+
+    h1 {
+        @apply font-titan text-yellow-c text-[40px] leading-[35px];
+    }
+
+    h2 {
+        @apply font-titan text-yellow-c text-[36px] leading-[20px];
+    }
+
+    h3 {
+        @apply font-titan text-yellow-c text-[24px] leading-[20px];
+    }
+
+    h4 {
+        @apply font-titan text-yellow-c text-[36px] leading-[30px];
+    }
+
+    p {
+        @apply font-tuffy text-[18px] leading-[20px];
+    }
+
+    small {
+        @apply font-tuffy text-[16px] leading-[24px];
+    }
+
+    label {
+        @apply font-tuffy text-[14px] leading-[18px];
+    }
+
+    strong {
+        @apply font-bold;
+    }
+
+}
