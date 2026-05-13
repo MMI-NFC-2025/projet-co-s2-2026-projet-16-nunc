@@ -3,14 +3,11 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-<button id="logout">Se déconnecter</button>
 
-<script>
-  import pb from "../../backend/backend.mjs";
+    <button id="logout">
+        Se déconnecter
+    </button>
 
-  document.getElementById("logout").addEventListener("click", () => {
-    pb.authStore.clear();
-    window.location.href = "/connexion";
-  });
-</script>
 </Layout>
+
+<script type="module" src="/src/js/deconnexion.js"></script>
