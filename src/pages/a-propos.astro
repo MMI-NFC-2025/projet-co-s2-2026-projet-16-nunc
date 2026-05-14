@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+import Fleche from '../assets/fleche.svg';
+import Logo from '../assets/logo.svg';
+import Valeurs from '../assets/img/valeurs.avif';
+
+import { Image } from 'astro:assets';
+---
+
+<Layout title="À propos">
+    <main class="px-5 py-10">
+        <a
+            href="/"
+            class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
+        >
+            <Image
+                src={Fleche}
+                alt=""
+                class="h-4 w-4"
+            />
+
+            Retour
+        </a>
+
+        <section class="mt-9 flex justify-center">
+            <Image
+                src={Logo}
+                alt="Logo Nunc"
+                class="h-auto w-72"
+            />
+        </section>
+
+        <section class="mt-15 rounded-2xl bg-beige-c px-6 py-8">
+            <h1 class="text-center text-bordeaux-c">
+                Notre Mission
+            </h1>
+
+            <p class="mt-8 leading-loose">
+                NÜNC révolutionne vos sorties nocturnes en vous offrant une
+                plateforme complète pour découvrir, organiser et profiter de
+                vos soirées entre amis. De la recherche de bars à la
+                planification de votre retour en toute sécurité, nous sommes là
+                pour rendre chaque moment inoubliable.
+            </p>
+        </section>
+
+        <section class="mt-15">
+            <h1 class="text-center text-paprika-c">
+                Notre Histoire
+            </h1>
+
+            <section class="mt-12">
+                <div class="rounded-4xl bg-white px-8 py-10 shadow-lg">
+                    <div>
+                        <h3 class="text-paprika-c">
+                            2025 – L'idée
+                        </h3>
+
+                        <p class="mt-6 leading-loose">
+                            Dans le cadre de notre formation en MMI, nous avons
+                            imaginé NÜNC, une application pour faciliter
+                            l’organisation de sorties entre amis et découvrir de
+                            nouveaux bars. Le concept et les premières
+                            fonctionnalités ont été définis lors de la phase de
+                            conception.
+                        </p>
+                    </div>
+
+                    <div class="mt-14">
+                        <h3 class="text-paprika-c">
+                            2025 – La conception
+                        </h3>
+
+                        <p class="mt-6 leading-loose">
+                            Nous avons réalisé la landing page du site
+                            promotionnel (mobile et desktop), ainsi que le guide
+                            de style : palette de couleurs, typographies,
+                            icônes et composants d’interface responsive.
+                        </p>
+                    </div>
+
+                    <div class="mt-14">
+                        <h3 class="text-paprika-c">
+                            2026 – Aujourd'hui
+                        </h3>
+
+                        <p class="mt-6 leading-loose">
+                            Nous avons conçu les maquettes de l’application, en
+                            nous concentrant sur l’expérience utilisateur.
+                            L’application inclut l’organisation de sorties, une
+                            carte interactive et des fonctionnalités de
+                            sécurité. Le projet est présenté lors de la
+                            soutenance.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section class="mt-15">
+            <h1 class="text-center text-paprika-c">
+                Nos Valeurs
+            </h1>
+
+            <div class="mt-10 overflow-hidden rounded-3xl bg-white-c">
+                <Image
+                    src={Valeurs}
+                    alt="Valeurs de NÜNC"
+                    class="h-auto w-full"
+                />
+            </div>
+
+            <small class="mt-15 block text-center">
+                <strong>Chez NÜNC</strong>, nous croyons que les meilleures
+                soirées se vivent ensemble. Notre application repose sur des
+                valeurs de convivialité, sécurité et innovation, afin d’offrir
+                une expérience simple et agréable. Nous voulons faciliter
+                l’organisation de sorties, encourager la découverte et permettre
+                à chacun de profiter du moment en toute confiance.
+            </small>
+        </section>
+    </main>
+</Layout>
