@@ -20,3 +20,37 @@ export function isAuthValid() {
 export function clearAuth() {
     pb.authStore.clear();
 }
+
+export async function getBars() {
+    return await pb.collection('bars').getFullList({
+        sort: '-created',
+    });
+}
+
+export async function getImageUrl(record, imageField) {
+    return pb.files.getURL(record, record[imageField]);
+}
+
+export async function getBarById(id) {
+
+    try {
+
+        let bar =
+            await pb
+                .collection("bars")
+                .getOne(id);
+
+        return bar;
+
+    } catch (error) {
+
+        console.error(
+            "Error fetching bar by ID:",
+            error
+        );
+
+        return null;
+
+    }
+
+}

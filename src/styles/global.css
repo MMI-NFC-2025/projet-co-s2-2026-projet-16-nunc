@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 @theme {
     --font-titan: 'Titan One', cursive;
@@ -55,4 +56,13 @@
         @apply font-bold;
     }
 
+}
+
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-control,
+.leaflet-marker-pane,
+.leaflet-popup-pane {
+    z-index: 1 !important;
 }

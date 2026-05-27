@@ -1,0 +1,89 @@
+---
+import Logo from '../assets/logo-nunc.svg';
+import Trophy from '../assets/trophy.svg';
+import Crown from '../assets/crown.svg';
+
+import { Image } from 'astro:assets';
+
+const {
+    username = 'Utilisateur',
+    level = 1,
+    points = 0,
+    maxPoints = 1000,
+    premium = false,
+} = Astro.props;
+
+const progress = Math.min((points / maxPoints) * 100, 100);
+---
+
+<header class="w-full bg-gradient-to-br from-paprika-c to-yellow-c px-8 py-10">
+    <small class="text-white-bk">
+        Accueil
+    </small>
+
+    <div class="mt-6 flex items-start justify-between gap-6">
+        <div>
+            <h1 class="text-white-bk">
+                Salut,<br />
+                {username} !
+            </h1>
+
+            <p class="mt-8 text-white-bk leading-loose">
+                Prêt pour de nouvelles aventures ?
+            </p>
+        </div>
+
+        <Image
+            src={Logo}
+            alt="Logo NÜNC"
+            class="w-44 shrink-0"
+        />
+    </div>
+
+    <section class="mt-12 rounded-3xl bg-white-c px-6 py-6 shadow-lg">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-yellow-c/50">
+                    <Image
+                        src={Trophy}
+                        alt=""
+                        class="h-8 w-8"
+                    />
+                </div>
+
+                <div>
+                    <h3 class="text-bordeaux-c">
+                        Niveau {level}
+                    </h3>
+
+                    <p class="mt-3">
+                        {points} / {maxPoints} points
+                    </p>
+                </div>
+            </div>
+
+            {
+                premium && (
+                    <div class="flex items-center gap-3 rounded-full bg-paprika-c px-5 py-3">
+                        <Image
+                            src={Crown}
+                            alt=""
+                            class="h-5 w-5"
+                        />
+
+                        <small class="font-bold text-white-bk">
+                            Premium
+                        </small>
+                    </div>
+                )
+            }
+        </div>
+
+        <div class="mt-8 h-5 overflow-hidden rounded-full bg-white-bk">
+            <div
+                class="h-full rounded-full bg-orange-c transition-all duration-500"
+                style={`width: ${progress}%`}
+            ></div>
+        </div>
+    </section>
+</header>
