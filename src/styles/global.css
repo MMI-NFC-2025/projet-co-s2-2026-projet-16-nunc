@@ -16,6 +16,7 @@
     --color-paprika-c: #da4b05;
     --color-white-bk: #f6e3d4;
 }
+
 @layer base {
 
     body {
@@ -27,15 +28,15 @@
     }
 
     h2 {
-        @apply font-titan text-yellow-c text-[36px] leading-[20px];
+        @apply font-titan text-yellow-c text-[36px] leading-[48px];
     }
 
     h3 {
-        @apply font-titan text-yellow-c text-[24px] leading-[20px];
+        @apply font-titan text-yellow-c text-[24px] leading-[30px];
     }
 
     h4 {
-        @apply font-titan text-yellow-c text-[36px] leading-[30px];
+        @apply font-tuffy font-bold text-[20px] leading-[24px];
     }
 
     p {
@@ -43,7 +44,7 @@
     }
 
     small {
-        @apply font-tuffy text-[16px] leading-[24px];
+        @apply font-tuffy font-normal text-[16px] leading-[24px];
     }
 
     label {

@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../layouts/Layout-login.astro";
 import Eye from "../assets/eye-open.svg";
 import { Image } from "astro:assets";
 ---
@@ -22,7 +22,7 @@ import { Image } from "astro:assets";
 
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 
-                    <label class="block">
+                    <label class="block font-bold">
                         Nom
 
                         <input
@@ -30,11 +30,11 @@ import { Image } from "astro:assets";
                             name="nom"
                             type="text"
                             required
-                            class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 outline-none focus:border-paprika-c"
+                            class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 font-normal outline-none focus:border-paprika-c"
                         />
                     </label>
 
-                    <label class="block">
+                    <label class="block font-bold">
                         Prénom
 
                         <input
@@ -42,13 +42,13 @@ import { Image } from "astro:assets";
                             name="prenom"
                             type="text"
                             required
-                            class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 outline-none focus:border-paprika-c"
+                            class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 font-normal outline-none focus:border-paprika-c"
                         />
                     </label>
 
                 </div>
 
-                <label class="block">
+                <label class="block font-bold">
                     Pseudonyme
 
                     <input
@@ -57,11 +57,11 @@ import { Image } from "astro:assets";
                         type="text"
                         required
                         placeholder="Ex: Nunc_participant023"
-                        class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                        class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 font-normal placeholder:text-mocha-c outline-none focus:border-paprika-c"
                     />
                 </label>
 
-                <label class="block">
+                <label class="block font-bold">
                     Email
 
                     <input
@@ -70,11 +70,11 @@ import { Image } from "astro:assets";
                         type="email"
                         required
                         placeholder="Ex : Nunc@participant.fr"
-                        class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                        class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 font-normal placeholder:text-mocha-c outline-none focus:border-paprika-c"
                     />
                 </label>
 
-                <label class="block">
+                <label class="block font-bold">
                     Mot de passe
 
                     <div class="relative mt-2">
@@ -87,7 +87,7 @@ import { Image } from "astro:assets";
                             minlength="8"
                             maxlength="20"
                             placeholder="Max 20 caractères"
-                            class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 pr-14 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                            class="w-full rounded-xl border-2 border-yellow-c bg-white-bk font-normal px-4 py-3 pr-14 placeholder:text-mocha-c outline-none focus:border-paprika-c"
                         />
 
                         <button
