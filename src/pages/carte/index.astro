@@ -11,8 +11,6 @@ import { getBars } from '../../../backend/backend.mjs';
 import { Image } from 'astro:assets';
 
 const bars = await getBars();
-
-bars.sort(() => Math.random() - 0.5);
 ---
 
 <Layout title="Carte des bars" description="Il y a 5 bars proche de toi">

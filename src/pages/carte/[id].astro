@@ -22,8 +22,6 @@ import { Image } from 'astro:assets';
 
 const bars = await getBars();
 
-bars.sort(() => Math.random() - 0.5);
-
 const { id } = Astro.params;
 
 const selectedBar = await getBarById(id);
