@@ -1,16 +1,20 @@
-import PocketBase from 'pocketbase' ;
-const pb = new PocketBase('http://127.0.0.1:8090') ;
+import PocketBase from 'pocketbase';
+
+const pb =
+    new PocketBase('http://127.0.0.1:8090');
 
 export async function addContact(data) {
     return await pb.collection('contact').create(data);
 }
 
 export async function addNewUser(data) {
-    return await pb.collection("users").create(data);
+    return await pb.collection('users').create(data);
 }
 
 export async function loginUser(email, password) {
-    return await pb.collection("users").authWithPassword(email, password);
+    return await pb
+        .collection('users')
+        .authWithPassword(email, password);
 }
 
 export function isAuthValid() {
@@ -22,13 +26,21 @@ export function clearAuth() {
 }
 
 export async function getBars() {
-    return await pb.collection('bars').getFullList({
-        sort: '-created',
-    });
+
+    return await pb
+        .collection('bars')
+        .getFullList({
+            sort: '-created',
+        });
+
 }
 
 export async function getImageUrl(record, imageField) {
-    return pb.files.getURL(record, record[imageField]);
+
+    return pb
+        .files
+        .getURL(record, record[imageField]);
+
 }
 
 export async function getBarById(id) {
@@ -37,7 +49,7 @@ export async function getBarById(id) {
 
         let bar =
             await pb
-                .collection("bars")
+                .collection('bars')
                 .getOne(id);
 
         return bar;
@@ -45,11 +57,85 @@ export async function getBarById(id) {
     } catch (error) {
 
         console.error(
-            "Error fetching bar by ID:",
+            'Error fetching bar by ID:',
             error
         );
 
         return null;
+
+    }
+
+}
+
+export async function createSortie(data) {
+
+    try {
+
+        await pb
+            .collection('sorties')
+            .create(data);
+
+        return {
+            success: true
+        };
+
+    } catch (error) {
+
+        console.log(error);
+
+        return {
+            success: false,
+            error: error
+        };
+
+    }
+
+}
+
+export async function refreshCurrentUser() {
+
+    const user =
+        pb.authStore.record;
+
+    if (!user) {
+        return null;
+    }
+
+    return await pb
+        .collection('users')
+        .getOne(user.id);
+
+}
+
+export async function addUserPoints(
+    userId,
+    pointsToAdd
+) {
+
+    try {
+
+        const user =
+            await pb
+                .collection('users')
+                .getOne(userId);
+
+        const currentPoints =
+            user.points || 0;
+
+        await pb
+            .collection('users')
+            .update(userId, {
+                points:
+                    currentPoints + pointsToAdd
+            });
+
+        return true;
+
+    } catch (error) {
+
+        console.error(error);
+
+        return false;
 
     }
 

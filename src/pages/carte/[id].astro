@@ -26,22 +26,15 @@ bars.sort(() => Math.random() - 0.5);
 
 const { id } = Astro.params;
 
-const selectedBar =
-    await getBarById(id);
+const selectedBar = await getBarById(id);
 
 if (!selectedBar) {
-
     return Astro.redirect('/carte');
-
 }
 ---
 
-<Layout
-    title="Carte des bars"
-    description="Il y a 5 bars proche de toi"
->
+<Layout title="Carte des bars" description="Il y a 5 bars proche de toi">
     <main class="relative px-5 py-10 pb-32">
-
         <a
             href="/"
             class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
@@ -60,18 +53,13 @@ if (!selectedBar) {
         </section>
 
         <section class="mt-12">
-
             <div class="flex items-center justify-between">
-
                 <h3 class="text-paprika-c">
                     Tous les bars
                 </h3>
 
                 <div class="flex items-center gap-3">
-
-                    <button
-                        id="reset-btn"
-                    >
+                    <button id="reset-btn">
                         <Image
                             src={Reset}
                             alt=""
@@ -89,9 +77,7 @@ if (!selectedBar) {
                             class="h-7 w-7"
                         />
                     </button>
-
                 </div>
-
             </div>
 
             <div
@@ -115,19 +101,14 @@ if (!selectedBar) {
                     ))
                 }
             </div>
-
         </section>
 
-        <section
-            class="fixed inset-0 z-50 bg-black/30"
-        >
-
+        <section class="fixed inset-0 z-50 bg-black/30">
             <div
                 class="absolute left-1/2 top-52 w-11/12 max-w-xl -translate-x-1/2 overflow-hidden rounded-3xl border-2 border-paprika-c bg-white-c"
             >
 
                 <div class="relative h-64 overflow-hidden">
-
                     <PbImage
                         record={selectedBar}
                         imageField="image"
@@ -143,30 +124,25 @@ if (!selectedBar) {
                             class="h-5 w-5"
                         />
                     </a>
-
                 </div>
 
                 <div class="px-6 py-7 text-marron-c">
 
                     <div class="flex items-start justify-between">
-
                         <div>
-
                             <h3 class="text-bordeaux-c">
                                 {selectedBar.nom}
                             </h3>
 
-                            <small class="mt-2">
+                            <small class="mt-2 block">
                                 {selectedBar.categorie}
                                 •
                                 {selectedBar.prix}
                                 €€
                             </small>
-
                         </div>
 
                         <div class="flex items-center gap-2">
-
                             <Image
                                 src={Etoile}
                                 alt=""
@@ -176,9 +152,7 @@ if (!selectedBar) {
                             <p class="font-bold">
                                 {selectedBar.note}
                             </p>
-
                         </div>
-
                     </div>
 
                     <small class="mt-3 block">
@@ -186,43 +160,39 @@ if (!selectedBar) {
                     </small>
 
                     <div class="mt-3 flex flex-col gap-2">
-
                         <small>
-                            <strong>Adresse : </strong>{selectedBar.adresse}
+                            <strong>Adresse :</strong>
+                            {selectedBar.adresse}
                         </small>
 
                         <small>
-                            <strong>Horaires : </strong>{selectedBar.horaires}
+                            <strong>Horaires :</strong>
+                            {selectedBar.horaires}
                         </small>
 
                         <small>
-                            <strong>Distance : </strong>À {selectedBar.distance} km
+                            <strong>Distance :</strong>
+                            À {selectedBar.distance} km
                         </small>
-
                     </div>
 
                     <div class="mt-4 flex gap-2">
+                        <a
+                            href={`/sortie/organiser-sortie?bar=${selectedBar.id}`}
+                            class="flex-1 rounded-lg bg-paprika-c px-4 py-3 text-center font-bold text-white"
+                        >
+                            Organiser une sortie
+                        </a>
 
-    <button
-        class="flex-1 rounded-lg bg-paprika-c px-4 py-2 font-bold text-white"
-    >
-        Organiser une sortie
-    </button>
-
-    <button
-        class="rounded-lg border-2 border-yellow-c bg-white px-4 py-2 font-bold text-marron-c"
-    >
-        Itinéraire
-    </button>
-
-</div>
-
+                        <button
+                            class="rounded-lg border-2 border-yellow-c bg-white px-4 py-3 font-bold text-marron-c"
+                        >
+                            Itinéraire
+                        </button>
+                    </div>
                 </div>
-
             </div>
-
         </section>
-
     </main>
 </Layout>
 

@@ -15,10 +15,7 @@ const bars = await getBars();
 bars.sort(() => Math.random() - 0.5);
 ---
 
-<Layout
-    title="Carte des bars"
-    description="Il y a 5 bars proche de toi"
->
+<Layout title="Carte des bars" description="Il y a 5 bars proche de toi">
     <main class="px-5 py-10 pb-32">
         <a
             href="/"
@@ -44,7 +41,6 @@ bars.sort(() => Math.random() - 0.5);
                 </h3>
 
                 <div class="flex items-center gap-3">
-
                     <button
                         id="reset-btn"
                         class=""
@@ -66,7 +62,6 @@ bars.sort(() => Math.random() - 0.5);
                             class="h-7 w-7"
                         />
                     </button>
-
                 </div>
             </div>
 
