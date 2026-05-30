@@ -1,89 +1,118 @@
 ---
-import Logo from '../assets/logo-nunc.svg';
-import Trophy from '../assets/trophy.svg';
-import Crown from '../assets/crown.svg';
+import Logo from '../assets/logo-white.svg';
+import Trophy from '../assets/profil.svg';
+import Courone from '../assets/courone.svg';
 
 import { Image } from 'astro:assets';
-
-const {
-    username = 'Utilisateur',
-    level = 1,
-    points = 0,
-    maxPoints = 1000,
-    premium = false,
-} = Astro.props;
-
-const progress = Math.min((points / maxPoints) * 100, 100);
 ---
 
-<header class="w-full bg-gradient-to-br from-paprika-c to-yellow-c px-8 py-10">
-    <small class="text-white-bk">
-        Accueil
-    </small>
+<header class="w-full px-6 py-10 bg-gradient-to-br from-paprika-c to-yellow-c">
 
-    <div class="mt-6 flex items-start justify-between gap-6">
+    <div class="flex justify-between items-start">
         <div>
-            <h1 class="text-white-bk">
-                Salut,<br />
-                {username} !
-            </h1>
+            <h3 class="text-white-c text-3xl leading-none">
+                Salut,
+            </h3>
 
-            <p class="mt-8 text-white-bk leading-loose">
+            <h3
+                id="username"
+                class="text-white-bk text-3xl leading-none mt-2"
+            >
+                Utilisateur !
+            </h3>
+
+            <small class="mt-4 block text-white-bk pr-7">
                 Prêt pour de nouvelles aventures ?
-            </p>
+            </small>
         </div>
 
         <Image
             src={Logo}
-            alt="Logo NÜNC"
-            class="w-44 shrink-0"
+            alt="Logo NUNC"
+            class="w-34 h-auto"
         />
     </div>
 
-    <section class="mt-12 rounded-3xl bg-white-c px-6 py-6 shadow-lg">
-        <div class="flex items-center justify-between gap-4">
+    <div class="mt-5 bg-white-c rounded-3xl p-6">
+        <div class="flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-yellow-c/50">
+                <div class="w-10 h-10 rounded-full bg-beige-c flex items-center justify-center shrink-0">
+
                     <Image
                         src={Trophy}
                         alt=""
-                        class="h-8 w-8"
+                        class="w-6 h-6"
                     />
+
                 </div>
 
                 <div>
-                    <h3 class="text-bordeaux-c">
-                        Niveau {level}
-                    </h3>
+                    <h4
+                        id="level"
+                        class="font-titan leading-none"
+                    >
+                        Niveau 1
+                    </h4>
 
-                    <p class="mt-3">
-                        {points} / {maxPoints} points
-                    </p>
+                    <small
+                        id="points"
+                        class="mt-3 text-marron-c"
+                        >
+                        0 / 250 points
+                    </small>
                 </div>
             </div>
 
-            {
-                premium && (
-                    <div class="flex items-center gap-3 rounded-full bg-paprika-c px-5 py-3">
-                        <Image
-                            src={Crown}
-                            alt=""
-                            class="h-5 w-5"
-                        />
+            <span
+                id="premium-badge"
+                class="
+                    hidden
+                    bg-paprika-c
+                    text-white-bk
+                    px-3
+                    py-2
+                    rounded-full
+                    flex
+                    items-center
+                    gap-3
+                "
+            >
 
-                        <small class="font-bold text-white-bk">
-                            Premium
-                        </small>
-                    </div>
-                )
-            }
+                <Image
+                    src={Courone}
+                    alt=""
+                    class="w-4 h-4"
+                />
+
+                Premium
+
+            </span>
         </div>
 
-        <div class="mt-8 h-5 overflow-hidden rounded-full bg-white-bk">
+        <div
+            class="
+                mt-8
+                h-5
+                bg-white
+                rounded-full
+                overflow-hidden
+            "
+        >
+
             <div
-                class="h-full rounded-full bg-orange-c transition-all duration-500"
-                style={`width: ${progress}%`}
+                id="progress-bar"
+                class="
+                    h-full
+                    bg-orange-c
+                    rounded-full
+                    transition-all
+                    duration-500
+                "
+                style="width:0%"
             ></div>
         </div>
-    </section>
+    </div>
+
 </header>
+
+<script type="module" src="/src/js/header-user.js"></script>

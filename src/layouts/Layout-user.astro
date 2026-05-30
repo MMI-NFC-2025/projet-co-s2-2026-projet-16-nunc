@@ -4,8 +4,8 @@ import '@fontsource/tuffy';
 import '@fontsource/tuffy/700.css';
 import '@fontsource/titan-one';
 
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Header from '../components/Header-user.astro';
+import Menu from "../components/Menu.astro";
 
 const { title, description } = Astro.props;
 ---
@@ -22,13 +22,13 @@ const { title, description } = Astro.props;
 		<meta name="apple-mobile-web-app-title" content="NŨNC" />
 		<link rel="manifest" href="/site.webmanifest" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title ?? "Astro Basics"}</title>
+		<title>{title ?? "NŨNC"}</title>
 	</head>
 	<body class="bg-white-bk text-bordeaux-c font-tuffy">
     <Header title={title} description={description} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Menu />
   </body>
 </html>

@@ -1,0 +1,46 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout-user.astro';
+
+import {
+    getSortieById,
+    refreshCurrentUser
+} from '../../../backend/backend.mjs';
+
+const { id } =
+    Astro.params;
+
+const sortie =
+    await getSortieById(id);
+
+const user =
+    await refreshCurrentUser();
+
+if (!sortie) {
+
+    return Astro.redirect(
+        '/sortie'
+    );
+
+}
+
+const isOrganisateur =
+    sortie.organisateur === user?.id;
+---
+
+<h1>
+    {sortie.titre}
+</h1>
+
+<p>
+    {sortie.description}
+</p>
+
+<p>
+    {sortie.date}
+</p>
+
+<p>
+    {sortie.heure}
+</p>

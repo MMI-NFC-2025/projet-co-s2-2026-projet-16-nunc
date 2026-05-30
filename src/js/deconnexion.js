@@ -1,10 +1,21 @@
 import { clearAuth } from "../../backend/backend.mjs";
 
-const logoutBtn = document.getElementById("logout");
+const logoutBtn =
+    document.getElementById("logout");
 
-logoutBtn.addEventListener("click", () => {
+logoutBtn.addEventListener(
+    "click",
+    () => {
 
-    clearAuth();
+        clearAuth();
 
-    window.location.href = "/connexion";
-});
+        console.log(
+            "localStorage après clear :",
+            localStorage
+        );
+
+        window.location.href =
+            "/connexion";
+
+    }
+);

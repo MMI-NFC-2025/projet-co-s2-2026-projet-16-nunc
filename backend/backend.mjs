@@ -11,10 +11,24 @@ export async function addNewUser(data) {
     return await pb.collection('users').create(data);
 }
 
-export async function loginUser(email, password) {
+export function getCurrentUser() {
+
+    return pb.authStore.record;
+
+}
+
+export async function loginUser(
+    email,
+    password
+) {
+
     return await pb
         .collection('users')
-        .authWithPassword(email, password);
+        .authWithPassword(
+            email,
+            password
+        );
+
 }
 
 export function isAuthValid() {
@@ -22,7 +36,13 @@ export function isAuthValid() {
 }
 
 export function clearAuth() {
+
     pb.authStore.clear();
+
+    localStorage.clear();
+
+    sessionStorage.clear();
+
 }
 
 export async function getBars() {
@@ -71,12 +91,14 @@ export async function createSortie(data) {
 
     try {
 
-        await pb
-            .collection('sorties')
-            .create(data);
+        const sortie =
+            await pb
+                .collection('sorties')
+                .create(data);
 
         return {
-            success: true
+            success: true,
+            sortie
         };
 
     } catch (error) {
@@ -89,6 +111,54 @@ export async function createSortie(data) {
         };
 
     }
+
+}
+
+export async function addParticipantSortie(
+    sortieId,
+    utilisateurId,
+    role = 'Organisateur',
+    etat = 'Accepté'
+) {
+
+    return await pb
+        .collection(
+            'participants_sortie'
+        )
+        .create({
+            sortie: sortieId,
+            utilisateur: utilisateurId,
+            role: role,
+            etat: etat
+        });
+
+}
+
+export async function getSortieById(id) {
+
+    return await pb
+        .collection('sorties')
+        .getOne(id, {
+            expand:
+                'organisateur,bar'
+        });
+
+}
+
+export async function getUserSorties(
+    userId
+) {
+
+    return await pb
+        .collection(
+            'participants_sortie'
+        )
+        .getFullList({
+            filter:
+                `utilisateur="${userId}" && etat="Accepté"`,
+            expand:
+                'sortie, sortie.bar, sortie.organisateur'
+        });
 
 }
 
@@ -138,5 +208,40 @@ export async function addUserPoints(
         return false;
 
     }
+
+}
+
+export function getLevel(points) {
+
+    return Math.floor(points / 250) + 1;
+
+}
+
+export function getLevelData(points) {
+
+    const level =
+        getLevel(points);
+
+    const currentLevelMin =
+        (level - 1) * 250;
+
+    const nextLevelMin =
+        level * 250;
+
+    const currentXp =
+        points - currentLevelMin;
+
+    const maxXp =
+        nextLevelMin - currentLevelMin;
+
+    const progress =
+        (currentXp / maxXp) * 100;
+
+    return {
+        level,
+        currentXp,
+        maxXp,
+        progress
+    };
 
 }

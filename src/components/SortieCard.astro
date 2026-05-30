@@ -1,0 +1,134 @@
+---
+import PbImage from './PbImage.astro';
+
+import Calendrier from '../assets/sortie.svg';
+import Carte from '../assets/carte.svg';
+import Groupe from '../assets/people.svg';
+
+const {
+    sortie,
+    organisateur,
+    participantsCount
+} = Astro.props;
+---
+
+<a href={`/sortie/${sortie.id}`}>
+
+    <article
+        class="
+            rounded-4xl
+            border-2
+            border-mocha-c
+            bg-white-c
+            p-6
+        "
+    >
+
+        <div class="flex gap-5">
+
+            <div
+                class="
+                    w-32
+                    h-32
+                    shrink-0
+                    overflow-hidden
+                    rounded-full
+                "
+            >
+
+                <PbImage
+                    record={organisateur}
+                    imageField="avatar"
+                />
+
+            </div>
+
+            <div class="flex-1">
+
+                <h3 class="text-bordeaux-c">
+                    {sortie.titre}
+                </h3>
+
+                <p class="mt-2">
+
+                    <span class="text-paprika-c">
+                        {organisateur.username}
+                    </span>
+
+                    {" "}
+                    a créé(e) cet évènement
+
+                </p>
+
+                <div class="mt-4 flex flex-col gap-2">
+
+                    <div class="flex items-center gap-3">
+
+                        <Calendrier
+                            class="
+                                w-6
+                                h-6
+                                text-marron-c
+                            "
+                        />
+
+                        <span>
+                            {sortie.date}
+                            {" à "}
+                            {sortie.heure}
+                        </span>
+
+                    </div>
+
+                    <div class="flex items-center gap-3">
+
+                        <Carte
+                            class="
+                                w-6
+                                h-6
+                                text-marron-c
+                            "
+                        />
+
+                        <span>
+                            {
+                                sortie.expand.bar.nom
+                            }
+                        </span>
+
+                    </div>
+
+                    <div class="flex items-center gap-3">
+
+                        <Groupe
+                            class="
+                                w-6
+                                h-6
+                                text-marron-c
+                            "
+                        />
+
+                        <span>
+
+                            {participantsCount}
+
+                            /
+
+                            {sortie.participants}
+
+                            {" "}
+                            participants
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </article>
+
+</a>

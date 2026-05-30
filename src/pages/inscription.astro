@@ -1,10 +1,12 @@
 ---
-import Layout from "../layouts/Layout-login.astro";
+import Layout from "../layouts/Layout-landingpage.astro";
+import Header from "../components/Header.astro";
 import Eye from "../assets/eye-open.svg";
 import { Image } from "astro:assets";
 ---
 
-<Layout title="Inscription">
+<Layout>
+    <Header title="Inscription"/>
     <main class="flex items-center justify-center px-6 py-10">
 
         <div class="w-full max-w-2xl">

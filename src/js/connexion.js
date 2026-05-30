@@ -3,26 +3,50 @@ import {
     isAuthValid
 } from "../../backend/backend.mjs";
 
-const form = document.getElementById("form-login");
-const retour = document.getElementById("retour-login");
-const btn = document.getElementById("btn-login");
+console.log("connexion.js chargé");
 
-const passwordInput = document.getElementById("password");
-const togglePassword = document.getElementById("toggle-password");
-const eyeIcon = document.getElementById("eye-icon");
+const form =
+    document.getElementById("form-login");
 
-togglePassword.addEventListener("click", () => {
+const retour =
+    document.getElementById("retour-login");
 
-    const isPassword = passwordInput.type === "password";
+const btn =
+    document.getElementById("btn-login");
 
-    passwordInput.type = isPassword ? "text" : "password";
+const passwordInput =
+    document.getElementById("password");
 
-    eyeIcon.src = isPassword
-        ? "/src/assets/eye-close.svg"
-        : "/src/assets/eye-open.svg";
-});
+const togglePassword =
+    document.getElementById("toggle-password");
 
-function showRetour(ok, msg) {
+const eyeIcon =
+    document.getElementById("eye-icon");
+
+togglePassword.addEventListener(
+    "click",
+    () => {
+
+        const isPassword =
+            passwordInput.type === "password";
+
+        passwordInput.type =
+            isPassword
+                ? "text"
+                : "password";
+
+        eyeIcon.src =
+            isPassword
+                ? "/src/assets/eye-close.svg"
+                : "/src/assets/eye-open.svg";
+
+    }
+);
+
+function showRetour(
+    ok,
+    msg
+) {
 
     retour.textContent = msg;
 
@@ -30,40 +54,75 @@ function showRetour(ok, msg) {
         ? "font-semibold px-4 py-3 rounded-xl bg-green-100 text-green-700"
         : "font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700";
 
-    retour.classList.remove("hidden");
+    retour.classList.remove(
+        "hidden"
+    );
+
 }
 
 if (isAuthValid()) {
+
     window.location.href = "/";
+
 }
 
-form.addEventListener("submit", async (e) => {
+form.addEventListener(
+    "submit",
+    async (e) => {
 
-    e.preventDefault();
+        console.log(
+            "submit détecté"
+        );
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+        e.preventDefault();
 
-    btn.disabled = true;
-    btn.textContent = "Connexion...";
+        const email =
+            document.getElementById(
+                "email"
+            ).value;
 
-    try {
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
 
-        await loginUser(email, password);
+        btn.disabled = true;
+        btn.textContent =
+            "Connexion...";
 
-        showRetour(true, "Connexion réussie. Redirection...");
+        try {
 
-        setTimeout(() => {
-            window.location.href = "/";
-        }, 800);
+            await loginUser(
+                email,
+                password
+            );
 
-    } catch (err) {
+            showRetour(
+                true,
+                "Connexion réussie. Redirection..."
+            );
 
-        console.error(err);
+            setTimeout(() => {
 
-        showRetour(false, "Identifiants incorrects");
+                window.location.href = "/";
 
-        btn.disabled = false;
-        btn.textContent = "Se connecter";
+            }, 800);
+
+        } catch (err) {
+
+            console.error(err);
+
+            showRetour(
+                false,
+                "Identifiants incorrects"
+            );
+
+            btn.disabled = false;
+
+            btn.textContent =
+                "Se connecter";
+
+        }
+
     }
-});
+);

@@ -1,5 +1,4 @@
-import { createSortie, refreshCurrentUser, addUserPoints, addParticipantSortie} from '../../backend/backend.mjs';
-
+import { createSortie, refreshCurrentUser, addUserPoints } from '../../backend/backend.mjs';
 const form =
     document.getElementById('sortie-form');
 
@@ -262,39 +261,10 @@ form.addEventListener('submit', async (e) => {
     };
 
     const result =
-    await createSortie(data);
-    
+        await createSortie(data);
+
     if (result.success) {
-        try {
 
-    await addParticipantSortie(
-        result.sortie.id,
-        user.id
-    );
-
-    console.log(
-        'Participant ajouté'
-    );
-
-    console.log(
-        'Sortie :',
-        result.sortie.id
-    );
-
-    console.log(
-        'Utilisateur :',
-        user.id
-    );
-
-} catch (error) {
-
-    console.error(
-        'Erreur participant :',
-        error
-    );
-
-}
-        
         await addUserPoints(
             user.id,
             points
