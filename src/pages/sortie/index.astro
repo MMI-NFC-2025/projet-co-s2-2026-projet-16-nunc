@@ -1,44 +1,16 @@
 ---
-export const prerender = false;
-
 import Layout from '../../layouts/Layout.astro';
-
 import SortieCard from '../../components/SortieCard.astro';
-
-import {
-    getCurrentUser,
-    getUserSorties
-} from '../../../backend/backend.mjs';
-
-const user =
-    getCurrentUser();
-
-const participations =
-    user
-        ? await getUserSorties(
-            user.id
-        )
-        : [];
 ---
 
 <Layout title="Mes sorties" description="Organise, participe et gagne des points !">
-    <section class="px-8 py-4">
-        <div class="flex rounded-2xl bg-white-c p-1 text-base">
-            <button class="rounded-xl bg-paprika-c px-5 py-3 text-white-bk">Mes évènements</button>
-            <button class="px-5">Invitations</button>
-            <button class="px-5">Historique</button>
-        </div>
-
-        <div class="mt-8 flex flex-col gap-8">
-            {
-                participations.map((participation: any) => (
-                    <SortieCard
-                        sortie={participation.expand.sortie}
-                        organisateur={participation.expand.sortie.expand.organisateur}
-                        participantsCount={participation.expand.sortie.participants}
-                    />
-                ))
-            }
-        </div>
-    </section>
+    <main class="px-8 py-10 pb-32">
+        <section class="">
+            <div id="sorties-container" class="mt-8 flex flex-col gap-8">
+                <SortieCard />
+            </div>
+        </section>
+    </main>
 </Layout>
+
+<script type="module" src="/src/js/sortie.js"></script>

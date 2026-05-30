@@ -11,9 +11,30 @@ export async function addNewUser(data) {
     return await pb.collection('users').create(data);
 }
 
-export function getCurrentUser() {
+export async function getCurrentUser() {
 
-    return pb.authStore.record;
+    if (
+        !pb.authStore.isValid
+    ) {
+        return null;
+    }
+
+    try {
+
+        const user =
+            await pb
+                .collection('users')
+                .getOne(
+                    pb.authStore.record.id
+                );
+
+        return user;
+
+    } catch {
+
+        return null;
+
+    }
 
 }
 
@@ -155,9 +176,22 @@ export async function getUserSorties(
         )
         .getFullList({
             filter:
-                `utilisateur="${userId}" && etat="Accepté"`,
+                `utilisateur="${userId}"`,
             expand:
-                'sortie, sortie.bar, sortie.organisateur'
+                'sortie,sortie.bar,sortie.organisateur'
+        });
+
+}
+
+export async function getAllSorties() {
+
+    return await pb
+        .collection(
+            'participants_sortie'
+        )
+        .getFullList({
+            expand:
+                'sortie,sortie.bar,sortie.organisateur'
         });
 
 }

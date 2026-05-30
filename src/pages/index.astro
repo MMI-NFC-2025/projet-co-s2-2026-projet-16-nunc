@@ -5,9 +5,6 @@ import Carte from '../assets/carte.svg';
 import Sortie from '../assets/sortie.svg';
 import Test from '../assets/test.svg';
 import Retour from '../assets/retour.svg';
-import Group from '../assets/people.svg';
-
-import { Image } from 'astro:assets';
 
 import { getCurrentUser, getUserSorties } from '../../backend/backend.mjs';
 
@@ -39,281 +36,73 @@ const participations =
 ---
 
 <Layout title="Accueil">
+    <main class="">
+        <section class="px-12 py-11">
+            <div class="grid grid-cols-2 gap-6">
+                <a href="/carte" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-orange-c flex items-center justify-center">
+                        <Carte class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Bars à proximité</small>
+                </a>
 
-    <section class="px-12 py-11">
+                <a href="/sortie" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-paprika-c flex items-center justify-center">
+                        <Sortie class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Organiser une sortie</small>
+                </a>
 
-        <div class="grid grid-cols-2 gap-6">
+                <a href="/test-sobriete" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-beige-c flex items-center justify-center">
+                        <Test class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Test de sobriété</small>
+                </a>
 
-            <a
-                href="/carte"
-                class={cardClass}
-            >
+                <a href="/retour-programme" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-marron-c flex items-center justify-center">
+                        <Retour class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Retour programmé</small>
+                </a>
+            </div>
+        </section>
 
-                <div
-                    class="
-                        w-14
-                        h-14
-                        rounded-full
-                        bg-orange-c
-                        flex
-                        items-center
-                        justify-center
-                    "
-                >
+        <section class="px-12 pb-11">
+            <div class="flex items-center justify-between">
+                <h2 class="text-paprika-c">Prochaines sorties</h2>
+                <a href="/sorties" class="text-marron-c">Voir tout</a>
+            </div>
 
-                    <Carte class="w-8 h-8 text-white" />
-
-                </div>
-
-                <small class="mt-3 font-bold">
-                    Bars à proximité
-                </small>
-
-            </a>
-
-            <a
-                href="/sortie"
-                class={cardClass}
-            >
-
-                <div
-                    class="
-                        w-14
-                        h-14
-                        rounded-full
-                        bg-paprika-c
-                        flex
-                        items-center
-                        justify-center
-                    "
-                >
-
-                    <Sortie class="w-8 h-8 text-white" />
-
-                </div>
-
-                <small class="mt-3 font-bold">
-                    Organiser une sortie
-                </small>
-            </a>
-
-            <a
-                href="/test-sobriete"
-                class={cardClass}
-            >
-
-                <div
-                    class="
-                        w-14
-                        h-14
-                        rounded-full
-                        bg-beige-c
-                        flex
-                        items-center
-                        justify-center
-                    "
-                >
-
-                    <Test class="w-8 h-8 text-white" />
-
-                </div>
-
-                <small class="mt-3 font-bold">
-                    Test de sobriété
-                </small>
-
-            </a>
-
-            <a
-                href="/retour-programme"
-                class={cardClass}
-            >
-
-                <div
-                    class="
-                        w-14
-                        h-14
-                        rounded-full
-                        bg-marron-c
-                        flex
-                        items-center
-                        justify-center
-                    "
-                >
-
-                    <Retour class="w-8 h-8 text-white" />
-
-                </div>
-
-                <small class="mt-3 font-bold">
-                    Retour programmé
-                </small>
-
-            </a>
-
-        </div>
-
-    </section>
-
-    <section class="px-12 pb-11">
-
-    <div
-        class="
-            flex
-            items-center
-            justify-between
-        "
-    >
-
-        <h2 class="text-paprika-c">
-            Prochaines sorties
-        </h2>
-
-        <a
-            href="/sorties"
-            class="text-marron-c"
-        >
-            Voir tout
-        </a>
-
-    </div>
-
-    <div
-        class="
-            mt-8
-            flex
-            flex-col
-            gap-6
-        "
-    >
-
-        {
-            participations.map(
-                ({ expand }) => {
-
-                    const sortie =
-                        expand.sortie;
-
-                    return (
-
-                        <article
-                            class="
-                                rounded-4xl
-                                border-2
-                                border-paprika-c
-                                bg-white-c
-                                p-6
-                            "
-                        >
-
-                            <h3
-                                class="
-                                    text-bordeaux-c
-                                "
-                            >
-                                {sortie.titre}
-                            </h3>
-
-                            <div
-                                class="
-                                    mt-5
-                                    flex
-                                    justify-between
-                                    items-center
-                                "
-                            >
-
-                                <div
-                                    class="
-                                        flex
-                                        flex-col
-                                        gap-3
-                                    "
-                                >
-
-                                    <div
-                                        class="
-                                            flex
-                                            items-center
-                                            gap-3
-                                        "
-                                    >
-
-                                        <Sortie
-                                            class="
-                                                w-6
-                                                h-6
-                                            "
-                                        />
-
-                                        <span>
-                                            {sortie.date}
-                                        </span>
-
+            <div class="mt-8 flex flex-col gap-6">
+                {
+                    participations.map(({ expand }) => {
+                        const sortie = expand.sortie;
+                        return (
+                            <article class="rounded-4xl border-2 border-paprika-c bg-white-c p-6">
+                                <h3 class="text-bordeaux-c">{sortie.titre}</h3>
+                                <div class="mt-5 flex justify-between items-center">
+                                    <div class="flex flex-col gap-3">
+                                        <div class="flex items-center gap-3">
+                                            <Sortie class="w-6 h-6" />
+                                            <span>{sortie.date}</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <Carte class="w-6 h-6" />
+                                            <span class="text-paprika-c">{sortie.expand?.bar?.nom}</span>
+                                        </div>
                                     </div>
-
-                                    <div
-                                        class="
-                                            flex
-                                            items-center
-                                            gap-3
-                                        "
-                                    >
-
-                                        <Carte
-                                            class="
-                                                w-6
-                                                h-6
-                                            "
-                                        />
-
-                                        <span
-                                            class="
-                                                text-paprika-c
-                                            "
-                                        >
-
-                                            {
-                                                sortie
-                                                .expand
-                                                ?.bar
-                                                ?.nom
-                                            }
-
-                                        </span>
-
-                                    </div>
-
+                                    <span>{sortie.participants} participants</span>
                                 </div>
-
-                                <span>
-
-                                    {
-                                        sortie
-                                        .participants
-                                    }
-                                    {' '}
-                                    participants
-
-                                </span>
-
-                            </div>
-
-                        </article>
-
-                    );
-
+                            </article>
+                        );
+                    })
                 }
-            )
-        }
-
-    </div>
-
-</section>
-
+            </div>
+        </section>
+    </main>
 </Layout>
 
-<script
-    type="module"
-    src="/src/js/auth-guard.js"
-></script>
+<script type="module" src="/src/js/auth-guard.js"></script>
+

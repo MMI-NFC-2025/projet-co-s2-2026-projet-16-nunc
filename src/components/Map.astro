@@ -1,71 +1,32 @@
 ---
 import Marker from '../assets/marker.svg';
+
 import { getBars } from '../../backend/backend.mjs';
 
 const bars = await getBars();
-
 const markerUrl = Marker.src;
 ---
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-<div
-    id="map"
-    class="h-89 w-full"
-></div>
+<div id="map" class="h-89 w-full"></div>
 
-<script
-    is:inline
-    define:vars={{ bars, markerUrl }}
->
+<script is:inline define:vars={{ bars, markerUrl }}>
     const script = document.createElement('script');
-
-    script.src =
-        'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
     script.onload = () => {
-
-        const map = L.map('map').setView(
-            [47.50957, 6.79823],
-            13
-        );
-
-        L.tileLayer(
-            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            {
-                attribution:
-                    '&copy; OpenStreetMap contributors',
-            }
-        ).addTo(map);
-
+        const map = L.map('map').setView([47.50957, 6.79823], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+        }).addTo(map);
         const customIcon = L.icon({
-
             iconUrl: markerUrl,
-
             iconSize: [42, 42],
-
             iconAnchor: [21, 42],
-
         });
-
         bars.forEach((bar) => {
-
-            L.marker(
-                [
-                    bar.position.lat,
-                    bar.position.lon
-                ],
-                {
-                    icon: customIcon
-                }
-            ).addTo(map);
-
+            L.marker([bar.position.lat, bar.position.lon], { icon: customIcon }).addTo(map);
         });
-
     };
-
     document.head.appendChild(script);
 </script>

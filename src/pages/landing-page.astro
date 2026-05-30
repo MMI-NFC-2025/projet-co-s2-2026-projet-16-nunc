@@ -1,7 +1,7 @@
 ---
 import Logo from '../assets/logo.svg';
-import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout-landingpage.astro';
+
 import Photo from '../assets/img/fond-landingpage.avif';
 import Orange from '../assets/orange.svg';
 import Ice from '../assets/ice.svg';
@@ -15,256 +15,145 @@ import Niveau from '../assets/img/niveau-image.avif';
 import Zeste from '../assets/zeste.svg';
 import Google from '../assets/google-play.svg';
 import Apple from '../assets/app-store.svg';
+
+import { Image } from 'astro:assets';
 ---
 
 <Layout title="Inscription">
-  <section class="mt-10 relative">
-    <Image 
-      src={Logo} 
-      alt="Logo" 
-      class="w-64 h-auto mx-auto"
-    />
-
-    <div class="relative overflow-hidden">
-      <Image
-        src={Photo}
-        alt=""
-        class="w-full max-w-md h-auto mx-auto"
-      />
-
-      <span class="absolute -right-16 top-40">
-        <Image 
-          src={Orange} 
-          alt="" 
-          class="w-40 h-40 -rotate-45"
-        />
-      </span>
-
-      <div class="absolute top-20 w-full flex justify-center px-11">
-        <p class="text-center max-w-sm">
-          Découvrez les meilleurs bars autour de vous, organisez vos sorties entre amis et profitez de la soirée en toute sérénité.
-        </p>
-      </div>
-
-      <div class="absolute bottom-24 w-full flex justify-center">
-        <a href="/connexion" class="relative bg-paprika-c text-white-bk rounded-full w-72 py-4 flex items-center justify-center">
-          Télécharger l'app
-
-          <span class="absolute left-4 inset-y-0 flex items-center">
-            <Image 
-              src={Flechegauche} 
-              alt="" 
-              class="w-12 h-12" 
-            />
-          </span>
-
-          <span class="absolute right-4 inset-y-0 flex items-center">
-            <Image 
-              src={Flechedroite} 
-              alt="" 
-              class="w-12 h-12" 
-            />
-          </span>
-
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="mt-2 px-6 text-left">
-    <h4 class="text-bordeaux-c">
-      Le future de vos soirées, <span class="text-yellow-c">maintenant</span>.
-    </h4>
-  </section>
-
-  <section class="mt-30">
-    <h3 class="text-paprika-c mb-6 text-center">
-      Fonctionnalités
-    </h3>
-
-    <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
-      <Image 
-        src={Bar} 
-        alt="" 
-        class="w-full h-36 object-cover" 
-      />
-
-      <div class="bg-beige-c p-5">
-        <h3>
-          Map interactive des bars
-        </h3>
-
-        <p class="mt-3">
-          Découvrez tous les bars autour de vous avec notre carte interactive.
-        </p>
-      </div>
-    </div>
-
-    <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-br-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
-      <Image 
-        src={Voiture} 
-        alt="" 
-        class="w-full h-36 object-cover" 
-      />
-
-      <div class="bg-white-c p-5">
-        <h3>
-          Retour programmé
-        </h3>
-
-        <p class="mt-3">
-          Rentrez en toute sécurité avec notre application.
-        </p>
-      </div>
-    </div>
-
-    <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
-      <Image 
-        src={Sortie} 
-        alt="" 
-        class="w-full h-36 object-cover" 
-      />
-
-      <div class="bg-beige-c p-5">
-        <h3>
-          Organisation de sorties
-        </h3>
-
-        <p class="mt-3">
-          Organisez vos soirées, envoyez des invitations et gérez vos événements en quelques cliques.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="relative overflow-hidden bg-linear-to-b from-white-bk via-beige-c to-white-bk">
-
-    <div class="relative">
-
-      <div class="mt-20 mb-30 relative w-80 mx-auto h-44">
-        <Image 
-          src={Orange} 
-          alt="" 
-          class="w-40 h-40 mx-auto" 
-        />
-
-        <span class="absolute -left-10 top-30">
-          <Image 
-            src={Ice} 
-            alt="" 
-            class="w-36 h-36 -rotate-12" 
-          />
-        </span>
-
-        <span class="absolute -right-2 top-20">
-          <Image 
-            src={Ice} 
-            alt="" 
-            class="w-20 h-20 -rotate-180" 
-          />
-        </span>
-      </div>
-
-      <div class="mt-20 mx-6 relative overflow-hidden rounded-4xl">
-        <Image 
-          src={Points} 
-          alt="" 
-          class="w-full h-80 object-cover" 
-        />
-
-        <span class="absolute -bottom-3 left-0 p-6">
-          <h3 class="text-white-bk">
-            Chaque sortie te fait progresser
-          </h3>
-
-          <p class="mt-3 text-white-bk">
-            Gagne des points, monte de niveau et débloque des exclusivités.
-          </p>
-        </span>
-      </div>
-
-      <div class="mt-10 flex justify-center">
-        <Image 
-          src={Zeste} 
-          alt="" 
-          class="w-full h-8"
-        />
-      </div>
-
-      <div class="mt-10 mb-20 mx-6 relative overflow-hidden rounded-4xl">
-        <Image 
-          src={Niveau} 
-          alt="" 
-          class="w-full h-80 object-cover"
-        />
-
-        <span class="absolute -bottom-3 left-0 p-6">
-          <h3 class="text-white-bk">
-            Monte de niveau
-          </h3>
-
-          <p class="mt-3 text-white-bk">
-            Plus tu participes aux sorties, plus ton niveau augment et ton profil se démarque.
-          </p>
-        </span>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="mt-16 mb-20 mx-6 rounded-4xl bg-linear-to-b from-yellow-c via-paprika-c to-beige-c px-6 py-10">
-
-    <h4 class="text-white text-center">
-      Ta prochaine soirée commence maintenant
-    </h4>
-
-    <p class="mt-8 px-3 text-center text-white-bk">
-      Organise tes sorties, découvre les meilleurs bars et profite du moment avec tes amis.
-    </p>
-
-    <div class="mt-12 flex justify-center">
-      <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-2.5 flex items-center gap-2">
+    <section class="mt-10 relative">
+        <Image src={Logo} alt="Logo" class="w-64 h-auto mx-auto" />
         
-        <Image 
-          src={Google} 
-          alt="" 
-          class="w-10 h-10 shrink-0"
-        />
+        <div class="relative overflow-hidden">
+            <Image src={Photo} alt="" class="w-full max-w-md h-auto mx-auto" />
 
-        <div class="flex flex-col justify-center text-left">
-          <small>
-            Télécharge sur
-          </small>
+            <span class="absolute -right-16 top-40">
+                <Image src={Orange} alt="" class="w-40 h-40 -rotate-45" />
+            </span>
 
-          <p class="font-titan">
-            Google play
-          </p>
+            <div class="absolute top-20 w-full flex justify-center px-11">
+                <p class="text-center max-w-sm">
+                    Découvrez les meilleurs bars autour de vous, organisez vos sorties entre amis et profitez de la soirée en toute sérénité.
+                </p>
+            </div>
+
+            <div class="absolute bottom-24 w-full flex justify-center">
+                <a href="/connexion" class="relative bg-paprika-c text-white-bk rounded-full w-72 py-4 flex items-center justify-center">
+                    Télécharger l'app
+
+                    <span class="absolute left-4 inset-y-0 flex items-center">
+                        <Image src={Flechegauche} alt="" class="w-12 h-12" />
+                    </span>
+                    <span class="absolute right-4 inset-y-0 flex items-center">
+                        <Image src={Flechedroite} alt="" class="w-12 h-12" />
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-2 px-6 text-left">
+        <h4 class="text-bordeaux-c">Le future de vos soirées, 
+          <span class="text-yellow-c">maintenant</span>.
+        </h4>
+    </section>
+
+    <section class="mt-30">
+        <h3 class="text-paprika-c mb-6 text-center">Fonctionnalités</h3>
+
+        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
+            <Image src={Bar} alt="" class="w-full h-36 object-cover" />
+            <div class="bg-beige-c p-5">
+                <h3>Map interactive des bars</h3>
+                <p class="mt-3">
+                  Découvrez tous les bars autour de vous avec notre carte interactive.
+                </p>
+            </div>
         </div>
 
-      </a>
-    </div>
+        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-br-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
+            <Image src={Voiture} alt="" class="w-full h-36 object-cover" />
+            <div class="bg-white-c p-5">
+                <h3>Retour programmé</h3>
+                <p class="mt-3">
+                  Rentrez en toute sécurité avec notre application.
+                </p>
+            </div>
+        </div>
+        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
+            <Image src={Sortie} alt="" class="w-full h-36 object-cover" />
+            <div class="bg-beige-c p-5">
+                <h3>Organisation de sorties</h3>
+                <p class="mt-3">
+                  Organisez vos soirées, envoyez des invitations et gérez vos événements en quelques cliques.
+                </p>
+            </div>
+        </div>
+    </section>
 
-    <div class="mt-6 flex justify-center">
-      <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-2.5 flex items-center gap-2">
-        
-        <Image 
-          src={Apple} 
-          alt="" 
-          class="w-10 h-10 shrink-0"
-        />
+    <section class="relative overflow-hidden bg-linear-to-b from-white-bk via-beige-c to-white-bk">
+        <div class="relative">
+            <div class="mt-20 mb-30 relative w-80 mx-auto h-44">
+                <Image src={Orange} alt="" class="w-40 h-40 mx-auto" />
 
-        <div class="flex flex-col justify-center text-left">
-          <small>
-            Télécharge sur
-          </small>
+                <span class="absolute -left-10 top-30">
+                    <Image src={Ice} alt="" class="w-36 h-36 -rotate-12" />
+                </span>
 
-          <p class="font-titan">
-            App Store
-          </p>
+                <span class="absolute -right-2 top-20">
+                    <Image src={Ice} alt="" class="w-20 h-20 -rotate-180" />
+                </span>
+            </div>
+
+            <div class="mt-20 mx-6 relative overflow-hidden rounded-4xl">
+                <Image src={Points} alt="" class="w-full h-80 object-cover" />
+                <span class="absolute -bottom-3 left-0 p-6">
+                    <h3 class="text-white-bk">Chaque sortie te fait progresser</h3>
+                    <p class="mt-3 text-white-bk">
+                      Gagne des points, monte de niveau et débloque des exclusivités.
+                    </p>
+                </span>
+            </div>
+
+            <div class="mt-10 flex justify-center">
+                <Image src={Zeste} alt="" class="w-full h-8" />
+            </div>
+
+            <div class="mt-10 mb-20 mx-6 relative overflow-hidden rounded-4xl">
+                <Image src={Niveau} alt="" class="w-full h-80 object-cover" />
+                <span class="absolute -bottom-3 left-0 p-6">
+                    <h3 class="text-white-bk">Monte de niveau</h3>
+                    <p class="mt-3 text-white-bk">
+                      Plus tu participes aux sorties, plus ton niveau augmente et ton profil se démarque.
+                    </p>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-16 mb-20 mx-6 rounded-4xl bg-linear-to-b from-yellow-c via-paprika-c to-beige-c px-6 py-10">
+        <h4 class="text-white text-center">Ta prochaine soirée commence maintenant</h4>
+        <p class="mt-8 px-3 text-center text-white-bk">
+          Organise tes sorties, découvre les meilleurs bars et profite du moment avec tes amis.
+        </p>
+
+        <div class="mt-12 flex justify-center">
+            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-2.5 flex items-center gap-2">
+                <Image src={Google} alt="" class="w-10 h-10 shrink-0" />
+                <div class="flex flex-col justify-center text-left">
+                    <small>Télécharge sur</small>
+                    <p class="font-titan">Google Play</p>
+                </div>
+            </a>
         </div>
 
-      </a>
-    </div>
-
-  </section>
+        <div class="mt-6 flex justify-center">
+            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-2.5 flex items-center gap-2">
+                <Image src={Apple} alt="" class="w-10 h-10 shrink-0" />
+                <div class="flex flex-col justify-center text-left">
+                    <small>Télécharge sur</small>
+                    <p class="font-titan">App Store</p>
+                </div>
+            </a>
+        </div>
+    </section>
 </Layout>
