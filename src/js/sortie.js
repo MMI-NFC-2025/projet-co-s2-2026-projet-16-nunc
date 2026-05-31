@@ -41,7 +41,7 @@ if (!user) {
             .getElementById(
                 'sorties-empty'
             )
-            .classList
+            ?.classList
             .remove(
                 'hidden'
             );
@@ -51,18 +51,10 @@ if (!user) {
     participations.forEach(
         (participation) => {
 
-            console.log(
-                participation
-            );
-
             const sortie =
                 participation
                     ?.expand
                     ?.sortie;
-
-            console.log(
-                sortie
-            );
 
             if (!sortie) {
 
@@ -75,12 +67,27 @@ if (!user) {
 
             }
 
+            console.log(
+    'SORTIE COMPLETE',
+    sortie
+);
+
+console.log(
+    'EXPAND',
+    sortie.expand
+);
+
             const organisateur =
                 sortie
                     ?.expand
                     ?.organisateur;
 
-            const bar =
+            const avatarUrl =
+                organisateur?.avatar
+                    ? `http://127.0.0.1:8090/api/files/${organisateur.collectionId}/${organisateur.id}/${organisateur.avatar}`
+                    : '';
+
+            const bars =
                 sortie
                     ?.expand
                     ?.bar;
@@ -97,6 +104,11 @@ if (!user) {
             );
 
             card.querySelector(
+                '.sortie-avatar'
+            ).src =
+                avatarUrl;
+
+            card.querySelector(
                 '.sortie-title'
             ).textContent =
                 sortie.titre || '';
@@ -108,46 +120,59 @@ if (!user) {
                 || 'Utilisateur';
 
             const date =
-    new Date(
-        sortie.date
-    );
+                new Date(
+                    sortie.date
+                );
 
-const dateFormatee =
-    date.toLocaleDateString(
-        'fr-FR',
-        {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }
-    );
+            const dateFormatee =
+                date.toLocaleDateString(
+                    'fr-FR',
+                    {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    }
+                );
 
-card.querySelector(
-    '.sortie-date'
-).textContent =
-    `${dateFormatee} à ${sortie.heure}`;
+            card.querySelector(
+                '.sortie-date'
+            ).textContent =
+                `${dateFormatee} à ${sortie.heure.replace(':', 'h')}`;
 
-            if (sortie.type === 'barcrawl') {
+            if (
+                sortie.type === 'barcrawl'
+                || sortie.type === 'bar crawl'
+            ) {
 
-    card.querySelector(
-        '.sortie-bar'
-    ).textContent =
-        'Bar Crawl';
+                card.querySelector(
+                    '.sortie-bar'
+                ).textContent =
+                    'Bar Crawl';
 
-} else {
+            } else {
 
-    card.querySelector(
-        '.sortie-bar'
-    ).textContent =
-        bar?.nom
-        || 'Bar';
+                card.querySelector(
+                    '.sortie-bar'
+                ).textContent =
+                    bars?.[0]?.nom
+                    || 'Bar';
 
-}
+            }
 
             card.querySelector(
                 '.sortie-participants'
             ).textContent =
                 `${sortie.participants || 0} participants`;
+
+            card.style.cursor =
+            'pointer';
+            
+            card.addEventListener(
+                'click',
+                () => {
+                    window.location.href = `/sortie/${sortie.id}`;
+                }
+            );
 
             container.appendChild(
                 card

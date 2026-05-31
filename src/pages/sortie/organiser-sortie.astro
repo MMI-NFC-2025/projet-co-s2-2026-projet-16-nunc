@@ -1,280 +1,121 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
 import Fleche from '../../assets/fleche.svg';
 import Position from '../../assets/carte.svg';
 import Group from '../../assets/people.svg';
 import Coupe from '../../assets/img/coupe.avif';
-
 import { Image } from 'astro:assets';
-
 import { getBars } from '../../../backend/backend.mjs';
 
-const bars =
-    await getBars();
-
-const barId =
-    Astro.url.searchParams.get('bar');
+const bars = await getBars();
+const barId = Astro.url.searchParams.get('bar');
 ---
 
 <Layout title="Organiser une sortie" description="Créer un nouvel événement">
     <main class="px-8 py-10 pb-32">
-
-        <a
-            href="/"
-            class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
-        >
-            <Image
-                src={Fleche}
-                alt=""
-                class="w-4 h-4"
-            />
-
+        <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+            <Image src={Fleche} alt="" class="w-4 h-4" />
             Retour
         </a>
 
-        <form
-            id="sortie-form"
-            class="mt-10 flex flex-col gap-8"
-        >
-
-            <input
-                type="hidden"
-                name="defaultBar"
-                value={barId}
-            />
-
-            <input
-                type="hidden"
-                name="type"
-                id="type-sortie"
-                value="classique"
-            />
+        <form id="sortie-form" class="mt-10 flex flex-col gap-8">
+            <input type="hidden" name="defaultBar" value={barId} />
+            <input type="hidden" name="type" id="type-sortie" value="classique" />
 
             <section class="rounded-3xl bg-white-c p-4">
-
-                <h3 class="text-paprika-c">
-                    Type d’événement
-                </h3>
+                <h3 class="text-paprika-c">Type d’événement</h3>
 
                 <div class="mt-7 flex gap-10">
-
-                    <button
-                        type="button"
-                        id="classic-btn"
-                        class="flex flex-1 flex-col items-center justify-center rounded-3xl border-3 border-paprika-c bg-paprika-c px-4 py-4 text-white"
-                    >
-
+                    <button type="button" id="classic-btn" class="flex flex-1 flex-col items-center justify-center rounded-3xl border-3 border-paprika-c bg-paprika-c px-4 py-4 text-white">
                         <Position class="h-6 w-6" />
-
-                        <label class="mt-4">
-                            Sortie classique
-                        </label>
-
-                        <label class="text-center">
-                            Un seul bar
-                        </label>
-
+                        <label class="mt-4">Sortie classique</label>
+                        <label class="text-center">Un seul bar</label>
                     </button>
 
-                    <button
-                        type="button"
-                        id="crawl-btn"
-                        class="flex flex-1 flex-col items-center justify-center rounded-3xl border-3 border-yellow-c bg-white-bk px-4 py-4 text-yellow-c"
-                    >
-
+                    <button type="button" id="crawl-btn" class="flex flex-1 flex-col items-center justify-center rounded-3xl border-3 border-yellow-c bg-white-bk px-4 py-4 text-yellow-c">
                         <Group class="h-6 w-6" />
-
-                        <label class="mt-4">
-                            Bar Crawl
-                        </label>
-
-                        <label class="mt-2 text-center">
-                            Plusieurs bars
-                        </label>
-
+                        <label class="mt-4">Bar Crawl</label>
+                        <label class="mt-2 text-center">Plusieurs bars</label>
                     </button>
-
                 </div>
 
-                <div
-                    id="crawl-bars"
-                    class="mt-6 hidden flex-col gap-3"
-                >
-
-                    <label class="font-bold text-bordeaux-c">
-                        Sélection des bars
-                    </label>
-
+                <div id="crawl-bars" class="mt-6 hidden flex-col gap-3">
+                    <label class="font-bold text-bordeaux-c">Sélection des bars</label>
                     <div class="flex flex-col gap-3">
-
-                        {
-                            bars.map((bar) => (
-
-                                <label
-                                    class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4"
-                                >
-
-                                    <span class="font-bold text-bordeaux-c">
-                                        {bar.nom}
-                                    </span>
-
-                                    <input
-                                        type="checkbox"
-                                        name="bar"
-                                        value={bar.id}
-                                        class="h-5 w-5 accent-paprika-c"
-                                    />
-
-                                </label>
-
-                            ))
-                        }
-
+                        {bars.map((bar) => (
+                            
+                            <label class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4">
+                                <span class="font-bold text-bordeaux-c">{bar.nom}</span>
+                                
+                                <input type="checkbox" name="bar" value={bar.id} class="h-5 w-5 accent-paprika-c" />
+                            </label>
+                        ))}
                     </div>
-
                 </div>
-
             </section>
 
             <section class="rounded-3xl bg-white-c p-6">
-
                 <div>
-
-                    <small class="font-bold">
-                        Titre de l'événement
-                    </small>
-
-                    <input
-                        type="text"
-                        name="titre"
-                        placeholder="Ex: Afterwork du vendredi"
-                        required
-                        class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
-                    />
-
+                    <small class="font-bold">Titre de l'événement</small>
+                    <input 
+                    type="text" 
+                    name="titre" 
+                    placeholder="Ex: Afterwork du vendredi" 
+                    required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
                 </div>
 
                 <div class="mt-4">
-
-                    <small class="font-bold">
-                        Description (optionnel)
-                    </small>
-
-                    <textarea
-                        name="description"
-                        placeholder="Décris ton événement..."
-                        class="mt-3 h-16 w-full resize-none rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
-                    ></textarea>
-
+                    <small class="font-bold">Description (optionnel)</small>
+                    <textarea 
+                    name="description" 
+                    placeholder="Décris ton événement..." 
+                    class="mt-3 h-16 w-full resize-none rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"></textarea>
                 </div>
 
                 <div class="mt-4 flex gap-4">
-
                     <div class="flex-1">
-
-                        <small class="font-bold">
-                            Date
-                        </small>
-
-                        <input
-                            type="date"
-                            name="date"
-                            required
-                            class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
-                        />
-
+                        <small class="font-bold">Date</small>
+                        <input type="date" 
+                        name="date" 
+                        required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
                     </div>
-
+                    
                     <div class="flex-1">
-
-                        <small class="font-bold">
-                            Heure
-                        </small>
-
-                        <input
-                            type="time"
-                            name="heure"
-                            required
-                            class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
-                        />
-
+                        <small class="font-bold">Heure</small>
+                        <input type="time" 
+                        name="heure" 
+                        required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
                     </div>
-
                 </div>
 
                 <div class="mt-6">
-
-                    <small class="font-bold">
-                        Nombre de participants
-                    </small>
-
-                    <input
-                        type="number"
-                        name="participants"
-                        placeholder="Max 20 sans Premium"
-                        required
-                        class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
-                    />
-
+                    <small class="font-bold">Nombre de participants</small>
+                    <input 
+                    type="number" 
+                    name="participants" 
+                    placeholder="Max 20 sans Premium" 
+                    required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
                 </div>
-
             </section>
 
             <section class="flex items-center justify-between rounded-3xl bg-gradient-to-r from-paprika-c to-yellow-c px-8 py-3 text-white">
-
                 <div>
-
-                    <label class="text-white">
-                        Points estimés pour cet événement
-                    </label>
-
-                    <h2 id="points-display" class="text-white">
-                        +30
-                    </h2>
-
+                    <label class="text-white">Points estimés pour cet événement</label>
+                    <h2 id="points-display" class="text-white">+30</h2>
                 </div>
-
-                <Image
-                    src={Coupe}
-                    alt=""
-                    class="h-17 w-17"
-                />
-
+                <Image src={Coupe} alt="" class="h-17 w-17" />
             </section>
 
-            <button
-                type="submit"
-                class="rounded-full bg-paprika-c px-6 py-5 text-center font-bold text-white"
-            >
-                Créer l’événement
-            </button>
-
+            <button type="submit" class="rounded-full bg-paprika-c px-6 py-5 text-center font-bold text-white">Créer l’événement</button>
         </form>
 
-        <section
-            id="error-popup"
-            class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-6"
-        >
-
+        <section id="error-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-6">
             <div class="w-full max-w-sm rounded-3xl bg-white-c p-6 text-center">
-
-                <p
-                    id="error-message"
-                    class="text-lg font-bold text-bordeaux-c"
-                ></p>
-
-                <button
-                    id="close-error"
-                    class="mt-6 rounded-full bg-paprika-c px-6 py-3 font-bold text-white"
-                >
-                    OK
-                </button>
-
+                <p id="error-message" class="text-lg font-bold text-bordeaux-c"></p>
+                
+                <button id="close-error" class="mt-6 rounded-full bg-paprika-c px-6 py-3 font-bold text-white">OK</button>
             </div>
-
         </section>
-
     </main>
 </Layout>
 

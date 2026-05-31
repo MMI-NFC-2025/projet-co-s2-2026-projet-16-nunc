@@ -57,13 +57,9 @@ export function isAuthValid() {
 }
 
 export function clearAuth() {
-
     pb.authStore.clear();
-
-    localStorage.clear();
-
+    localStorage.removeItem('pb_auth');
     sessionStorage.clear();
-
 }
 
 export async function getBars() {
@@ -110,11 +106,11 @@ export async function getBarById(id) {
 
 export async function createSortie(data) {
     try {
-        console.log('Data envoyée:', data);  // ← Ajoutez cette ligne
+        console.log('Data envoyée:', data);
         const sortie = await pb.collection('sorties').create(data);
         return { success: true, sortie };
     } catch (error) {
-        console.error('Erreur createSortie:', error.response?.data);  // ← Plus de détails
+        console.error('Erreur createSortie:', error.response?.data);
         return { success: false, error: error };
     }
 }
@@ -141,12 +137,20 @@ export async function addParticipantSortie(
 
 export async function getSortieById(id) {
 
-    return await pb
-        .collection('sorties')
-        .getOne(id, {
-            expand:
-                'organisateur,bar'
-        });
+    try {
+
+        return await pb
+            .collection('sorties')
+            .getOne(id, {
+                expand:
+                    'organisateur,bar'
+            });
+
+    } catch {
+
+        return null;
+
+    }
 
 }
 
@@ -177,6 +181,67 @@ export async function getAllSorties() {
             expand:
                 'sortie,sortie.bar,sortie.organisateur'
         });
+
+}
+
+export async function updateSortieById(
+    id,
+    data
+) {
+
+    return await pb
+        .collection('sorties')
+        .update(
+            id,
+            data
+        );
+
+}
+
+export async function deleteSortieById(
+    id
+) {
+
+    return await pb
+        .collection('sorties')
+        .delete(id);
+
+}
+
+export async function deleteSortieCompletely(
+    sortieId
+) {
+
+    const participations =
+        await pb
+            .collection(
+                'participants_sortie'
+            )
+            .getFullList({
+                filter:
+                    `sortie="${sortieId}"`
+            });
+
+    for (
+        const participation
+        of participations
+    ) {
+
+        await pb
+            .collection(
+                'participants_sortie'
+            )
+            .delete(
+                participation.id
+            );
+
+    }
+
+    await pb
+        .collection('sorties')
+        .delete(
+            sortieId
+        );
 
 }
 

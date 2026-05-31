@@ -1,21 +1,22 @@
 ---
 export const prerender = false;
 
-import Layout from '../../layouts/Layout-user.astro';
+import Layout from '../../layouts/Layout.astro';
 
 import {
     getSortieById,
-    refreshCurrentUser
+    getBars
 } from '../../../backend/backend.mjs';
+
+import {
+    formatDate
+} from '../../js/utils.mjs';
 
 const { id } =
     Astro.params;
 
 const sortie =
     await getSortieById(id);
-
-const user =
-    await refreshCurrentUser();
 
 if (!sortie) {
 
@@ -25,22 +26,161 @@ if (!sortie) {
 
 }
 
-const isOrganisateur =
-    sortie.organisateur === user?.id;
+const allBars =
+    await getBars();
+
+const bars =
+    sortie.expand.bar || [];
+
+const nomBars =
+    sortie.type === 'bar crawl'
+        ? bars.map(
+            (bar) => bar.nom
+        ).join(', ')
+        : bars[0]?.nom
+        || 'Bar inconnu';
+
+const typeFormate =
+    sortie.type === 'bar crawl'
+        ? 'Bar Crawl'
+        : 'Classique';
+
+const dateFormatee =
+    formatDate(
+        sortie.date
+    );
 ---
 
-<h1>
-    {sortie.titre}
-</h1>
+<Layout
+    title={sortie.titre}
+    description={sortie.description}
+>
 
-<p>
-    {sortie.description}
-</p>
+    <main
+        class="px-8 py-10 pb-32"
+        data-organisateur={sortie.organisateur}
+    >
 
-<p>
-    {sortie.date}
-</p>
+        <h1>
+            {sortie.titre}
+        </h1>
 
-<p>
-    {sortie.heure}
-</p>
+        <p class="mt-4">
+            {sortie.description}
+        </p>
+
+        <div class="mt-8">
+
+            <p>
+                Date :
+                {dateFormatee}
+            </p>
+
+            <p>
+                Heure :
+                {sortie.heure.replace(':', 'h')}
+            </p>
+
+            <p>
+                Participants :
+                {sortie.participants}
+            </p>
+
+            <p>
+                Type :
+                {typeFormate}
+            </p>
+
+            <p>
+                Bar(s) :
+                {nomBars}
+            </p>
+
+        </div>
+
+        <section
+            id="organisateur-panel"
+            class="mt-10 hidden"
+        >
+
+            <h2>
+                Modifier la sortie
+            </h2>
+
+            <div class="mt-4 flex flex-col gap-4">
+
+                <input
+                    id="date"
+                    type="date"
+                    value={sortie.date.substring(0, 10)
+    }
+                />
+
+                <input
+                    id="heure"
+                    type="time"
+                    value={
+                        sortie.heure
+                    }
+                />
+
+                {
+                    sortie.type !== 'bar crawl' && (
+
+                        <select
+                            id="bar"
+                        >
+
+                            {
+                                allBars.map(
+                                    (bar) => (
+
+                                        <option
+                                            value={bar.id}
+                                            selected={
+                                                bars[0]?.id ===
+                                                bar.id
+                                            }
+                                        >
+                                            {bar.nom}
+                                        </option>
+
+                                    )
+                                )
+                            }
+
+                        </select>
+
+                    )
+                }
+
+                <button
+                    id="save-btn"
+                    data-sortie-id={
+                        sortie.id
+                    }
+                >
+                    Enregistrer
+                </button>
+
+                <button
+                    id="delete-btn"
+                    data-sortie-id={
+                        sortie.id
+                    }
+                >
+                    Supprimer la sortie
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</Layout>
+
+<script
+    type="module"
+    src="/src/js/sortie-details.js"
+></script>
