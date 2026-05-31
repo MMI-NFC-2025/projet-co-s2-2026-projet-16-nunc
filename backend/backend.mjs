@@ -109,30 +109,14 @@ export async function getBarById(id) {
 }
 
 export async function createSortie(data) {
-
     try {
-
-        const sortie =
-            await pb
-                .collection('sorties')
-                .create(data);
-
-        return {
-            success: true,
-            sortie
-        };
-
+        console.log('Data envoyée:', data);  // ← Ajoutez cette ligne
+        const sortie = await pb.collection('sorties').create(data);
+        return { success: true, sortie };
     } catch (error) {
-
-        console.log(error);
-
-        return {
-            success: false,
-            error: error
-        };
-
+        console.error('Erreur createSortie:', error.response?.data);  // ← Plus de détails
+        return { success: false, error: error };
     }
-
 }
 
 export async function addParticipantSortie(

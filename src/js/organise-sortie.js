@@ -181,6 +181,11 @@ form.addEventListener('submit', async (e) => {
     const formData =
         new FormData(form);
 
+        console.log(
+    'defaultBar =',
+    formData.get('defaultBar')
+);
+
     const participants =
         Number(
             formData.get('participants')
@@ -219,10 +224,40 @@ form.addEventListener('submit', async (e) => {
 
     }
 
+    const defaultBar =
+    new URLSearchParams(
+        window.location.search
+    ).get('bar');
+
     const selectedBars =
+        formData.getAll('bar');
+
+    const bars =
         formData.get('type') === 'classique'
-            ? [formData.get('defaultBar')]
-            : formData.getAll('bar');
+            ? defaultBar
+                ? [defaultBar.trim()]
+                : selectedBars.map((barId) =>
+                    typeof barId === 'string'
+                        ? barId.trim()
+                        : ''
+                ).filter(Boolean)
+            : selectedBars
+                .map((barId) =>
+                    typeof barId === 'string'
+                        ? barId.trim()
+                        : ''
+                )
+                .filter(Boolean);
+
+    if (bars.length === 0) {
+        errorMessage.textContent =
+            'Vous devez sélectionner au moins un bar.';
+
+        errorPopup.classList.remove('hidden');
+        errorPopup.classList.add('flex');
+
+        return;
+    }
 
     const points =
         calculatePoints(
@@ -254,7 +289,7 @@ form.addEventListener('submit', async (e) => {
             user.id,
 
         bar:
-            selectedBars,
+            bars,
 
         points:
             points
