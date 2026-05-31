@@ -2,185 +2,214 @@
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import Fleche from '../../assets/fleche.svg';
 
-import {
-    getSortieById,
-    getBars
-} from '../../../backend/backend.mjs';
+import { getSortieById, getBars } from '../../../backend/backend.mjs';
+import { formatDate } from '../../js/utils.mjs';
 
-import {
-    formatDate
-} from '../../js/utils.mjs';
-
-const { id } =
-    Astro.params;
-
-const sortie =
-    await getSortieById(id);
+const { id } = Astro.params;
+const sortie = await getSortieById(id);
 
 if (!sortie) {
-
-    return Astro.redirect(
-        '/sortie'
-    );
-
+    return Astro.redirect('/sortie');
 }
 
-const allBars =
-    await getBars();
-
-const bars =
-    sortie.expand.bar || [];
+const allBars = await getBars();
+const bars = sortie.expand.bar || [];
 
 const nomBars =
     sortie.type === 'bar crawl'
-        ? bars.map(
-            (bar) => bar.nom
-        ).join(', ')
-        : bars[0]?.nom
-        || 'Bar inconnu';
+        ? bars.map((bar) => bar.nom).join(', ')
+        : bars[0]?.nom || 'Bar inconnu';
 
 const typeFormate =
     sortie.type === 'bar crawl'
         ? 'Bar Crawl'
         : 'Classique';
 
-const dateFormatee =
-    formatDate(
-        sortie.date
-    );
+const dateFormatee = formatDate(sortie.date);
 ---
 
-<Layout
-    title={sortie.titre}
-    description={sortie.description}
->
+<Layout title={sortie.titre} description="Retrouvez tous les détails de la sortie ici !">
+    <main class="px-8 py-10 pb-32" data-organisateur={sortie.organisateur}>
 
-    <main
-        class="px-8 py-10 pb-32"
-        data-organisateur={sortie.organisateur}
-    >
+        <a href="/sortie" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+            <Image src={Fleche} alt="" class="h-4 w-4" />
+            Retour
+        </a>
 
-        <h1>
-            {sortie.titre}
-        </h1>
+        <section class="mt-12 rounded-3xl bg-white-c p-6">
+            <h3 class="text-paprika-c">Informations sur la sortie</h3>
 
-        <p class="mt-4">
-            {sortie.description}
-        </p>
+            {sortie.description && (
+                <p class="mt-4">{sortie.description}</p>
+            )}
+        </section>
 
-        <div class="mt-8">
+        <section class="mt-6 rounded-3xl bg-white-c p-6">
 
-            <p>
-                Date :
-                {dateFormatee}
-            </p>
+            <div class="flex gap-4">
+                <div class="flex-1">
+                    <small class="font-bold">Date</small>
+                    
+                    <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
+                        {dateFormatee}
+                    </div>
+                </div>
 
-            <p>
-                Heure :
-                {sortie.heure.replace(':', 'h')}
-            </p>
+                <div class="flex-1">
+                    <small class="font-bold">Heure</small>
+                    
+                    <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
+                        {sortie.heure.replace(':', 'h')}
+                    </div>
+                </div>
+            </div>
 
-            <p>
-                Participants :
-                {sortie.participants}
-            </p>
+            <div class="mt-4">
+                <small class="font-bold">Participants</small>
+                
+                <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
+                    {sortie.participants}
+                </div>
+            </div>
 
-            <p>
-                Type :
-                {typeFormate}
-            </p>
+            <div class="mt-4">
+                <small class="font-bold">Type</small>
+                
+                <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
+                    {typeFormate}
+                </div>
+            </div>
 
-            <p>
-                Bar(s) :
-                {nomBars}
-            </p>
+            <div class="mt-4">
+                <small class="font-bold">Bar(s)</small>
+                
+                <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
+                    {nomBars}
+                </div>
+            </div>
+        </section>
 
-        </div>
+        <section class="mt-6 rounded-3xl bg-white-c p-6">
+            <h3 class="text-paprika-c">Participants</h3>
 
-        <section
-            id="organisateur-panel"
-            class="mt-10 hidden"
-        >
+            <div id="participants-list" class="mt-4 flex flex-col gap-3">
 
-            <h2>
-                Modifier la sortie
-            </h2>
+                <div id="participant-template" class="hidden rounded-3xl border border-yellow-c bg-white-bk p-4">
+                    <div class="flex items-center gap-4">
+                        <img class="participant-avatar h-16 w-16 rounded-full object-cover" alt="" />
+                        <div>
+                            <p class="participant-name font-bold text-xl"></p>
+                            <small class="participant-role text-paprika-c"></small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="organisateur-panel" class="mt-10 hidden rounded-3xl bg-white-c p-6">
+
+            <h3 class="text-paprika-c">Modifier la sortie</h3>
 
             <div class="mt-4 flex flex-col gap-4">
-
                 <input
                     id="date"
                     type="date"
-                    value={sortie.date.substring(0, 10)
-    }
+                    value={sortie.date.substring(0, 10)}
+                    class="rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
                 />
 
                 <input
                     id="heure"
                     type="time"
-                    value={
-                        sortie.heure
-                    }
+                    value={sortie.heure}
+                    class="rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
                 />
 
                 {
-                    sortie.type !== 'bar crawl' && (
-
-                        <select
-                            id="bar"
-                        >
-
-                            {
-                                allBars.map(
-                                    (bar) => (
-
-                                        <option
-                                            value={bar.id}
-                                            selected={
-                                                bars[0]?.id ===
-                                                bar.id
-                                            }
-                                        >
-                                            {bar.nom}
-                                        </option>
-
-                                    )
-                                )
-                            }
-
-                        </select>
-
+                    sortie.type === 'bar crawl' ? (
+                        <div id="bar-crawl-container" class="flex flex-col gap-3">
+                            {allBars.map((bar) => (
+                                <label class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4">
+                                    <span class="font-bold">{bar.nom}</span>
+                                    <input
+                                        type="checkbox"
+                                        name="bar"
+                                        value={bar.id}
+                                        checked={bars.some((currentBar) => currentBar.id === bar.id)}
+                                        class="h-5 w-5 accent-paprika-c"
+                                    />
+                                </label>
+                            ))}
+                        </div>
+                    ) : (
+                        <div class="flex flex-col gap-3">
+                            {allBars.map((bar) => (
+                                <label
+                                    class={`flex items-center justify-between rounded-2xl border-2 px-5 py-4 ${
+                                        bars[0]?.id === bar.id
+                                            ? 'border-paprika-c bg-paprika-c text-white'
+                                            : 'border-yellow-c bg-white-bk text-bordeaux-c'
+                                    }`}
+                                >
+                                    <span>{bar.nom}</span>
+                                    <input
+                                        type="radio"
+                                        name="bar"
+                                        value={bar.id}
+                                        checked={bars[0]?.id === bar.id}
+                                        class="h-5 w-5 accent-paprika-c"
+                                    />
+                                </label>
+                            ))}
+                        </div>
                     )
                 }
 
                 <button
                     id="save-btn"
-                    data-sortie-id={
-                        sortie.id
-                    }
+                    data-sortie-id={sortie.id}
+                    class="rounded-full bg-paprika-c px-6 py-4 font-bold text-white"
                 >
                     Enregistrer
                 </button>
 
                 <button
+                    id="invite-btn"
+                    class="rounded-full border-2 border-yellow-c px-6 py-4 font-bold text-bordeaux-c"
+                >
+                    Inviter un ami
+                </button>
+
+                <div id="invite-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-6">
+                    <div class="w-full max-w-md rounded-3xl bg-white-c p-6">
+                        <h3 class="text-paprika-c">Inviter un ami</h3>
+                        <div id="users-list" class="mt-6 flex flex-col gap-3"></div>
+
+                        <div class="mt-6 flex gap-3">
+                            <button id="send-invite-btn" class="flex-1 rounded-full bg-paprika-c py-3 text-white">
+                                Envoyer
+                            </button>
+                            <button id="close-invite-btn" class="flex-1 rounded-full border-2 border-paprika-c py-3 text-paprika-c">
+                                Fermer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button
                     id="delete-btn"
-                    data-sortie-id={
-                        sortie.id
-                    }
+                    data-sortie-id={sortie.id}
+                    class="rounded-full border-2 border-paprika-c px-6 py-4 font-bold text-paprika-c"
                 >
                     Supprimer la sortie
                 </button>
-
             </div>
-
         </section>
-
     </main>
-
 </Layout>
 
-<script
-    type="module"
-    src="/src/js/sortie-details.js"
-></script>
+<script type="module" src="/src/js/sortie-details.js"></script>

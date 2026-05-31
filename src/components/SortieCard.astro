@@ -4,33 +4,33 @@ import Carte from '../assets/carte.svg';
 import People from '../assets/people.svg';
 ---
 
-<article id="sortie-template" class="hidden rounded-4xl border-2 border-mocha-c bg-white-c p-6">
+<article id="sortie-template" class="hidden rounded-3xl border border-mocha-c bg-white-c pr-4 pl-2 py-5">
     <div class="flex gap-5">
-        <img class="sortie-avatar h-24 w-24 shrink-0 rounded-2xl object-cover" alt="" />
+        <img class="sortie-avatar h-19 w-19 shrink-0 rounded-full object-cover" alt="" />
 
         <div class="flex-1">
-            <h3 class="sortie-title text-paprika-c"></h3>
+            <h4 class="sortie-title text-bordeaux-c font-titan"></h4>
 
-            <p class="mt-2 font-bold">
-                <span class="sortie-organisateur text-paprika-c"></span>
+            <small class="mt-2 font-bold">
+                <span class="sortie-organisateur text-lg text-paprika-c"></span>
                 a créé(e) cet évènement
-            </p>
+            </small>
 
-            <div class="mt-4 flex flex-col gap-3">
-                <p class="flex items-center gap-3">
-                    <Calendrier class="h-6 w-6" />
+            <div class="mt-2 flex flex-col">
+                <small class="flex items-center gap-2">
+                    <Calendrier class="h-4 w-4" />
                     <span class="sortie-date"></span>
-                </p>
+                </small>
 
-                <p class="flex items-center gap-3">
-                    <Carte class="h-6 w-6" />
+                <small class="flex items-center gap-2">
+                    <Carte class="h-4 w-4" />
                     <span class="sortie-bar"></span>
-                </p>
+                </small>
 
-                <p class="flex items-center gap-3">
-                    <People class="h-6 w-6" />
+                <small class="flex items-center gap-2">
+                    <People class="h-4 w-4" />
                     <span class="sortie-participants"></span>
-                </p>
+                </small>
             </div>
         </div>
     </div>
