@@ -2,7 +2,7 @@
 import Logo from '../assets/logo.svg';
 import Layout from '../layouts/Layout-landingpage.astro';
 
-import Photo from '../assets/img/fond-landingpage.avif';
+import Photo from '../assets/img/photo-verre.avif';
 import Orange from '../assets/orange.svg';
 import Ice from '../assets/ice.svg';
 import Flechegauche from '../assets/flecheorange-gauche.svg';
@@ -23,8 +23,30 @@ import { Image } from 'astro:assets';
     <section class="mt-10 relative">
         <Image src={Logo} alt="Logo" class="w-64 h-auto mx-auto" />
         
-        <div class="relative overflow-hidden">
-            <Image src={Photo} alt="" class="w-full max-w-md h-auto mx-auto" />
+        <div class="relative h-136 overflow-hidden">
+            <Image
+            src={Photo}
+            alt=""
+            class="
+                absolute
+                inset-0
+                h-full
+                w-full
+                object-cover
+                opacity-70
+                "
+                />
+                
+                <div
+                class="
+                absolute
+                inset-0
+                bg-linear-to-b
+                from-white-bk
+                via-transparent
+                to-white-bk
+                "
+                ></div>
 
             <span class="absolute -right-16 top-40">
                 <Image src={Orange} alt="" class="w-40 h-40 -rotate-45" />
@@ -52,13 +74,13 @@ import { Image } from 'astro:assets';
     </section>
 
     <section class="mt-2 px-6 text-left">
-        <h4 class="text-bordeaux-c">Le future de vos soirées, 
+        <h1 class="text-bordeaux-c">Le future de vos soirées, 
           <span class="text-yellow-c">maintenant</span>.
-        </h4>
+        </h1>
     </section>
 
     <section class="mt-30">
-        <h3 class="text-paprika-c mb-6 text-center">Fonctionnalités</h3>
+        <h2 class="text-paprika-c mb-6 text-center">Fonctionnalités</h2>
 
         <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
             <Image src={Bar} alt="" class="w-full h-36 object-cover" />
@@ -130,28 +152,28 @@ import { Image } from 'astro:assets';
         </div>
     </section>
 
-    <section class="mt-16 mb-20 mx-6 rounded-4xl bg-linear-to-b from-yellow-c via-paprika-c to-beige-c px-6 py-10">
-        <h4 class="text-white text-center">Ta prochaine soirée commence maintenant</h4>
+    <section class="mt-16 mb-20 mx-6 rounded-4xl bg-linear-to-br from-yellow-c via-paprika-c to-beige-c px-6 py-10">
+        <h2 class="text-white text-center leading-none">Ta prochaine soirée commence maintenant</h2>
         <p class="mt-8 px-3 text-center text-white-bk">
           Organise tes sorties, découvre les meilleurs bars et profite du moment avec tes amis.
         </p>
 
-        <div class="mt-12 flex justify-center">
-            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-2.5 flex items-center gap-2">
+        <div class="mt-12 flex justify-center text-marron-c">
+            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-3 flex items-center gap-4">
                 <Image src={Google} alt="" class="w-10 h-10 shrink-0" />
                 <div class="flex flex-col justify-center text-left">
                     <small>Télécharge sur</small>
-                    <p class="font-titan">Google Play</p>
+                    <h3 class="text-marron-c">Google Play</h3>
                 </div>
             </a>
         </div>
 
-        <div class="mt-6 flex justify-center">
-            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-2.5 flex items-center gap-2">
+        <div class="mt-6 flex justify-center text-marron-c">
+            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-3 flex items-center gap-4">
                 <Image src={Apple} alt="" class="w-10 h-10 shrink-0" />
                 <div class="flex flex-col justify-center text-left">
                     <small>Télécharge sur</small>
-                    <p class="font-titan">App Store</p>
+                    <h3 class="text-marron-c">App Store</h3>
                 </div>
             </a>
         </div>

@@ -210,3 +210,32 @@ export function getLevelData(points) {
 
     return { level, currentXp, maxXp, progress };
 }
+
+export async function getAbonnements() {
+
+    return await pb
+        .collection(
+            'abonnement'
+        )
+        .getFullList({
+            expand:
+                'avantage'
+        });
+
+}
+
+export async function getAvantages() {
+    return await pb
+        .collection('avantages')
+        .getFullList({
+            sort: 'created'
+        });
+}
+
+export async function getFaq() {
+    return await pb
+        .collection('faq')
+        .getFullList({
+            sort: 'created'
+        });
+}
