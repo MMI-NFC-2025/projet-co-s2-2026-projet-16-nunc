@@ -1,13 +1,13 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 
-import Fleche from '../assets/fleche.svg';
-import Orange from '../assets/orange.svg';
-import Trophy from '../assets/img/coupe.avif';
-import Warning from '../assets/tw.svg';
-import Flechegauche from '../assets/flecheorange-gauche.svg';
-import Flechedroite from '../assets/flecheorange-droite.svg';
+import Fleche from '../../assets/fleche.svg';
+import Orange from '../../assets/orange.svg';
+import Trophy from '../../assets/img/coupe.avif';
+import Warning from '../../assets/tw.svg';
+import Flechegauche from '../../assets/flecheorange-gauche.svg';
+import Flechedroite from '../../assets/flecheorange-droite.svg';
 ---
 
 <Layout title="Test de Sobriété" description="Challenge ton cerveau et vérifie que tu es en forme !">
@@ -88,19 +88,20 @@ import Flechedroite from '../assets/flecheorange-droite.svg';
 
         </section>
 
-        <button
-            type="button"
-            class="relative mx-auto mt-9 flex w-full items-center justify-center rounded-full bg-paprika-c py-5 text-white"
-        >
-            <span class="absolute inset-y-0 left-4 flex items-center">
-                <Image src={Flechegauche} alt="" class="h-12 w-12" />
-            </span>
+        <a
+    href="/test-sobriete/jeu"
+    class="relative mx-auto mt-9 flex w-full items-center justify-center rounded-full bg-paprika-c py-5 text-white"
+>
+    <span class="absolute inset-y-0 left-4 flex items-center">
+        <Image src={Flechegauche} alt="" class="h-12 w-12" />
+    </span>
 
-            Commencer le test
+    Commencer le test
 
-            <span class="absolute inset-y-0 right-4 flex items-center">
-                <Image src={Flechedroite} alt="" class="h-12 w-12" />
-            </span>
-        </button>
+    <span class="absolute inset-y-0 right-4 flex items-center">
+        <Image src={Flechedroite} alt="" class="h-12 w-12" />
+    </span>
+</a>
+
     </main>
 </Layout>
