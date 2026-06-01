@@ -10,15 +10,10 @@ export async function addNewUser(data) {
     return await pb.collection('users').create(data);
 }
 
-export async function getCurrentUser() {
-    if (!pb.authStore.isValid) return null;
+export function getCurrentUser() {
 
-    try {
-        const user = await pb.collection('users').getOne(pb.authStore.record.id);
-        return user;
-    } catch {
-        return null;
-    }
+    return pb.authStore.record || null;
+
 }
 
 export async function loginUser(email, password) {
@@ -56,7 +51,6 @@ export async function getUsersByIds(ids) {
     if (!ids || ids.length === 0) return [];
 
     const filter = ids.map(id => `id="${id}"`).join(' || ');
-
     let users = await pb.collection('users').getFullList({ filter });
 
     if (users.length === 0) {

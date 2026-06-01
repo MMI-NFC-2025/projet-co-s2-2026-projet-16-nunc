@@ -52,6 +52,10 @@
         @apply font-tuffy text-[14px] leading-[18px];
     }
 
+    button {
+        @apply font-tuffy font-bold text-[18px] leading-[20px];
+    }
+
     strong {
         @apply font-bold;
     }

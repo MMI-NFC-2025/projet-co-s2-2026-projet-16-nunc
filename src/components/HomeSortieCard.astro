@@ -1,0 +1,29 @@
+---
+import Calendrier from '../assets/sortie.svg';
+import Carte from '../assets/carte.svg';
+import People from '../assets/people.svg';
+---
+
+<article id="home-sortie-template" class="hidden rounded-3xl border border-paprika-c bg-white-c p-5">
+    <h4 class="home-sortie-title font-titan leading-none"></h4>
+
+    <div class="mt-2 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+
+            <div class="flex items-center gap-2">
+                <Calendrier class="h-5 w-5 shrink-0" />
+                <span class="home-sortie-date text-base"></span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <People class="h-5 w-5 shrink-0" />
+                <span class="home-sortie-participants text-base"></span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 text-paprika-c">
+            <Carte class="h-5 w-5 shrink-0" />
+            <span class="home-sortie-bar text-base"></span>
+        </div>
+    </div>
+</article>
