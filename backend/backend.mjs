@@ -186,6 +186,16 @@ export async function addUserPoints(userId, pointsToAdd) {
     }
 }
 
+export async function createRetourProgramme(data) {
+
+    return await pb
+        .collection(
+            'retours_programmes'
+        )
+        .create(data);
+
+}
+
 export function getLevel(points) {
     return Math.floor(points / 250) + 1;
 }
