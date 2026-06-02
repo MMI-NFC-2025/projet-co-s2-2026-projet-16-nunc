@@ -34,7 +34,10 @@ const dateFormatee = formatDate(sortie.date);
 <Layout title={sortie.titre} description="Retrouvez tous les détails de la sortie ici !">
     <main class="px-8 py-10 pb-32" data-organisateur={sortie.organisateur}>
 
-        <a href="/sortie" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+        <a
+            href="/sortie"
+            class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
+        >
             <Image src={Fleche} alt="" class="h-4 w-4" />
             Retour
         </a>
@@ -52,7 +55,6 @@ const dateFormatee = formatDate(sortie.date);
             <div class="flex gap-4">
                 <div class="flex-1">
                     <small class="font-bold">Date</small>
-                    
                     <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
                         {dateFormatee}
                     </div>
@@ -60,7 +62,6 @@ const dateFormatee = formatDate(sortie.date);
 
                 <div class="flex-1">
                     <small class="font-bold">Heure</small>
-                    
                     <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
                         {sortie.heure.replace(':', 'h')}
                     </div>
@@ -69,7 +70,6 @@ const dateFormatee = formatDate(sortie.date);
 
             <div class="mt-4">
                 <small class="font-bold">Participants</small>
-                
                 <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
                     {sortie.participants}
                 </div>
@@ -77,7 +77,6 @@ const dateFormatee = formatDate(sortie.date);
 
             <div class="mt-4">
                 <small class="font-bold">Type</small>
-                
                 <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
                     {typeFormate}
                 </div>
@@ -85,11 +84,11 @@ const dateFormatee = formatDate(sortie.date);
 
             <div class="mt-4">
                 <small class="font-bold">Bar(s)</small>
-                
                 <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2">
                     {nomBars}
                 </div>
             </div>
+
         </section>
 
         <section class="mt-6 rounded-3xl bg-white-c p-6">
@@ -97,9 +96,15 @@ const dateFormatee = formatDate(sortie.date);
 
             <div id="participants-list" class="mt-4 flex flex-col gap-3">
 
-                <div id="participant-template" class="hidden rounded-3xl border border-yellow-c bg-white-bk p-4">
+                <div
+                    id="participant-template"
+                    class="hidden rounded-3xl border border-yellow-c bg-white-bk p-4"
+                >
                     <div class="flex items-center gap-4">
-                        <img class="participant-avatar h-16 w-16 rounded-full object-cover" alt="" />
+                        <img
+                            class="participant-avatar h-16 w-16 rounded-full object-cover"
+                            alt=""
+                        />
                         <div>
                             <p class="participant-name font-bold text-xl"></p>
                             <small class="participant-role text-paprika-c"></small>
@@ -115,6 +120,7 @@ const dateFormatee = formatDate(sortie.date);
             <h3 class="text-paprika-c">Modifier la sortie</h3>
 
             <div class="mt-4 flex flex-col gap-4">
+
                 <input
                     id="date"
                     type="date"
@@ -133,7 +139,19 @@ const dateFormatee = formatDate(sortie.date);
                     sortie.type === 'bar crawl' ? (
                         <div id="bar-crawl-container" class="flex flex-col gap-3">
                             {allBars.map((bar) => (
-                                <label class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4">
+                                <label
+                                    class="
+                                        flex
+                                        items-center
+                                        justify-between
+                                        rounded-2xl
+                                        border-2
+                                        border-yellow-c
+                                        bg-white-bk
+                                        px-5
+                                        py-4
+                                    "
+                                >
                                     <span class="font-bold">{bar.nom}</span>
                                     <input
                                         type="checkbox"
@@ -184,16 +202,27 @@ const dateFormatee = formatDate(sortie.date);
                     Inviter un ami
                 </button>
 
-                <div id="invite-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-6">
+                <div
+                    id="invite-modal"
+                    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-6"
+                >
                     <div class="w-full max-w-md rounded-3xl bg-white-c p-6">
                         <h3 class="text-paprika-c">Inviter un ami</h3>
+
                         <div id="users-list" class="mt-6 flex flex-col gap-3"></div>
 
                         <div class="mt-6 flex gap-3">
-                            <button id="send-invite-btn" class="flex-1 rounded-full bg-paprika-c py-3 text-white">
+                            <button
+                                id="send-invite-btn"
+                                class="flex-1 rounded-full bg-paprika-c py-3 text-white"
+                            >
                                 Envoyer
                             </button>
-                            <button id="close-invite-btn" class="flex-1 rounded-full border-2 border-paprika-c py-3 text-paprika-c">
+
+                            <button
+                                id="close-invite-btn"
+                                class="flex-1 rounded-full border-2 border-paprika-c py-3 text-paprika-c"
+                            >
                                 Fermer
                             </button>
                         </div>
@@ -207,9 +236,37 @@ const dateFormatee = formatDate(sortie.date);
                 >
                     Supprimer la sortie
                 </button>
+
+                <div
+                    id="delete-modal"
+                    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-8"
+                >
+                    <div class="w-full max-w-md rounded-4xl bg-white-c p-8 text-center">
+                        <h4 class="text-bordeaux-c">Supprimer cette sortie ?</h4>
+
+                        <div class="mt-8 flex gap-4">
+                            <button
+                                id="cancel-delete"
+                                class="flex-1 rounded-full border-2 border-paprika-c py-4 text-paprika-c"
+                            >
+                                Annuler
+                            </button>
+
+                            <button
+                                id="confirm-delete"
+                                class="flex-1 rounded-full bg-paprika-c py-4 text-white"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
+
     </main>
 </Layout>
 
 <script type="module" src="/src/js/sortie-details.js"></script>
+<script type="module" src="/src/js/auth-guard.js"></script>

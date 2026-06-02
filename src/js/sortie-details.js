@@ -1,4 +1,12 @@
-import { getCurrentUser, updateSortieById, deleteSortieCompletely, getUserFriends, createInvitation, getSortieParticipants } from '../../backend/backend.mjs';
+import {
+    getCurrentUser,
+    updateSortieById,
+    deleteSortieCompletely,
+    getUserFriends,
+    createInvitation,
+    getSortieParticipants,
+    getFileUrl
+} from '../../backend/backend.mjs';
 
 const main = document.querySelector('[data-organisateur]');
 const organisateurId = main?.dataset?.organisateur;
@@ -36,9 +44,7 @@ if (sortieId) {
         const user = participant.expand?.utilisateur;
 
         card.querySelector('.participant-avatar').src =
-            user?.avatar
-                ? `http://127.0.0.1:8090/api/files/${user.collectionId}/${user.id}/${user.avatar}`
-                : '';
+            user?.avatar ? getFileUrl(user, user.avatar) : '';
 
         participantsList.appendChild(card);
     });
@@ -67,16 +73,55 @@ if (saveBtn) {
     });
 }
 
-if (deleteBtn) {
-    deleteBtn.addEventListener('click', async () => {
-        const confirmation = confirm('Supprimer cette sortie ?');
-        if (!confirmation) return;
+const modal =
+    document.getElementById('delete-modal');
 
-        const sortieId = deleteBtn.dataset.sortieId;
-        await deleteSortieCompletely(sortieId);
+const cancelDelete =
+    document.getElementById('cancel-delete');
+
+const confirmDelete =
+    document.getElementById('confirm-delete');
+
+let sortieToDelete = null;
+
+if (
+    deleteBtn &&
+    modal &&
+    cancelDelete &&
+    confirmDelete
+) {
+
+    deleteBtn.addEventListener('click', () => {
+
+        sortieToDelete =
+            deleteBtn.dataset.sortieId;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+    });
+
+    cancelDelete.addEventListener('click', () => {
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+
+        sortieToDelete = null;
+
+    });
+
+    confirmDelete.addEventListener('click', async () => {
+
+        if (!sortieToDelete) return;
+
+        await deleteSortieCompletely(
+            sortieToDelete
+        );
 
         window.location.href = '/sortie';
+
     });
+
 }
 
 const radios = document.querySelectorAll('input[type="radio"][name="bar"]');

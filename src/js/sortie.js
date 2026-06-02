@@ -1,4 +1,13 @@
-import { refreshCurrentUser, getUserSorties,  getUsersByIds, getUserInvitations, acceptInvitation, refuseInvitation, addParticipantSortie } from '../../backend/backend.mjs';
+import {
+    refreshCurrentUser,
+    getUserSorties,
+    getUsersByIds,
+    getUserInvitations,
+    acceptInvitation,
+    refuseInvitation,
+    addParticipantSortie,
+    getFileUrl
+} from '../../backend/backend.mjs';
 
 const user = await refreshCurrentUser();
 
@@ -35,11 +44,8 @@ function afficherSorties(participations, organiserMap) {
             ? rawOrganisateurId[0]
             : rawOrganisateurId;
 
-        const organisateur = expandedOrganisateur || organiserMap.get(organisateurId);
-
-        const avatarUrl = organisateur?.avatar
-            ? `http://127.0.0.1:8090/api/files/${organisateur.collectionId}/${organisateur.id}/${organisateur.avatar}`
-            : '';
+        const organisateur =
+            expandedOrganisateur || organiserMap.get(organisateurId);
 
         const bars = sortie?.expand?.bar;
 
@@ -49,16 +55,16 @@ function afficherSorties(participations, organiserMap) {
 
         const avatarEl = card.querySelector('.sortie-avatar');
 
-        if (avatarUrl) {
-            avatarEl.src = avatarUrl;
-            avatarEl.alt = `${organisateur?.username || 'Organisateur'} avatar`;
+        if (organisateur?.avatar) {
+            avatarEl.src = getFileUrl(organisateur, organisateur.avatar);
+            avatarEl.alt = organisateur.username;
         } else {
-            avatarEl.removeAttribute('src');
-            avatarEl.alt = 'Photo de l’organisateur indisponible';
+            avatarEl.src = '';
         }
 
         card.querySelector('.sortie-title').textContent = sortie.titre || '';
-        card.querySelector('.sortie-organisateur').textContent = organisateur?.username || 'Utilisateur';
+        card.querySelector('.sortie-organisateur').textContent =
+            organisateur?.username || 'Utilisateur';
 
         const date = new Date(sortie.date);
         const dateFormatee = date.toLocaleDateString('fr-FR', {
@@ -73,7 +79,8 @@ function afficherSorties(participations, organiserMap) {
         if (sortie.type === 'barcrawl' || sortie.type === 'bar crawl') {
             card.querySelector('.sortie-bar').textContent = 'Bar Crawl';
         } else {
-            card.querySelector('.sortie-bar').textContent = bars?.[0]?.nom || 'Bar';
+            card.querySelector('.sortie-bar').textContent =
+                bars?.[0]?.nom || 'Bar';
         }
 
         card.querySelector('.sortie-participants').textContent =
@@ -99,9 +106,10 @@ if (user) {
         )
     ];
 
-    const organisers = organiserIds.length > 0
-        ? await getUsersByIds(organiserIds)
-        : [];
+    const organisers =
+        organiserIds.length > 0
+            ? await getUsersByIds(organiserIds)
+            : [];
 
     const organiserMap = new Map(
         organisers.map((organisateur) => [organisateur.id, organisateur])

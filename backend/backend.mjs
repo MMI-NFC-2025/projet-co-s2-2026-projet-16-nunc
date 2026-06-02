@@ -1,6 +1,6 @@
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase('https://pbnunc.linabenmabrouk.fr');
 
 export async function addContact(data) {
     return await pb.collection('contact').create(data);
@@ -238,4 +238,14 @@ export async function getFaq() {
         .getFullList({
             sort: 'created'
         });
+}
+
+export function getFileUrl(
+    record,
+    filename
+) {
+    return pb.files.getURL(
+        record,
+        filename
+    );
 }

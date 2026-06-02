@@ -1,7 +1,8 @@
 import {
     createRetourProgramme,
     getCurrentUser,
-    getUserFriends
+    getUserFriends,
+    getFileUrl
 } from '../../backend/backend.mjs';
 
 const samCard = document.getElementById('sam-card');
@@ -55,10 +56,9 @@ samCard.addEventListener('click', async () => {
 
         card.querySelector('.friend-username').textContent = ami.username;
 
-        card.querySelector('.friend-avatar').src =
-            ami.avatar
-                ? `http://127.0.0.1:8090/api/files/_pb_users_auth_/${ami.id}/${ami.avatar}`
-                : '/default-avatar.png';
+        const avatar = card.querySelector('.friend-avatar');
+        avatar.src = ami.avatar ? getFileUrl(ami, ami.avatar) : '';
+        avatar.alt = ami.username;
 
         card.addEventListener('click', async () => {
             await createRetourProgramme({
