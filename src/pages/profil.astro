@@ -1,15 +1,89 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import Fleche from '../assets/fleche.svg';
+import Trophee from '../assets/profil.svg';
+import Courone from '../assets/courone.svg';
+import Calendrier from '../assets/sortie.svg';
+import Amis from '../assets/people.svg';
+import Power from '../assets/power.svg';
+import Edit from '../assets/edit.svg';
 ---
 
-<Layout title="Profil">
+<Layout title="Mon profil" hideHeader={true}>
+    <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16">
+        <div class="flex items-start justify-between">
+            <a href="/" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk">
+                <Image src={Fleche} alt="" class="h-4 w-4" />
+                Retour
+            </a>
 
-    <button id="logout">
-        Se déconnecter
-    </button>
+            <button id="logout" class="flex h-12 w-12 items-center justify-center rounded-full bg-white-bk/50">
+                <Image src={Power} alt="Déconnexion" class="h-7 w-7" />
+            </button>
+        </div>
 
+        <div class="mt-4 flex flex-col items-center">
+            <div class="relative mt-4">
+                <img id="avatar" src="" alt="" class="h-40 w-40 rounded-full object-cover" />
+
+                <input id="avatar-input" type="file" accept="image/*" class="hidden" />
+
+                <label for="avatar-input" class="absolute top-1 right-1 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white-c">
+                    <Image src={Edit} alt="Modifier la photo" class="h-6 w-6" />
+                </label>
+            </div>
+
+            <h3 id="username" class="mt-5 text-center text-white-bk"></h3>
+
+            <div id="premium-badge" class="hidden mt-3 flex items-center gap-2 rounded-full bg-white-c/40 px-5 py-2 font-bold text-white-bk">
+                <Image src={Courone} alt="" class="h-4 w-4" />
+                Premium
+            </div>
+
+            <small id="date-inscription" class="mt-2 text-white-c"></small>
+        </div>
+
+        <div class="mt-7 rounded-3xl bg-white-c p-6">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-beige-c flex items-center justify-center">
+                    <Image src={Trophee} alt="" class="w-6 h-6" />
+                </div>
+
+                <div>
+                    <h4 id="niveau" class="font-titan leading-none"></h4>
+                    <small id="points" class="mt-1 block text-marron-c"></small>
+                </div>
+            </div>
+
+            <div class="mt-8 h-5 bg-white rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-orange-c rounded-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="mt-8 grid grid-cols-3 gap-4 px-6">
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Image src={Calendrier} alt="" class="mx-auto h-7 w-7" />
+            <h4 id="nb-sorties" class="mt-4 font-titan"></h4>
+            <small class="mt-2 block text-marron-c">Sorties</small>
+        </article>
+
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Image src={Trophee} alt="" class="mx-auto h-7 w-7" />
+            <h4 id="nb-organisations" class="mt-4 font-titan"></h4>
+            <small class="mt-2 block text-marron-c">Organiser</small>
+        </article>
+
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Image src={Amis} alt="" class="mx-auto h-7 w-7" />
+            <h4 id="nb-amis" class="mt-4 font-titan"></h4>
+            <small class="mt-2 block text-marron-c">Ami(e)s</small>
+        </article>
+    </div>
 </Layout>
 
-
-<script type="module" src="/src/js/deconnexion.js"></script>
 <script type="module" src="/src/js/auth-guard.js"></script>
+<script type="module" src="/src/js/profil.js"></script>
+<script type="module" src="/src/js/deconnexion.js"></script>

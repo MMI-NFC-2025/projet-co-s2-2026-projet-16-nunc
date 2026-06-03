@@ -4,13 +4,13 @@
 Éléménts à renseigner pour la soutenance :
 
 - [ ] Nom du projet : NŨNC
-- [ ] URL de la landing page :
-- [ ] URL de l'application finale :
+- [ ] URL de la landing page : 
+- [ ] URL de l'application finale : 
 - [ ] URL de connexion au back office : https://pbnunc.linabenmabrouk.fr/_/
-- [ ] Identifiant de connexion au backoffice : 
-- [ ] Mot de passe de connexion au backoffice :
+- [ ] Identifiant de connexion au backoffice : linabenmabrouk23@gmail.com
+- [ ] Mot de passe de connexion au backoffice : Caramel010416
 - [ ] URL de la maquette FIGMA : https://www.figma.com/design/TJiXKVsvrgmfMSRRY3fHF3/N%C5%A8NC?node-id=69-5&t=Ns8wmFFPwShNKtBL-1 
-- [ ] Description du projet :
+- [ ] Description du projet : 
 
 
 ## 🚀 Équipe

@@ -1,0 +1,76 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+import Fleche from '../../assets/fleche.svg';
+---
+
+<Layout title="Listes de tes amis">
+    <main class="px-8 py-10 pb-32">
+
+        <a
+            href="/"
+            class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
+        >
+            <Image src={Fleche} alt="" class="h-4 w-4" />
+            Retour
+        </a>
+
+        <input
+            id="search-user"
+            type="text"
+            placeholder="Rechercher un utilisateur"
+            class="mt-8 w-full rounded-2xl border-2 border-mocha-c bg-white-bk p-4 outline-none"
+        />
+
+        <div class="mt-6 flex gap-3">
+            <button
+                id="tab-friends"
+                class="friend-tab rounded-full bg-paprika-c px-4 py-3 text-white"
+            >
+                Mes amis
+            </button>
+
+            <button
+                id="tab-requests"
+                class="friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c"
+            >
+                Demandes
+            </button>
+
+            <button
+                id="tab-pending"
+                class="friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c"
+            >
+                En attente
+            </button>
+        </div>
+
+        <div id="friends-list" class="mt-8 flex flex-col gap-4"></div>
+
+        <article
+            id="user-template"
+            class="hidden w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4"
+        >
+            <img
+                class="user-avatar h-16 w-16 rounded-full object-cover"
+                src=""
+                alt=""
+            />
+
+            <div class="flex-1">
+                <h4 class="user-name font-bold text-bordeaux-c"></h4>
+                <small class="user-status text-marron-c"></small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <button class="user-action rounded-full bg-paprika-c px-5 py-2 text-white text-sm"></button>
+
+                <button class=" user-refuse hidden rounded-full border-2 border-mocha-c px-5 py-2 text-mocha-c text-sm"> Refuser </button>
+            </div>
+        </article>
+
+    </main>
+</Layout>
+
+<script type="module" src="/src/js/amis.js"></script>

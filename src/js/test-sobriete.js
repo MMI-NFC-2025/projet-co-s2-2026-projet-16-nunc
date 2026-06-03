@@ -1,244 +1,100 @@
-import { refreshCurrentUser, addUserPoints } from '../../backend/backend.mjs';
+import {
+    refreshCurrentUser,
+    addUserPoints,
+    getQuestionsSobriete
+} from '../../backend/backend.mjs';
 
 let score = 0;
-let currentGame = 1;
-let gameFinished = false;
+let currentQuestion = 0;
+let questions = [];
+let hasAnswered = false;
 let pointsAdded = false;
 
+const step = document.getElementById('game-step');
 const title = document.getElementById('game-title');
-const circle = document.getElementById('circle');
+const question = document.getElementById('question');
+const buttons = document.querySelectorAll('.answer-btn');
 const message = document.getElementById('game-message');
 const nextBtn = document.getElementById('next-btn');
-const quizContainer = document.getElementById('quiz-container');
-const question = document.getElementById('question');
-const answerButtons = document.querySelectorAll('.answer-btn');
-const answersContainer = document.getElementById('answers-container');
-const sequenceContainer = document.getElementById('sequence-container');
-const sequenceDisplay = document.getElementById('sequence-display');
-const sequenceInput = document.getElementById('sequence-input');
-const sequenceSubmit = document.getElementById('sequence-submit');
+const scoreDisplay = document.getElementById('score-display');
+const progressBar = document.getElementById('progress-bar');
 
-title.textContent = 'Test des réflexes';
-message.textContent = 'Attends que le cercle devienne vert';
+questions = await getQuestionsSobriete();
 
-let startTime = 0;
-let canClick = false;
+questions = (await getQuestionsSobriete())
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 5);
 
-const delay = Math.random() * 3000 + 2000;
+showQuestion();
 
-setTimeout(() => {
-    circle.classList.remove('bg-paprika-c');
-    circle.classList.add('bg-green-500', 'scale-110');
-    message.textContent = 'Clique maintenant !';
-    startTime = Date.now();
-    canClick = true;
-}, delay);
+function showQuestion() {
+    hasAnswered = false;
 
-circle.addEventListener('click', () => {
-    if (gameFinished) return;
+    const current = questions[currentQuestion];
 
-    if (!canClick) {
-        message.textContent = 'Trop tôt !';
-        return;
-    }
-
-    gameFinished = true;
-
-    const reactionTime = Date.now() - startTime;
-
-    if (reactionTime < 400) score = 15;
-    else if (reactionTime < 600) score = 10;
-    else if (reactionTime < 800) score = 5;
-    else score = 0;
-
-    document.getElementById('score-display').textContent = `${score}/80`;
-    document.getElementById('progress-bar').style.width = '20%';
-
-    title.textContent = 'Résultat';
-    message.textContent = `${reactionTime} ms • ${score} points`;
-
-    nextBtn.classList.remove('hidden');
-
-    circle.classList.remove('bg-green-500');
-    circle.classList.add('bg-paprika-c');
-});
-
-nextBtn.addEventListener('click', () => {
-    currentGame++;
-
-    if (currentGame === 2) startCalculGame();
-    else if (currentGame === 3) startLogiqueGame();
-    else if (currentGame === 4) startMemoireVisuelleGame();
-    else if (currentGame === 5) startMemoireSequenceGame();
-    else if (currentGame === 6) showFinalResult();
-});
-
-function startCalculGame() {
-    document.getElementById('game-step').textContent = 'Défi 2 / 5';
-    title.textContent = 'Calcul mental';
+    step.textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+    title.textContent = 'Test de sobriété';
+    question.textContent = current.question;
     message.textContent = '';
 
-    circle.classList.add('hidden');
-    nextBtn.classList.add('hidden');
-    quizContainer.classList.remove('hidden');
-
-    const a = Math.floor(Math.random() * 20) + 1;
-    const b = Math.floor(Math.random() * 20) + 1;
-    const bonneReponse = a + b;
-
-    question.textContent = `${a} + ${b} = ?`;
-
-    const reponses = [
-        bonneReponse,
-        bonneReponse + 2,
-        bonneReponse - 3,
-        bonneReponse + 5
-    ].sort(() => Math.random() - 0.5);
-
-    answerButtons.forEach((button, index) => {
-        button.textContent = reponses[index];
-        button.onclick = () => {
-            if (Number(button.textContent) === bonneReponse) score += 15;
-
-            document.getElementById('progress-bar').style.width = '40%';
-
-            title.textContent = 'Résultat';
-            message.textContent = `Score total : ${score}/80`;
-
-            quizContainer.classList.add('hidden');
-            nextBtn.classList.remove('hidden');
-        };
-    });
-}
-
-function startLogiqueGame() {
-    document.getElementById('game-step').textContent = 'Défi 3 / 5';
-    title.textContent = 'Logique';
-    message.textContent = '';
+    scoreDisplay.textContent = `${score}/100`;
+    progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
 
     nextBtn.classList.add('hidden');
-    quizContainer.classList.remove('hidden');
 
-    const questions = [
-        { question: '2 - 4 - 8 - 16 - ?', answers: ['24', '32', '64', '20'], correct: '32' },
-        { question: '5 - 10 - 20 - 40 - ?', answers: ['60', '80', '90', '100'], correct: '80' },
-        { question: '1 - 3 - 5 - 7 - ?', answers: ['8', '9', '10', '11'], correct: '9' }
+    const choices = [
+        current.choix_1,
+        current.choix_2,
+        current.choix_3,
+        current.choix_4
     ];
 
-    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+    buttons.forEach((button, index) => {
+        button.textContent = choices[index];
+        button.disabled = false;
 
-    question.textContent = randomQuestion.question;
+        button.classList.remove('bg-paprika-c', 'text-white');
+        button.classList.add('bg-white-bk');
 
-    answerButtons.forEach((button, index) => {
-        button.textContent = randomQuestion.answers[index];
         button.onclick = () => {
-            if (button.textContent === randomQuestion.correct) score += 20;
-
-            document.getElementById('score-display').textContent = `${score}/80`;
-            document.getElementById('progress-bar').style.width = '60%';
-
-            title.textContent = 'Résultat';
-            message.textContent = `Score total : ${score}/80`;
-
-            quizContainer.classList.add('hidden');
-            nextBtn.classList.remove('hidden');
+            checkAnswer(index + 1, current);
         };
     });
 }
 
-function startMemoireVisuelleGame() {
-    document.getElementById('game-step').textContent = 'Défi 4 / 5';
-    title.textContent = 'Mémoire visuelle';
-    message.textContent = 'Mémorise la case colorée';
+function checkAnswer(selectedAnswer, current) {
+    if (hasAnswered) return;
 
-    answersContainer.classList.remove('flex', 'flex-col');
-    answersContainer.classList.add('grid', 'grid-cols-2');
+    hasAnswered = true;
 
-    nextBtn.classList.add('hidden');
-    quizContainer.classList.remove('hidden');
-
-    question.textContent = '';
-
-    answerButtons.forEach((button) => {
-        button.classList.remove('bg-white-bk');
-        button.classList.remove('p-4');
-        button.classList.add('h-24');
+    buttons.forEach((button) => {
+        button.disabled = true;
     });
 
-    const bonneCase = Math.floor(Math.random() * 4);
+    if (selectedAnswer === current.bonne_reponse) {
+        score += current.points;
+        message.textContent = `Bonne réponse ! +${current.points} points`;
+    } else {
+        message.textContent = 'Mauvaise réponse';
+    }
 
-    answerButtons.forEach((button, index) => {
-        button.textContent = '';
-        button.style.backgroundColor = '';
-        button.classList.add('bg-white-bk');
-        button.onclick = null;
+    scoreDisplay.textContent = `${score}/100`;
 
-        if (index === bonneCase) {
-            button.style.backgroundColor = 'orange';
-        }
-    });
+    buttons[selectedAnswer - 1].classList.remove('bg-white-bk');
+    buttons[selectedAnswer - 1].classList.add('bg-paprika-c', 'text-white');
 
-    setTimeout(() => {
-        answerButtons.forEach((button, index) => {
-            button.style.backgroundColor = '';
-            button.onclick = () => {
-                if (index === bonneCase) score += 15;
-
-                document.getElementById('score-display').textContent = `${score}/80`;
-                document.getElementById('progress-bar').style.width = '80%';
-
-                title.textContent = 'Résultat';
-                message.textContent = `Score total : ${score}/80`;
-
-                quizContainer.classList.add('hidden');
-                nextBtn.classList.remove('hidden');
-            };
-        });
-
-        message.textContent = 'Quelle case était colorée ?';
-    }, 2000);
+    nextBtn.classList.remove('hidden');
 }
 
-function startMemoireSequenceGame() {
-    document.getElementById('game-step').textContent = 'Défi 5 / 5';
-    title.textContent = 'Mémoire de séquence';
-    message.textContent = 'Retiens les chiffres';
+nextBtn.addEventListener('click', async () => {
+    currentQuestion++;
 
-    nextBtn.classList.add('hidden');
-    quizContainer.classList.add('hidden');
-    sequenceContainer.classList.remove('hidden');
-
-    const sequence = Array.from({ length: 4 }, () =>
-        Math.floor(Math.random() * 10)
-    ).join('');
-
-    sequenceDisplay.textContent = sequence;
-
-    sequenceInput.disabled = true;
-    sequenceSubmit.disabled = true;
-    sequenceInput.value = '';
-
-    setTimeout(() => {
-        sequenceDisplay.textContent = '? ? ? ?';
-        sequenceInput.disabled = false;
-        sequenceSubmit.disabled = false;
-        sequenceInput.focus();
-        message.textContent = 'Recopie la séquence';
-    }, 3000);
-
-    sequenceSubmit.onclick = () => {
-        if (sequenceInput.value === sequence) score += 15;
-
-        document.getElementById('score-display').textContent = `${score}/80`;
-        document.getElementById('progress-bar').style.width = '100%';
-
-        title.textContent = 'Résultat';
-        message.textContent = `Score total : ${score}/80`;
-
-        sequenceContainer.classList.add('hidden');
-        nextBtn.classList.remove('hidden');
-    };
-}
+    if (currentQuestion < questions.length) {
+        showQuestion();
+    } else {
+        await showFinalResult();
+    }
+});
 
 async function showFinalResult() {
     const user = await refreshCurrentUser();
@@ -248,27 +104,26 @@ async function showFinalResult() {
         pointsAdded = true;
     }
 
-    document.getElementById('game-step').textContent = 'Terminé';
+    step.textContent = 'Terminé';
     title.textContent = 'Résultat final';
+    question.textContent = `${score}/100 points`;
 
-    circle.classList.add('hidden');
-    quizContainer.classList.add('hidden');
-    sequenceContainer.classList.add('hidden');
+    buttons.forEach((button) => {
+        button.classList.add('hidden');
+    });
 
-    let resultat = '';
+    progressBar.style.width = '100%';
 
-    if (score >= 70) resultat = 'Très bon résultat';
-    else if (score >= 50) resultat = 'Résultat correct';
-    else if (score >= 30) resultat = 'Prudence';
-    else resultat = 'Ne prends pas le volant';
+    if (score >= 80) {
+        message.textContent = 'Bon résultat';
+    } else if (score >= 60) {
+        message.textContent = 'Résultat moyen';
+    } else if (score >= 40) {
+        message.textContent = 'Tu peux faire mieux !';
+    }
 
-    message.textContent = `${score}/80 • ${resultat}`;
-
-    document.getElementById('score-display').textContent = `${score}/80`;
-    document.getElementById('progress-bar').style.width = '100%';
-
-    nextBtn.classList.remove('hidden');
     nextBtn.textContent = 'Retour à l’accueil';
+    nextBtn.classList.remove('hidden');
 
     nextBtn.onclick = () => {
         window.location.href = '/';

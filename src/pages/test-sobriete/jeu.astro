@@ -3,168 +3,39 @@ import Layout from '../../layouts/Layout.astro';
 ---
 
 <Layout title="Défis Sobriété !">
-    <main class="px-8 py-10">
-
+    <main class="px-8 py-10 pb-32">
         <div class="flex items-center justify-between">
-            <p id="game-step" class="text-lg text-marron-c">Défi 1 / 5</p>
+            <p id="game-step" class="text-lg text-marron-c">Question 1 / 5</p>
 
-            <div
-                class="
-                    flex
-                    h-12
-                    min-w-24
-                    items-center
-                    justify-center
-                    rounded-full
-                    border
-                    border-bordeaux-c
-                    bg-white-bk
-                    px-5
-                "
-            >
-                <span id="score-display">0 / 80</span>
+            <div class="flex h-12 min-w-24 items-center justify-center rounded-full border border-bordeaux-c bg-white-bk px-5">
+                <span id="score-display">0 / 100</span>
             </div>
         </div>
 
-        <h2 id="game-title" class="mt-6 text-center text-paprika-c"></h2>
+        <h2 id="game-title" class="mt-6 text-center text-paprika-c">
+            Test de sobriété
+        </h2>
 
         <div class="mt-6 h-3 overflow-hidden rounded-full bg-orange-c">
-            <div id="progress-bar" class="h-full w-1/5 bg-paprika-c transition-all"></div>
+            <div id="progress-bar" class="h-full w-0 bg-paprika-c transition-all"></div>
         </div>
 
-        <div
-            id="game-card"
-            class="mt-8 rounded-3xl border-2 border-mocha-c bg-white-c p-8"
-        >
+        <div id="game-card" class="mt-8 rounded-3xl border-2 border-mocha-c bg-white-c p-8">
+            <h4 id="question" class="text-center font-bold"></h4>
 
-            <div class="flex justify-center">
-                <div
-                    id="circle"
-                    class="
-                        h-56
-                        w-56
-                        rounded-full
-                        bg-paprika-c
-                        transition-all
-                        duration-300
-                    "
-                ></div>
+            <div id="answers-container" class="mt-8 flex flex-col gap-4">
+                <button class="answer-btn rounded-2xl border-2 border-paprika-c bg-white-bk p-4"></button>
+                <button class="answer-btn rounded-2xl border-2 border-paprika-c bg-white-bk p-4"></button>
+                <button class="answer-btn rounded-2xl border-2 border-paprika-c bg-white-bk p-4"></button>
+                <button class="answer-btn rounded-2xl border-2 border-paprika-c bg-white-bk p-4"></button>
             </div>
 
-            <div id="quiz-container" class="hidden">
-                <h4 id="question" class="text-center text-2xl font-bold"></h4>
+            <p id="game-message" class="mt-10 text-center text-lg font-bold text-marron-c"></p>
 
-                <div id="answers-container" class="mt-8 flex flex-col gap-4">
-                    <button
-                        class="
-                            answer-btn
-                            rounded-2xl
-                            border-2
-                            border-paprika-c
-                            bg-white-bk
-                            p-4
-                        "
-                    ></button>
-
-                    <button
-                        class="
-                            answer-btn
-                            rounded-2xl
-                            border-2
-                            border-paprika-c
-                            bg-white-bk
-                            p-4
-                        "
-                    ></button>
-
-                    <button
-                        class="
-                            answer-btn
-                            rounded-2xl
-                            border-2
-                            border-paprika-c
-                            bg-white-bk
-                            p-4
-                        "
-                    ></button>
-
-                    <button
-                        class="
-                            answer-btn
-                            rounded-2xl
-                            border-2
-                            border-paprika-c
-                            bg-white-bk
-                            p-4
-                        "
-                    ></button>
-                </div>
-            </div>
-
-            <div id="sequence-container" class="hidden">
-
-                <p
-                    id="sequence-display"
-                    class="text-center text-5xl font-bold text-bordeaux-c"
-                ></p>
-
-                <input
-                    id="sequence-input"
-                    type="text"
-                    class="
-                        mt-8
-                        w-full
-                        rounded-2xl
-                        border-2
-                        border-paprika-c
-                        p-4
-                        text-center
-                    "
-                    placeholder="Entrez la séquence"
-                />
-
-                <button
-                    id="sequence-submit"
-                    class="
-                        mt-6
-                        w-full
-                        rounded-2xl
-                        bg-paprika-c
-                        p-4
-                        text-white
-                    "
-                >
-                    Valider
-                </button>
-
-            </div>
-
-            <p
-                id="game-message"
-                class="mt-10 text-center text-lg font-bold text-marron-c"
-            ></p>
-
-            <button
-                id="next-btn"
-                class="
-                    hidden
-                    mx-auto
-                    mt-8
-                    flex
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-paprika-c
-                    px-8
-                    py-4
-                    text-white
-                "
-            >
-                Défi suivant
+            <button id="next-btn" class="hidden mx-auto mt-8 rounded-full bg-paprika-c px-8 py-4 text-white">
+                Question suivante
             </button>
-
         </div>
-
     </main>
 </Layout>
 

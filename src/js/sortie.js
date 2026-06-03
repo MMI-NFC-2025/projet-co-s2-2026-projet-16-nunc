@@ -20,9 +20,9 @@ const tabInvitations = document.getElementById('tab-invitations');
 
 function activateTab(activeTab) {
     [tabEvents, tabHistory, tabInvitations].forEach((tab) => {
-        tab.classList.remove('bg-paprika-c', 'text-white');
+        tab.classList.remove('bg-paprika-c', 'text-white-bk');
     });
-    activeTab.classList.add('bg-paprika-c', 'text-white');
+    activeTab.classList.add('bg-paprika-c', 'text-white-bk');
 }
 
 function getDateSortie(sortie) {
