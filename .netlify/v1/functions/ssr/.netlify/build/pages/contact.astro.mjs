@@ -1,13 +1,13 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C_63O6nA.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_ZVQDZnmQ.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
 import { a as Carte } from '../chunks/Menu_BsNEgW-R.mjs';
 import { I as Instagram, T as Tiktok, F as Facebook } from '../chunks/tiktok_CZRKFt0f.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
-import { x as createServerPocketBase, z as addContact } from '../chunks/backend_DljU_PTa.mjs';
+import { x as createServerPocketBase, z as addContact } from '../chunks/backend_DUp2moCL.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Mail = createSvgComponent({"meta":{"src":"/_astro/mail.DtmojuP_.svg","width":24,"height":24,"format":"svg"},"attributes":{"width":"24","height":"24","viewBox":"0 0 24 24","fill":"none"},"children":"\n<path d=\"M19.9976 3.99951H3.99951C2.89508 3.99951 1.99976 4.89483 1.99976 5.99927V17.9978C1.99976 19.1022 2.89508 19.9976 3.99951 19.9976H19.9976C21.102 19.9976 21.9973 19.1022 21.9973 17.9978V5.99927C21.9973 4.89483 21.102 3.99951 19.9976 3.99951Z\" stroke=\"white\" stroke-width=\"1.99976\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\n<path d=\"M21.9973 6.99915L13.0284 12.6984C12.7197 12.8919 12.3628 12.9944 11.9985 12.9944C11.6343 12.9944 11.2774 12.8919 10.9687 12.6984L1.99976 6.99915\" stroke=\"white\" stroke-width=\"1.99976\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\n"});

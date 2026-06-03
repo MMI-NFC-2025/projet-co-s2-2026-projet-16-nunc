@@ -5,7 +5,7 @@ import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
 import { T as Trophy, $ as $$Menu, C as Calendrier, a as Carte } from '../chunks/Menu_BsNEgW-R.mjs';
 import { C as Courone } from '../chunks/courone_CrdAgGv2.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
-import { l as loadAstroAuth, g as getUserById, Q as getUserSorties } from '../chunks/backend_DljU_PTa.mjs';
+import { l as loadAstroAuth, g as getUserById, R as getUserSorties } from '../chunks/backend_DUp2moCL.mjs';
 import { A as Amis } from '../chunks/people_Dj-cI_yv.mjs';
 import { F as Fleche } from '../chunks/fleche-droite_CG47Fsf7.mjs';
 export { renderers } from '../renderers.mjs';

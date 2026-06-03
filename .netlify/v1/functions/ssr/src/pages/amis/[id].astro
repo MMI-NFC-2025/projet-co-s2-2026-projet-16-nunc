@@ -8,8 +8,9 @@ import Trophee from '../../assets/profil.svg';
 import Courone from '../../assets/courone.svg';
 import Calendrier from '../../assets/sortie.svg';
 import Amis from '../../assets/people.svg';
+import UserAvatar from '../../components/UserAvatar.astro';
 
-import { getUserById, getFileUrl, getNbSortiesParticipees, getNbSortiesOrganisees, getNbAmis, loadAstroAuth } from '../../../backend/backend.mjs';
+import { getUserById, getNbSortiesParticipees, getNbSortiesOrganisees, getNbAmis, loadAstroAuth } from '../../../backend/backend.mjs';
 
 const id = Astro.params.id;
 const { pb } = await loadAstroAuth(Astro);
@@ -28,7 +29,7 @@ const points =
     user.points || 0;
 
 const niveau =
-    Math.floor(points / 250) + 1;
+    user.niveau || Math.floor(points / 250) + 1;
 
 const maxXp =
     niveau * 250;
@@ -50,7 +51,7 @@ const dateInscription = new Date(user.created).toLocaleDateString('fr-FR', { mon
         </a>
 
         <div class="mt-4 flex flex-col items-center">
-            <img src={getFileUrl(user, user.avatar, pb)} alt="" class="h-40 w-40 rounded-full object-cover" />
+            <UserAvatar user={user} pb={pb} size="h-40 w-40" />
 
             <h3 class="mt-5 text-center text-white-bk">{user.username}</h3>
 
@@ -104,5 +105,3 @@ const dateInscription = new Date(user.created).toLocaleDateString('fr-FR', { mon
         </article>
     </div>
 </Layout>
-
-<script type="module" src="/src/js/auth-guard.js"></script>

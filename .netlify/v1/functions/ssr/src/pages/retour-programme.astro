@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import UserAvatar from '../components/UserAvatar.astro';
 
 import { Image } from 'astro:assets';
 
@@ -13,7 +14,6 @@ import Argent from '../assets/argent.svg';
 import Temps from '../assets/temps.svg';
 import {
     createRetourProgramme,
-    getFileUrl,
     getUserFriends,
     loadAstroAuth
 } from '../../backend/backend.mjs';
@@ -236,17 +236,7 @@ const samFriends = friends
                                         active:scale-95
                                     "
                                 >
-                                    <img
-                                        class="
-                                            h-16
-                                            w-16
-                                            shrink-0
-                                            rounded-full
-                                            object-cover
-                                        "
-                                        src={getFileUrl(friend, friend.avatar, pb)}
-                                        alt={friend.username}
-                                    >
+                                    <UserAvatar user={friend} pb={pb} size="h-16 w-16" alt={friend.username} />
 
                                     <div>
                                         <p class="text-lg font-bold text-paprika-c">{friend.username}</p>

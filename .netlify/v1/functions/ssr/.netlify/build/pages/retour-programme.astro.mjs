@@ -1,11 +1,12 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C_63O6nA.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_CWVrNdg0.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { W as Warning } from '../chunks/tw_sVE_cmhm.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
-import { l as loadAstroAuth, F as createRetourProgramme, f as getUserFriends, d as getFileUrl } from '../chunks/backend_DljU_PTa.mjs';
+import { l as loadAstroAuth, G as createRetourProgramme, e as getUserFriends } from '../chunks/backend_DUp2moCL.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Taxi = new Proxy({"src":"/_astro/taxi.gUQ6ya2u.avif","width":272,"height":272,"format":"avif"}, {
@@ -139,13 +140,7 @@ C’est le conducteur sobre qui vous ramène
                                         transition-all
                                         duration-200
                                         active:scale-95
-                                    "> <img class="
-                                            h-16
-                                            w-16
-                                            shrink-0
-                                            rounded-full
-                                            object-cover
-                                        "${addAttribute(getFileUrl(friend, friend.avatar, pb), "src")}${addAttribute(friend.username, "alt")}> <div> <p class="text-lg font-bold text-paprika-c">${friend.username}</p> <small class="text-marron-c">
+                                    "> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": friend, "pb": pb, "size": "h-16 w-16", "alt": friend.username })} <div> <p class="text-lg font-bold text-paprika-c">${friend.username}</p> <small class="text-marron-c">
 Conducteur disponible
 </small> </div> </button> </form>`) : renderTemplate`<p class="rounded-xl bg-white-c p-4 text-marron-c">
 Tu n'as pas encore d'ami disponible comme conducteur SAM.

@@ -1,13 +1,14 @@
 import { c as createComponent, r as renderComponent, e as renderScript, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C_63O6nA.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { T as Trophy, C as Calendrier } from '../chunks/Menu_BsNEgW-R.mjs';
 import { C as Courone } from '../chunks/courone_CrdAgGv2.mjs';
 import { A as Amis } from '../chunks/people_Dj-cI_yv.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
-import { l as loadAstroAuth, D as createClearAuthCookie, E as updateAvatar, g as getUserById, a as getNbSortiesParticipees, b as getNbSortiesOrganisees, c as getNbAmis, d as getFileUrl } from '../chunks/backend_DljU_PTa.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_CWVrNdg0.mjs';
+import { l as loadAstroAuth, D as createClearAuthCookie, E as equiperCadreUtilisateur, F as updateAvatar, g as getUserById, a as getNbSortiesParticipees, b as getNbSortiesOrganisees, c as getNbAmis, n as getCadresUtilisateur, t as getFileUrl } from '../chunks/backend_DUp2moCL.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Power = createSvgComponent({"meta":{"src":"/_astro/power.q-kovQPh.svg","width":24,"height":24,"format":"svg"},"attributes":{"width":"24","height":"24","viewBox":"0 0 24 24","fill":"none"},"children":"\n<path d=\"M7 6C5.78639 7.02477 4.91697 8.39771 4.50943 9.93294C4.10189 11.4682 4.17592 13.0915 4.7215 14.5833C5.26708 16.0751 6.25786 17.3632 7.55971 18.2732C8.86156 19.1833 10.4116 19.6714 12 19.6714C13.5884 19.6714 15.1384 19.1833 16.4403 18.2732C17.7421 17.3632 18.7329 16.0751 19.2785 14.5833C19.8241 13.0915 19.8981 11.4682 19.4906 9.93294C19.083 8.39771 18.2136 7.02477 17 6\" stroke=\"#F6E3D4\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\n<path d=\"M12 4V12\" stroke=\"#F6E3D4\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\n"});
@@ -26,10 +27,14 @@ const $$Profil = createComponent(async ($$result, $$props, $$slots) => {
     const formData = await Astro2.request.formData();
     const action = formData.get("action")?.toString();
     const avatar = formData.get("avatar");
+    const inventaireId = formData.get("inventaireId")?.toString();
     if (action === "logout") {
       const response = Astro2.redirect("/connexion");
       response.headers.append("Set-Cookie", createClearAuthCookie());
       return response;
+    }
+    if (action === "equip-cadre" && inventaireId) {
+      await equiperCadreUtilisateur(currentUser.id, inventaireId, pb);
     }
     if (action === "avatar" && avatar instanceof File && avatar.size > 0) {
       await updateAvatar(currentUser.id, avatar, pb);
@@ -38,26 +43,38 @@ const $$Profil = createComponent(async ($$result, $$props, $$slots) => {
   }
   const user = await getUserById(currentUser.id, pb);
   const points = user.points || 0;
-  const niveau = Math.floor(points / 250) + 1;
+  const niveau = user.niveau || Math.floor(points / 250) + 1;
   const maxXp = niveau * 250;
   const progress = maxXp > 0 ? points / maxXp * 100 : 0;
   const dateInscription = new Date(user.created).toLocaleDateString("fr-FR", {
     month: "long",
     year: "numeric"
   });
-  const [nbSorties, nbOrganisations, nbAmis] = await Promise.all([
+  const [nbSorties, nbOrganisations, nbAmis, inventaireCadres] = await Promise.all([
     getNbSortiesParticipees(user.id, pb),
     getNbSortiesOrganisees(user.id, pb),
-    getNbAmis(user.id, pb)
+    getNbAmis(user.id, pb),
+    getCadresUtilisateur(user.id, pb)
   ]);
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Mon profil", "hideHeader": true }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16"> <div class="flex items-start justify-between"> <a href="/" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
+  const cadresInventaire = inventaireCadres.map((item) => ({
+    id: item.id,
+    equipe: Boolean(item.equipe),
+    cadre: item.expand?.cadre || item.expand?.cadre_premium,
+    type: item.cadre_premium ? "premium" : "classique"
+  })).filter((item) => item.cadre);
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Mon profil", "hideHeader": true }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="pb-32"> <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16"> <div class="flex items-start justify-between"> <a href="/" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
 Retour
-</a> <form method="post"> <input type="hidden" name="action" value="logout"> <button type="submit" class="flex h-12 w-12 items-center justify-center rounded-full bg-white-bk/50"> ${renderComponent($$result2, "Image", $$Image, { "src": Power, "alt": "D\xE9connexion", "class": "h-7 w-7" })} </button> </form> </div> <div class="mt-4 flex flex-col items-center"> <form id="avatar-form" method="post" enctype="multipart/form-data" class="relative mt-4"> <input type="hidden" name="action" value="avatar"> <img id="avatar"${addAttribute(getFileUrl(user, user.avatar, pb), "src")} alt="" class="h-40 w-40 rounded-full object-cover"> <input id="avatar-input" name="avatar" type="file" accept="image/*" class="hidden"> <label for="avatar-input" class="absolute top-1 right-1 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Edit, "alt": "Modifier la photo", "class": "h-6 w-6" })} </label> </form> <h3 id="username" class="mt-5 text-center text-white-bk">${user.username}</h3> <div id="premium-badge"${addAttribute([
+</a> <form method="post"> <input type="hidden" name="action" value="logout"> <button type="submit" class="flex h-12 w-12 items-center justify-center rounded-full bg-white-bk/50"> ${renderComponent($$result2, "Image", $$Image, { "src": Power, "alt": "D\xE9connexion", "class": "h-7 w-7" })} </button> </form> </div> <div class="mt-4 flex flex-col items-center"> <form id="avatar-form" method="post" enctype="multipart/form-data" class="relative mt-4"> <input type="hidden" name="action" value="avatar"> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": user, "pb": pb, "size": "h-40 w-40" })} <input id="avatar-input" name="avatar" type="file" accept="image/*" class="hidden"> <label for="avatar-input" class="absolute top-1 right-1 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Edit, "alt": "Modifier la photo", "class": "h-6 w-6" })} </label> </form> <h3 id="username" class="mt-5 text-center text-white-bk">${user.username}</h3> <div id="premium-badge"${addAttribute([
     "mt-3 flex items-center gap-2 rounded-full bg-white-c/40 px-5 py-2 font-bold text-white-bk",
     { hidden: !user.premium }
   ], "class:list")}> ${renderComponent($$result2, "Image", $$Image, { "src": Courone, "alt": "", "class": "h-4 w-4" })}
 Premium
-</div> <small id="date-inscription" class="mt-2 text-white-c">Membre depuis ${dateInscription}</small> </div> <div class="mt-7 rounded-3xl bg-white-c p-6"> <div class="flex items-center gap-4"> <div class="w-10 h-10 rounded-full bg-beige-c flex items-center justify-center"> ${renderComponent($$result2, "Image", $$Image, { "src": Trophy, "alt": "", "class": "w-6 h-6" })} </div> <div> <h4 id="niveau" class="font-titan leading-none">Niveau ${niveau}</h4> <small id="points" class="mt-1 block text-marron-c">${points} / ${maxXp} points</small> </div> </div> <div class="mt-8 h-5 bg-white rounded-full overflow-hidden"> <div id="progress-bar" class="h-full bg-orange-c rounded-full"${addAttribute(`width:${progress}%`, "style")}></div> </div> </div> </section> <div class="mt-8 grid grid-cols-3 gap-4 px-6"> <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center"> ${renderComponent($$result2, "Calendrier", Calendrier, { "class": "mx-auto h-7 w-7 text-paprika-c" })} <h4 id="nb-sorties" class="mt-4 font-titan">${nbSorties}</h4> <small class="mt-2 block text-marron-c">Sorties</small> </article> <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center"> ${renderComponent($$result2, "Trophee", Trophy, { "class": "mx-auto h-7 w-7 text-paprika-c" })} <h4 id="nb-organisations" class="mt-4 font-titan">${nbOrganisations}</h4> <small class="mt-2 block text-marron-c">Organiser</small> </article> <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center"> ${renderComponent($$result2, "Amis", Amis, { "class": "mx-auto h-7 w-7 text-paprika-c" })} <h4 id="nb-amis" class="mt-4 font-titan">${nbAmis}</h4> <small class="mt-2 block text-marron-c">Ami(e)s</small> </article> </div> ` })} ${renderScript($$result, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/pages/profil.astro?astro&type=script&index=0&lang.ts")}`;
+</div> <small id="date-inscription" class="mt-2 text-white-c">Membre depuis ${dateInscription}</small> </div> <div class="mt-7 rounded-3xl bg-white-c p-6"> <div class="flex items-center gap-4"> <div class="w-10 h-10 rounded-full bg-beige-c flex items-center justify-center"> ${renderComponent($$result2, "Image", $$Image, { "src": Trophy, "alt": "", "class": "w-6 h-6" })} </div> <div> <h4 id="niveau" class="font-titan leading-none">Niveau ${niveau}</h4> <small id="points" class="mt-1 block text-marron-c">${points} / ${maxXp} points</small> </div> </div> <div class="mt-8 h-5 bg-white rounded-full overflow-hidden"> <div id="progress-bar" class="h-full bg-orange-c rounded-full"${addAttribute(`width:${progress}%`, "style")}></div> </div> </div> </section> <div class="mt-8 grid grid-cols-3 gap-4 px-6"> <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center"> ${renderComponent($$result2, "Calendrier", Calendrier, { "class": "mx-auto h-7 w-7 text-paprika-c" })} <h4 id="nb-sorties" class="mt-4 font-titan">${nbSorties}</h4> <small class="mt-2 block text-marron-c">Sorties</small> </article> <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center"> ${renderComponent($$result2, "Trophee", Trophy, { "class": "mx-auto h-7 w-7 text-paprika-c" })} <h4 id="nb-organisations" class="mt-4 font-titan">${nbOrganisations}</h4> <small class="mt-2 block text-marron-c">Organiser</small> </article> <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center"> ${renderComponent($$result2, "Amis", Amis, { "class": "mx-auto h-7 w-7 text-paprika-c" })} <h4 id="nb-amis" class="mt-4 font-titan">${nbAmis}</h4> <small class="mt-2 block text-marron-c">Ami(e)s</small> </article> </div> <section class="mt-10 px-6"> <div class="flex items-center justify-between"> <h3 class="text-paprika-c">Mes cadres</h3> <small class="text-marron-c">${cadresInventaire.length} possédé${cadresInventaire.length > 1 ? "s" : ""}</small> </div> ${cadresInventaire.length > 0 ? renderTemplate`<div class="mt-5 grid grid-cols-2 gap-4"> ${cadresInventaire.map((item) => renderTemplate`<form method="post"> <input type="hidden" name="action" value="equip-cadre"> <input type="hidden" name="inventaireId"${addAttribute(item.id, "value")}> <button${addAttribute([
+    "w-full rounded-2xl border bg-white-c p-4 text-center",
+    item.equipe ? "border-paprika-c" : "border-beige-c"
+  ], "class:list")}> <div class="mx-auto flex h-36 w-36 items-center justify-center overflow-hidden rounded-xl bg-white-bk"> <img${addAttribute(getFileUrl(item.cadre, item.cadre.image, pb), "src")} alt="" class="h-full w-full object-contain"> </div> <p class="mt-4 font-bold text-bordeaux-c">${item.cadre.nom}</p> <small class="mt-1 block text-marron-c"> ${item.type === "premium" ? "Cadre premium" : "Cadre classique"} </small> ${item.equipe && renderTemplate`<span class="mt-3 inline-flex rounded-full bg-paprika-c px-4 py-2 text-sm font-bold text-white-bk">
+Équipé
+</span>`} </button> </form>`)} </div>` : renderTemplate`<article class="mt-5 rounded-2xl border border-beige-c bg-white-c px-5 py-6 text-center"> <p class="font-bold text-bordeaux-c">Aucun cadre pour le moment</p> <small class="mt-2 block text-marron-c">Les cadres achetés dans la boutique apparaîtront ici.</small> </article>`} </section> </main> ` })} ${renderScript($$result, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/pages/profil.astro?astro&type=script&index=0&lang.ts")}`;
 }, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/pages/profil.astro", void 0);
 
 const $$file = "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/pages/profil.astro";

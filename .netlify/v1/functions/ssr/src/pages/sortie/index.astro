@@ -5,7 +5,6 @@ import InvitationCard from '../../components/InvitationCard.astro';
 import {
     acceptInvitation,
     addParticipantSortie,
-    getFileUrl,
     getUserInvitations,
     getUserSorties,
     loadAstroAuth,
@@ -136,7 +135,8 @@ const sortiesAffichees = activeTab === 'history' ? sortiesPassees : sortiesActiv
                                     return (
                                         <a href={`/sortie/${sortie.id}`}>
                                             <SortieCard
-                                                avatar={getFileUrl(organisateur, organisateur?.avatar, pb)}
+                                                user={organisateur}
+                                                pb={pb}
                                                 organisateur={organisateur?.username || 'Utilisateur'}
                                                 titre={sortie.titre || ''}
                                                 date={formatDateSortie(sortie)}

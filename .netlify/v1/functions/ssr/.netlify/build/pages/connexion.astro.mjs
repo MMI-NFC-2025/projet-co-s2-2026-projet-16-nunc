@@ -1,10 +1,10 @@
 import { c as createComponent, a as renderTemplate, r as renderComponent, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_CREC1hDw.mjs';
+import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_B8KOGYn8.mjs';
 import { $ as $$Header } from '../chunks/Header_BASlXZdf.mjs';
 import { E as Eye } from '../chunks/eye-open_8-RQuacV.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
-import { x as createServerPocketBase, y as createAuthCookie } from '../chunks/backend_DljU_PTa.mjs';
+import { x as createServerPocketBase, y as createAuthCookie } from '../chunks/backend_DUp2moCL.mjs';
 export { renderers } from '../renderers.mjs';
 
 var __freeze = Object.freeze;

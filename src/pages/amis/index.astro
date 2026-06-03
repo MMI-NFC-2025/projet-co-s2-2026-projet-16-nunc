@@ -1,11 +1,11 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import UserAvatar from "../../components/UserAvatar.astro";
 
 import Fleche from '../../assets/fleche.svg';
 import {
     acceptFriendRequest,
-    getFileUrl,
     getFriendRequests,
     getFriendship,
     getPendingFriends,
@@ -70,10 +70,6 @@ const searchResults = search.length >= 2
         .catch(() => [])
     : [];
 
-function avatar(record) {
-    return getFileUrl(record, record?.avatar, pb) || '/favicon.svg';
-}
-
 function tabClass(tab) {
     return activeTab === tab && search.length < 2
         ? 'friend-tab rounded-full bg-paprika-c px-4 py-3 text-white'
@@ -133,7 +129,7 @@ const currentFriends = friends
                         searchResults.map((person) => (
                             <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
                                 <a href={`/amis/${person.id}`} class="flex flex-1 items-center gap-4">
-                                    <img class="h-16 w-16 rounded-full object-cover" src={avatar(person)} alt="" />
+                                    <UserAvatar user={person} pb={pb} size="h-16 w-16" />
                                     <div>
                                         <h4 class="font-bold text-bordeaux-c">{person.username}</h4>
                                         <small class="text-marron-c">Utilisateur</small>
@@ -158,7 +154,7 @@ const currentFriends = friends
                             return (
                                 <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
                                     <a href={`/amis/${sender?.id}`} class="flex flex-1 items-center gap-4">
-                                        <img class="h-16 w-16 rounded-full object-cover" src={avatar(sender)} alt="" />
+                                        <UserAvatar user={sender} pb={pb} size="h-16 w-16" />
                                         <div>
                                             <h4 class="font-bold text-bordeaux-c">{sender?.username || 'Utilisateur'}</h4>
                                             <small class="text-marron-c">Demande reçue</small>
@@ -192,7 +188,7 @@ const currentFriends = friends
                             return (
                                 <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
                                     <a href={`/amis/${receiver?.id}`} class="flex flex-1 items-center gap-4">
-                                        <img class="h-16 w-16 rounded-full object-cover" src={avatar(receiver)} alt="" />
+                                        <UserAvatar user={receiver} pb={pb} size="h-16 w-16" />
                                         <div>
                                             <h4 class="font-bold text-bordeaux-c">{receiver?.username || 'Utilisateur'}</h4>
                                             <small class="text-marron-c">Demande envoyée</small>
@@ -211,7 +207,7 @@ const currentFriends = friends
                         currentFriends.map((friend) => (
                             <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
                                 <a href={`/amis/${friend.id}`} class="flex flex-1 items-center gap-4">
-                                    <img class="h-16 w-16 rounded-full object-cover" src={avatar(friend)} alt="" />
+                                    <UserAvatar user={friend} pb={pb} size="h-16 w-16" />
                                     <div>
                                         <h4 class="font-bold text-bordeaux-c">{friend.username}</h4>
                                         <small class="text-marron-c">Ami(e)</small>

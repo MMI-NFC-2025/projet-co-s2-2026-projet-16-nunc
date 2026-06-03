@@ -1,13 +1,13 @@
 import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate, b as createAstro, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C_63O6nA.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { P as Photo } from '../chunks/photo-verre_pUW6spG4.mjs';
 import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_ZVQDZnmQ.mjs';
 import { O as Orange } from '../chunks/orange_Cz3fDFH3.mjs';
 import 'clsx';
-import { l as loadAstroAuth, A as getAbonnements, B as getAvantages, C as getFaq } from '../chunks/backend_DljU_PTa.mjs';
+import { l as loadAstroAuth, A as getAbonnements, B as getAvantages, C as getFaq } from '../chunks/backend_DUp2moCL.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$2 = createAstro();

@@ -60,7 +60,7 @@ const [user, cadres, inventaire, cadresPremium, cadresExclusifs] = await Promise
 ]);
 
 const points = user.points || 0;
-const niveau = Math.floor(points / 250) + 1;
+const niveau = user.niveau || Math.floor(points / 250) + 1;
 const maxXp = niveau * 250;
 const progress = maxXp > 0 ? (points / maxXp) * 100 : 0;
 

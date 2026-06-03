@@ -3,20 +3,27 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import UserAvatar from '../../components/UserAvatar.astro';
 import Fleche from '../../assets/fleche.svg';
 
 import {
     createInvitation,
     deleteSortieCompletely,
     getBars,
-    getFileUrl,
     getSortieById,
     getSortieParticipants,
     getUserFriends,
     loadAstroAuth,
     updateSortieById
 } from '../../../backend/backend.mjs';
-import { formatDate } from '../../js/utils.mjs';
+
+function formatDate(date) {
+    return new Date(date).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
 
 const { id } = Astro.params;
 const { pb, user: currentUser } = await loadAstroAuth(Astro);
@@ -177,11 +184,7 @@ const dateFormatee = formatDate(sortie.date);
                         return (
                             <div class="rounded-3xl border border-yellow-c bg-white-bk p-4">
                                 <div class="flex items-center gap-4">
-                                    <img
-                                        class="participant-avatar h-16 w-16 rounded-full object-cover"
-                                        src={getFileUrl(participantUser, participantUser?.avatar, pb)}
-                                        alt=""
-                                    />
+                                    <UserAvatar user={participantUser} pb={pb} size="h-16 w-16" />
                                     <div>
                                         <p class="participant-name font-bold text-xl">{participantUser?.username || 'Utilisateur'}</p>
                                         <small class="participant-role text-paprika-c">

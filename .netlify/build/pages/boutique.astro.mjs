@@ -1,11 +1,11 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C_63O6nA.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { T as Trophy } from '../chunks/Menu_BsNEgW-R.mjs';
 import { C as Courone } from '../chunks/courone_CrdAgGv2.mjs';
 import { F as Fleche } from '../chunks/fleche-droite_CG47Fsf7.mjs';
-import { l as loadAstroAuth, m as acheterCadre, g as getUserById, o as obtenirCadrePremium, n as getCadres, p as getCadresUtilisateur, q as getCadresPremium, t as getCadresExclusifs, d as getFileUrl } from '../chunks/backend_DljU_PTa.mjs';
+import { l as loadAstroAuth, k as acheterCadre, g as getUserById, o as obtenirCadrePremium, m as getCadres, n as getCadresUtilisateur, p as getCadresPremium, q as getCadresExclusifs, t as getFileUrl } from '../chunks/backend_DUp2moCL.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro();
@@ -47,7 +47,7 @@ const $$Boutique = createComponent(async ($$result, $$props, $$slots) => {
     getCadresExclusifs(pb)
   ]);
   const points = user.points || 0;
-  const niveau = Math.floor(points / 250) + 1;
+  const niveau = user.niveau || Math.floor(points / 250) + 1;
   const maxXp = niveau * 250;
   const progress = maxXp > 0 ? points / maxXp * 100 : 0;
   const cadresPossedes = new Set(inventaire.map((item) => item.cadre).filter(Boolean));

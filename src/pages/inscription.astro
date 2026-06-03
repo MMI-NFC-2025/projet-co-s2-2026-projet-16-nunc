@@ -26,7 +26,9 @@ if (Astro.request.method === 'POST') {
             passwordConfirm: password,
             username: formData.get('username')?.toString() || '',
             nom: formData.get('nom')?.toString() || '',
-            prenom: formData.get('prenom')?.toString() || ''
+            prenom: formData.get('prenom')?.toString() || '',
+            points: 0,
+            niveau: 1
         });
 
         await pb.collection('users').authWithPassword(email, password);

@@ -1,7 +1,7 @@
 import { c as createComponent, a as renderTemplate, f as defineScriptVars, r as renderComponent, b as createAstro, m as maybeRenderHead } from '../../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../../chunks/Layout_C0Mj2Fxw.mjs';
-import { l as loadAstroAuth, I as addUserPoints, S as getQuestionsSobriete } from '../../chunks/backend_DljU_PTa.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_C_63O6nA.mjs';
+import { l as loadAstroAuth, J as addUserPoints, U as getQuestionsSobriete } from '../../chunks/backend_DUp2moCL.mjs';
 export { renderers } from '../../renderers.mjs';
 
 var __freeze = Object.freeze;

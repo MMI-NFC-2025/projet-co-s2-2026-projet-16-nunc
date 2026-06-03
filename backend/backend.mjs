@@ -280,9 +280,11 @@ export async function addUserPoints(userId, pointsToAdd, client = pb) {
     try {
         const user = await collection(pocketbaseCollections.users, client).getOne(userId);
         const currentPoints = user.points || 0;
+        const nextPoints = Math.max(0, currentPoints + pointsToAdd);
 
         await collection(pocketbaseCollections.users, client).update(userId, {
-            points: currentPoints + pointsToAdd
+            points: nextPoints,
+            niveau: getLevel(nextPoints)
         });
 
         return true;
@@ -297,7 +299,7 @@ export async function createRetourProgramme(data, client = pb) {
 }
 
 export function getLevel(points) {
-    return Math.floor(points / 250) + 1;
+    return Math.max(1, Math.floor((points || 0) / 250) + 1);
 }
 
 export function getLevelData(points) {
@@ -501,14 +503,19 @@ export async function acheterCadre(userId, cadreId, client = pb) {
         );
     }
 
+    const nextPoints =
+        user.points -
+        cadre.prix;
+
     await getPocketBase(client)
         .collection(pocketbaseCollections.users)
         .update(
             userId,
             {
                 points:
-                    user.points -
-                    cadre.prix
+                    nextPoints,
+                niveau:
+                    getLevel(nextPoints)
             }
         );
 
@@ -538,9 +545,43 @@ export async function getCadresUtilisateur(
         )
         .getFullList({
             filter:
-                `utilisateur="${userId}"`
+                `utilisateur="${userId}"`,
+            expand:
+                'cadre,cadre_premium'
         });
 
+}
+
+export async function getCadreEquipeUtilisateur(userId, client = pb) {
+    return await getPocketBase(client)
+        .collection(pocketbaseCollections.inventaireCadres)
+        .getFirstListItem(
+            `utilisateur="${userId}" && equipe=true`,
+            {
+                expand: 'cadre,cadre_premium',
+                requestKey: null
+            }
+        )
+        .catch(() => null);
+}
+
+export async function equiperCadreUtilisateur(userId, inventaireId, client = pb) {
+    const inventaire = await getCadresUtilisateur(userId, client);
+    const selected = inventaire.find((item) => item.id === inventaireId);
+
+    if (!selected) {
+        throw new Error('Cadre introuvable');
+    }
+
+    for (const item of inventaire) {
+        await getPocketBase(client)
+            .collection(pocketbaseCollections.inventaireCadres)
+            .update(item.id, {
+                equipe: item.id === inventaireId
+            });
+    }
+
+    return true;
 }
 
 export async function getCadresPremium(client = pb) {
