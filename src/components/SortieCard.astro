@@ -2,34 +2,43 @@
 import Calendrier from '../assets/sortie.svg';
 import Carte from '../assets/carte.svg';
 import People from '../assets/people.svg';
+
+const {
+    avatar = '',
+    organisateur = 'Utilisateur',
+    titre = '',
+    date = '',
+    bar = '',
+    participants = ''
+} = Astro.props;
 ---
 
-<article id="sortie-template" class="hidden rounded-3xl border border-mocha-c bg-white-c pr-4 pl-2 py-5">
+<article class="rounded-3xl border border-mocha-c bg-white-c pr-4 pl-2 py-5">
     <div class="flex gap-5">
-        <img class="sortie-avatar h-19 w-19 shrink-0 rounded-full object-cover" alt="" />
+        <img class="h-19 w-19 shrink-0 rounded-full object-cover" src={avatar} alt="" />
 
         <div class="flex-1">
-            <h4 class="sortie-title text-bordeaux-c font-titan"></h4>
+            <h4 class="text-bordeaux-c font-titan">{titre}</h4>
 
             <small class="mt-2 font-bold">
-                <span class="sortie-organisateur text-lg text-paprika-c"></span>
+                <span class="text-lg text-paprika-c">{organisateur}</span>
                 a créé(e) cet évènement
             </small>
 
             <div class="mt-2 flex flex-col">
                 <small class="flex items-center gap-2">
                     <Calendrier class="h-4 w-4" />
-                    <span class="sortie-date"></span>
+                    <span>{date}</span>
                 </small>
 
                 <small class="flex items-center gap-2">
                     <Carte class="h-4 w-4" />
-                    <span class="sortie-bar"></span>
+                    <span>{bar}</span>
                 </small>
 
                 <small class="flex items-center gap-2">
                     <People class="h-4 w-4" />
-                    <span class="sortie-participants"></span>
+                    <span>{participants}</span>
                 </small>
             </div>
         </div>

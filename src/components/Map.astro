@@ -1,9 +1,11 @@
 ---
 import Marker from '../assets/marker.svg';
 
-import { getBars } from '../../backend/backend.mjs';
+import { getBars, loadAstroAuth } from '../../backend/backend.mjs';
 
-const bars = await getBars();
+const { bars: providedBars } = Astro.props;
+const { pb } = await loadAstroAuth(Astro);
+const bars = providedBars || await getBars(pb);
 const markerUrl = Marker.src;
 ---
 

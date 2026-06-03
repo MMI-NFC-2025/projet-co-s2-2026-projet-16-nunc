@@ -2,49 +2,159 @@
 import Layout from '../../layouts/Layout.astro';
 import SortieCard from '../../components/SortieCard.astro';
 import InvitationCard from '../../components/InvitationCard.astro';
+import {
+    acceptInvitation,
+    addParticipantSortie,
+    getFileUrl,
+    getUserInvitations,
+    getUserSorties,
+    loadAstroAuth,
+    refuseInvitation
+} from '../../../backend/backend.mjs';
+
+const { pb, user } = await loadAstroAuth(Astro);
+
+if (!user) {
+    return Astro.redirect('/connexion');
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action')?.toString();
+    const invitationId = formData.get('invitationId')?.toString();
+    const sortieId = formData.get('sortieId')?.toString();
+
+    if (action === 'accept' && invitationId && sortieId) {
+        await addParticipantSortie(sortieId, user.id, 'Participant', 'Accepté', pb);
+        await acceptInvitation(invitationId, pb);
+        return Astro.redirect('/sortie?tab=invitations');
+    }
+
+    if (action === 'refuse' && invitationId) {
+        await refuseInvitation(invitationId, pb);
+        return Astro.redirect('/sortie?tab=invitations');
+    }
+}
+
+const activeTab = Astro.url.searchParams.get('tab') || 'events';
+const participations = await getUserSorties(user.id, pb).catch(() => []);
+const invitations = await getUserInvitations(user.id, pb).catch(() => []);
+const maintenant = new Date();
+
+function getDateSortie(sortie) {
+    if (!sortie?.date || !sortie?.heure) return new Date(0);
+    return new Date(`${sortie.date.substring(0, 10)}T${sortie.heure}`);
+}
+
+function formatDateSortie(sortie) {
+    const dateFormatee = new Date(sortie.date).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    return `${dateFormatee} à ${sortie.heure.replace(':', 'h')}`;
+}
+
+function getBarLabel(sortie) {
+    const bars = sortie.expand?.bar;
+
+    if (sortie.type === 'barcrawl' || sortie.type === 'bar crawl') {
+        return 'Bar Crawl';
+    }
+
+    return bars?.[0]?.nom || bars?.nom || 'Bar';
+}
+
+function getOrganisateur(sortie) {
+    const organisateur = sortie.expand?.organisateur;
+    return Array.isArray(organisateur) ? organisateur[0] : organisateur;
+}
+
+function tabClass(tab) {
+    return activeTab === tab
+        ? 'tab-btn flex-1 rounded-2xl bg-paprika-c py-2 px-1 text-base text-white-bk text-center'
+        : 'tab-btn flex-1 rounded-2xl py-2 px-1 text-base text-center';
+}
+
+const sortiesTriees = participations
+    .filter((participation) => participation.expand?.sortie)
+    .sort((a, b) => getDateSortie(a.expand.sortie) - getDateSortie(b.expand.sortie));
+
+const sortiesActives = sortiesTriees.filter((participation) => getDateSortie(participation.expand.sortie) >= maintenant);
+const sortiesPassees = sortiesTriees.filter((participation) => getDateSortie(participation.expand.sortie) < maintenant);
+const sortiesAffichees = activeTab === 'history' ? sortiesPassees : sortiesActives;
 ---
 
 <Layout title="Mes sorties" description="Organise, participe et gagne des points !">
     <main class="px-8 py-10 pb-32">
         <div class="flex rounded-2xl bg-white-c p-1">
-            <button
-                id="tab-events"
-                class="tab-btn flex-1 rounded-2xl bg-paprika-c py-2 px-1 text-base text-white-bk"
-            >
+            <a href="/sortie?tab=events" id="tab-events" class={tabClass('events')}>
                 Mes évènements
-            </button>
+            </a>
 
-            <button
-                id="tab-invitations"
-                class="tab-btn flex-1 rounded-2xl py-2 px-1 text-base"
-            >
+            <a href="/sortie?tab=invitations" id="tab-invitations" class={tabClass('invitations')}>
                 Invitations
-            </button>
+            </a>
 
-            <button
-                id="tab-history"
-                class="tab-btn flex-1 rounded-2xl py-2 px-1 text-base"
-            >
+            <a href="/sortie?tab=history" id="tab-history" class={tabClass('history')}>
                 Historique
-            </button>
+            </a>
         </div>
 
         <section class="mt-8">
-            <div
-                id="sorties-container"
-                class="flex flex-col gap-8"
-            >
-                <SortieCard />
-            </div>
+            {
+                activeTab === 'invitations' ? (
+                    <div id="invitations-container" class="flex flex-col gap-8">
+                        {
+                            invitations.length > 0 ? (
+                                invitations.map((invitation) => (
+                                    <InvitationCard
+                                        id={invitation.id}
+                                        sortieId={invitation.sortie}
+                                        title={invitation.expand?.sortie?.titre || 'Sortie'}
+                                        expediteur={
+                                            invitation.expand?.expediteur?.username ||
+                                            invitation.expand?.expediteur?.email ||
+                                            'Utilisateur'
+                                        }
+                                    />
+                                ))
+                            ) : (
+                                <p class="rounded-3xl bg-white-c p-5 text-marron-c">Aucune invitation en attente.</p>
+                            )
+                        }
+                    </div>
+                ) : (
+                    <div id="sorties-container" class="flex flex-col gap-8">
+                        {
+                            sortiesAffichees.length > 0 ? (
+                                sortiesAffichees.map((participation) => {
+                                    const sortie = participation.expand.sortie;
+                                    const organisateur = getOrganisateur(sortie);
 
-            <div
-                id="invitations-container"
-                class="hidden flex-col gap-8"
-            >
-                <InvitationCard />
-            </div>
+                                    return (
+                                        <a href={`/sortie/${sortie.id}`}>
+                                            <SortieCard
+                                                avatar={getFileUrl(organisateur, organisateur?.avatar, pb)}
+                                                organisateur={organisateur?.username || 'Utilisateur'}
+                                                titre={sortie.titre || ''}
+                                                date={formatDateSortie(sortie)}
+                                                bar={getBarLabel(sortie)}
+                                                participants={`${sortie.participants || 0} participants`}
+                                            />
+                                        </a>
+                                    );
+                                })
+                            ) : (
+                                <p class="rounded-3xl bg-white-c p-5 text-marron-c">
+                                    {activeTab === 'history' ? 'Aucune sortie passée.' : 'Aucune sortie prévue.'}
+                                </p>
+                            )
+                        }
+                    </div>
+                )
+            }
         </section>
     </main>
 </Layout>
-
-<script type="module" src="/src/js/sortie.js"></script>

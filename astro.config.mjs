@@ -10,6 +10,9 @@ export default defineConfig({
   },
   output: 'server',
   adapter: netlify(),
+  image: {
+    domains: ['pbnunc.linabenmabrouk.fr'],
+  },
   security: {
     checkOrigin: false,
   },

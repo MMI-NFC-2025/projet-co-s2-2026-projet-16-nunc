@@ -9,6 +9,42 @@ import Retour from '../assets/retour.svg';
 import Fleche from '../assets/fleche-droite.svg';
 import Boutique from '../assets/sac.svg';
 import Courone from '../assets/courone.svg';
+import { getUserSorties, loadAstroAuth } from '../../backend/backend.mjs';
+
+const { pb, user } = await loadAstroAuth(Astro);
+const participations = user
+    ? await getUserSorties(user.id, pb).catch(() => [])
+    : [];
+
+const maintenant = new Date();
+const prochainesSorties = participations
+    .filter((participation) => {
+        const sortie = participation.expand?.sortie;
+        if (!sortie?.date || !sortie?.heure) return false;
+
+        const dateSortie = new Date(`${sortie.date.substring(0, 10)}T${sortie.heure}`);
+        return dateSortie >= maintenant;
+    })
+    .sort((a, b) => {
+        const sortieA = a.expand.sortie;
+        const sortieB = b.expand.sortie;
+        const dateA = new Date(`${sortieA.date.substring(0, 10)}T${sortieA.heure}`);
+        const dateB = new Date(`${sortieB.date.substring(0, 10)}T${sortieB.heure}`);
+        return dateA - dateB;
+    })
+    .slice(0, 2);
+
+function formatSortieDate(sortie) {
+    return new Date(sortie.date).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+function getSortieBarName(sortie) {
+    return sortie.expand?.bar?.[0]?.nom || sortie.expand?.bar?.nom || 'Bar';
+}
 
 const cardClass = `
     aspect-square
@@ -70,7 +106,29 @@ const cardClass = `
             </div>
 
             <div id="home-sorties" class="mt-8 flex flex-col gap-5">
-                <HomeSortieCard />
+                {
+                    prochainesSorties.length > 0 ? (
+                        prochainesSorties.map((participation) => {
+                            const sortie = participation.expand.sortie;
+
+                            return (
+                                <a href={`/sortie/${sortie.id}`}>
+                                    <HomeSortieCard
+                                        titre={sortie.titre}
+                                        date={formatSortieDate(sortie)}
+                                        bar={getSortieBarName(sortie)}
+                                        participants={`${sortie.participants} participants`}
+                                    />
+                                </a>
+                            );
+                        })
+                    ) : (
+                        <div class="rounded-3xl border border-paprika-c bg-white-c p-5">
+                            <p class="font-bold text-bordeaux-c">Aucune sortie prévue</p>
+                            <small class="mt-2 block text-marron-c">Organise une nouvelle sortie pour la voir ici.</small>
+                        </div>
+                    )
+                }
             </div>
         </section>
 
@@ -115,6 +173,3 @@ const cardClass = `
         </section>
     </main>
 </Layout>
-
-<script type="module" src="/src/js/home.js"></script>
-<script type="module" src="/src/js/auth-guard.js"></script>

@@ -7,10 +7,11 @@ import Fleche from '../../assets/fleche.svg';
 import Filtre from '../../assets/filtre.svg';
 import Reset from '../../assets/reset.svg';
 
-import { getBars } from '../../../backend/backend.mjs';
+import { getBars, loadAstroAuth } from '../../../backend/backend.mjs';
 import { Image } from 'astro:assets';
 
-const bars = await getBars();
+const { pb } = await loadAstroAuth(Astro);
+const bars = await getBars(pb);
 ---
 
 <Layout title="Carte des bars" description="Il y a 5 bars proche de toi">
@@ -20,7 +21,7 @@ const bars = await getBars();
             Retour
         </a>
         <section class="mt-10 overflow-hidden rounded-3xl border-2 border-paprika-c">
-            <Map />
+            <Map bars={bars} />
         </section>
         
         <section class="mt-12">
@@ -46,7 +47,8 @@ const bars = await getBars();
                             categorie={bar.categorie} 
                             distance={bar.distance} 
                             note={bar.note} 
-                            record={bar} />
+                            record={bar}
+                            pb={pb} />
                         </div>
                     ))
                 }
@@ -56,4 +58,3 @@ const bars = await getBars();
 </Layout>
 
 <script type="module" src="/src/js/filtre.js"></script>
-<script type="module" src="/src/js/auth-guard.js"></script>

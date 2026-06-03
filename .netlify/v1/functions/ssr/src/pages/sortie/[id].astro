@@ -5,26 +5,101 @@ import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import Fleche from '../../assets/fleche.svg';
 
-import { getSortieById, getBars } from '../../../backend/backend.mjs';
+import {
+    createInvitation,
+    deleteSortieCompletely,
+    getBars,
+    getFileUrl,
+    getSortieById,
+    getSortieParticipants,
+    getUserFriends,
+    loadAstroAuth,
+    updateSortieById
+} from '../../../backend/backend.mjs';
 import { formatDate } from '../../js/utils.mjs';
 
 const { id } = Astro.params;
-const sortie = await getSortieById(id);
+const { pb, user: currentUser } = await loadAstroAuth(Astro);
+
+if (!currentUser) {
+    return Astro.redirect('/connexion');
+}
+
+const sortie = await getSortieById(id, pb);
 
 if (!sortie) {
     return Astro.redirect('/sortie');
 }
 
-const allBars = await getBars();
-const bars = sortie.expand.bar || [];
+const isOrganisateur = currentUser.id === sortie.organisateur;
+
+if (Astro.request.method === 'POST' && isOrganisateur) {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action')?.toString();
+
+    if (action === 'update') {
+        const date = formData.get('date')?.toString();
+        const heure = formData.get('heure')?.toString();
+        const selectedBars = formData.getAll('bar').map(String).filter(Boolean);
+        const data = {};
+
+        if (date) data.date = date;
+        if (heure) data.heure = heure;
+        if (selectedBars.length > 0) {
+            data.bar = selectedBars.length === 1 ? selectedBars[0] : selectedBars;
+        }
+
+        await updateSortieById(id, data, pb);
+        return Astro.redirect(`/sortie/${id}`);
+    }
+
+    if (action === 'delete') {
+        await deleteSortieCompletely(id, pb);
+        return Astro.redirect('/sortie');
+    }
+
+    if (action === 'invite') {
+        const selectedUsers = formData.getAll('destinataire').map(String).filter(Boolean);
+
+        for (const destinataire of selectedUsers) {
+            await createInvitation({
+                expediteur: currentUser.id,
+                destinataire,
+                sortie: id,
+                statut: 'en attente'
+            }, pb);
+        }
+
+        return Astro.redirect(`/sortie/${id}`);
+    }
+}
+
+const allBars = await getBars(pb);
+const participants = await getSortieParticipants(id, pb);
+const organiserFriends = isOrganisateur
+    ? await getUserFriends(currentUser.id, pb).catch(() => [])
+    : [];
+const inviteUsers = organiserFriends
+    .map((friendship) => (
+        friendship.utilisateur1 === currentUser.id
+            ? friendship.expand?.utilisateur2
+            : friendship.expand?.utilisateur1
+    ))
+    .filter(Boolean);
+const bars = Array.isArray(sortie.expand?.bar)
+    ? sortie.expand.bar
+    : sortie.expand?.bar
+        ? [sortie.expand.bar]
+        : [];
+const isBarCrawl = sortie.type === 'bar crawl' || sortie.type === 'barcrawl';
 
 const nomBars =
-    sortie.type === 'bar crawl'
+    isBarCrawl
         ? bars.map((bar) => bar.nom).join(', ')
         : bars[0]?.nom || 'Bar inconnu';
 
 const typeFormate =
-    sortie.type === 'bar crawl'
+    isBarCrawl
         ? 'Bar Crawl'
         : 'Classique';
 
@@ -94,7 +169,30 @@ const dateFormatee = formatDate(sortie.date);
         <section class="mt-6 rounded-3xl bg-white-c p-6">
             <h3 class="text-paprika-c">Participants</h3>
 
-            <div id="participants-list" class="mt-4 flex flex-col gap-3">
+            <div id="participants-list" data-rendered="server" class="mt-4 flex flex-col gap-3">
+                {
+                    participants.map((participant) => {
+                        const participantUser = participant.expand?.utilisateur;
+
+                        return (
+                            <div class="rounded-3xl border border-yellow-c bg-white-bk p-4">
+                                <div class="flex items-center gap-4">
+                                    <img
+                                        class="participant-avatar h-16 w-16 rounded-full object-cover"
+                                        src={getFileUrl(participantUser, participantUser?.avatar, pb)}
+                                        alt=""
+                                    />
+                                    <div>
+                                        <p class="participant-name font-bold text-xl">{participantUser?.username || 'Utilisateur'}</p>
+                                        <small class="participant-role text-paprika-c">
+                                            {participant.role === 'Organisateur' ? 'Organisateur' : 'Participant'}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })
+                }
 
                 <div
                     id="participant-template"
@@ -115,28 +213,32 @@ const dateFormatee = formatDate(sortie.date);
             </div>
         </section>
 
-        <section id="organisateur-panel" class="mt-10 hidden rounded-3xl bg-white-c p-6">
+        <section id="organisateur-panel" class:list={[
+            'mt-10 rounded-3xl bg-white-c p-6',
+            { hidden: !isOrganisateur }
+        ]}>
 
             <h3 class="text-paprika-c">Modifier la sortie</h3>
 
-            <div class="mt-4 flex flex-col gap-4">
+            <form method="post" class="mt-4 flex flex-col gap-4">
+                <input type="hidden" name="action" value="update" />
 
                 <input
-                    id="date"
+                    name="date"
                     type="date"
                     value={sortie.date.substring(0, 10)}
                     class="rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
                 />
 
                 <input
-                    id="heure"
+                    name="heure"
                     type="time"
                     value={sortie.heure}
                     class="rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"
                 />
 
                 {
-                    sortie.type === 'bar crawl' ? (
+                    isBarCrawl ? (
                         <div id="bar-crawl-container" class="flex flex-col gap-3">
                             {allBars.map((bar) => (
                                 <label
@@ -188,85 +290,51 @@ const dateFormatee = formatDate(sortie.date);
                 }
 
                 <button
-                    id="save-btn"
-                    data-sortie-id={sortie.id}
+                    type="submit"
                     class="rounded-full bg-paprika-c px-6 py-4 font-bold text-white"
                 >
                     Enregistrer
                 </button>
+            </form>
 
-                <button
-                    id="invite-btn"
-                    class="rounded-full border-2 border-yellow-c px-6 py-4 font-bold text-bordeaux-c"
-                >
-                    Inviter un ami
-                </button>
+            <form method="post" class="mt-6 rounded-3xl border border-yellow-c p-4">
+                <input type="hidden" name="action" value="invite" />
+                <h4 class="text-paprika-c">Inviter un ami</h4>
 
-                <div
-                    id="invite-modal"
-                    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-6"
-                >
-                    <div class="w-full max-w-md rounded-3xl bg-white-c p-6">
-                        <h3 class="text-paprika-c">Inviter un ami</h3>
-
-                        <div id="users-list" class="mt-6 flex flex-col gap-3"></div>
-
-                        <div class="mt-6 flex gap-3">
-                            <button
-                                id="send-invite-btn"
-                                class="flex-1 rounded-full bg-paprika-c py-3 text-white"
-                            >
-                                Envoyer
-                            </button>
-
-                            <button
-                                id="close-invite-btn"
-                                class="flex-1 rounded-full border-2 border-paprika-c py-3 text-paprika-c"
-                            >
-                                Fermer
-                            </button>
-                        </div>
-                    </div>
+                <div class="mt-4 flex flex-col gap-3">
+                    {
+                        inviteUsers.length > 0 ? (
+                            inviteUsers.map((friend) => (
+                                <label class="flex items-center gap-3 rounded-xl border border-yellow-c p-3">
+                                    <input type="checkbox" name="destinataire" value={friend.id} class="h-5 w-5 accent-paprika-c" />
+                                    <span>{friend.username || friend.email || 'Utilisateur'}</span>
+                                </label>
+                            ))
+                        ) : (
+                            <p class="text-marron-c">Tu n'as aucun ami à inviter.</p>
+                        )
+                    }
                 </div>
 
                 <button
-                    id="delete-btn"
-                    data-sortie-id={sortie.id}
+                    type="submit"
+                    class="mt-4 w-full rounded-full border-2 border-yellow-c px-6 py-4 font-bold text-bordeaux-c"
+                    disabled={inviteUsers.length === 0}
+                >
+                    Envoyer les invitations
+                </button>
+            </form>
+
+            <form method="post" class="mt-6">
+                <input type="hidden" name="action" value="delete" />
+                <button
+                    type="submit"
                     class="rounded-full border-2 border-paprika-c px-6 py-4 font-bold text-paprika-c"
                 >
                     Supprimer la sortie
                 </button>
-
-                <div
-                    id="delete-modal"
-                    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-8"
-                >
-                    <div class="w-full max-w-md rounded-4xl bg-white-c p-8 text-center">
-                        <h4 class="text-bordeaux-c">Supprimer cette sortie ?</h4>
-
-                        <div class="mt-8 flex gap-4">
-                            <button
-                                id="cancel-delete"
-                                class="flex-1 rounded-full border-2 border-paprika-c py-4 text-paprika-c"
-                            >
-                                Annuler
-                            </button>
-
-                            <button
-                                id="confirm-delete"
-                                class="flex-1 rounded-full bg-paprika-c py-4 text-white"
-                            >
-                                OK
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            </form>
         </section>
 
     </main>
 </Layout>
-
-<script type="module" src="/src/js/sortie-details.js"></script>
-<script type="module" src="/src/js/auth-guard.js"></script>

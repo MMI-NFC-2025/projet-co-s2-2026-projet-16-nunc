@@ -10,11 +10,12 @@ import Flechedroite from '../../assets/flecheorange-droite.svg';
 import Card from '../../components/AvantageCard.astro';
 import FaqCard from '../../components/FaqCard.astro';
 
-import { getAbonnements, getAvantages, getFaq } from '../../../backend/backend.mjs';
+import { getAbonnements, getAvantages, getFaq, loadAstroAuth } from '../../../backend/backend.mjs';
 
-const abonnements = await getAbonnements();
-const avantages = await getAvantages();
-const faq = await getFaq();
+const { pb } = await loadAstroAuth(Astro);
+const abonnements = await getAbonnements(pb);
+const avantages = await getAvantages(pb);
+const faq = await getFaq(pb);
 ---
 
 <Layout title="NŨNC Premium" hideHeader={true}>

@@ -5,10 +5,84 @@ import Position from '../../assets/carte.svg';
 import Group from '../../assets/people.svg';
 import Coupe from '../../assets/img/coupe.avif';
 import { Image } from 'astro:assets';
-import { getBars } from '../../../backend/backend.mjs';
+import {
+    addParticipantSortie,
+    addUserPoints,
+    createSortie,
+    getBars,
+    getUserById,
+    loadAstroAuth
+} from '../../../backend/backend.mjs';
 
-const bars = await getBars();
+const { pb, user: authUser } = await loadAstroAuth(Astro);
+
+if (!authUser) {
+    return Astro.redirect('/connexion');
+}
+
+const user = await getUserById(authUser.id, pb).catch(() => authUser);
+const bars = await getBars(pb);
 const barId = Astro.url.searchParams.get('bar');
+let error = '';
+
+function calculatePoints(participants, hasPremium) {
+    let points = 30 + participants;
+
+    if (participants >= 20) points = 50;
+
+    if (hasPremium && participants > 20) {
+        points = 50 + ((participants - 20) * 5);
+    }
+
+    return Math.min(points, hasPremium ? 130 : 50);
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const participants = Number(formData.get('participants'));
+    const hasPremium = Boolean(user?.premium);
+    const type = String(formData.get('type') || 'classique');
+    const defaultBar = String(formData.get('defaultBar') || '').trim();
+    const classicBar = String(formData.get('classicBar') || '').trim();
+    const selectedBars = formData
+        .getAll('bar')
+        .map((id) => String(id || '').trim())
+        .filter(Boolean);
+
+    const sortieBars = type === 'classique'
+        ? [defaultBar || classicBar].filter(Boolean)
+        : selectedBars;
+
+    if (!Number.isFinite(participants) || participants < 1) {
+        error = 'Indique un nombre de participants valide.';
+    } else if (!hasPremium && participants > 20) {
+        error = 'Sans abonnement Premium, la limite est de 20 participants.';
+    } else if (sortieBars.length === 0) {
+        error = 'Vous devez sélectionner au moins un bar.';
+    } else {
+        const points = calculatePoints(participants, hasPremium);
+        const result = await createSortie({
+            titre: String(formData.get('titre') || '').trim(),
+            description: String(formData.get('description') || '').trim(),
+            date: String(formData.get('date') || ''),
+            heure: String(formData.get('heure') || ''),
+            participants,
+            type,
+            organisateur: user.id,
+            bar: sortieBars,
+            points
+        }, pb);
+
+        if (result.success) {
+            await addParticipantSortie(result.sortie.id, user.id, 'Organisateur', 'Accepté', pb);
+            await addUserPoints(user.id, points, pb);
+
+            return Astro.redirect(`/sortie/${result.sortie.id}`);
+        }
+
+        error = 'Une erreur est survenue lors de la création de la sortie.';
+    }
+}
 ---
 
 <Layout title="Organiser une sortie" description="Créer un nouvel événement">
@@ -18,9 +92,15 @@ const barId = Astro.url.searchParams.get('bar');
             Retour
         </a>
 
-        <form id="sortie-form" class="mt-10 flex flex-col gap-8">
-            <input type="hidden" name="defaultBar" value={barId} />
+        <form id="sortie-form" method="post" class="mt-10 flex flex-col gap-8" data-premium={user?.premium ? 'true' : 'false'}>
+            <input type="hidden" name="defaultBar" value={barId || ''} />
             <input type="hidden" name="type" id="type-sortie" value="classique" />
+
+            {error && (
+                <section class="rounded-3xl bg-white-c p-5 text-center font-bold text-bordeaux-c">
+                    {error}
+                </section>
+            )}
 
             <section class="rounded-3xl bg-white-c p-4">
                 <h3 class="text-paprika-c">Type d’événement</h3>
@@ -39,6 +119,19 @@ const barId = Astro.url.searchParams.get('bar');
                     </button>
                 </div>
 
+                <div id="classic-bar" class="mt-6 flex flex-col gap-3">
+                    <label class="font-bold text-bordeaux-c">Bar de la sortie</label>
+                    <div class="flex flex-col gap-3">
+                        {bars.map((bar) => (
+                            <label class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4">
+                                <span class="font-bold text-bordeaux-c">{bar.nom}</span>
+
+                                <input type="radio" name="classicBar" value={bar.id} checked={bar.id === barId} class="h-5 w-5 accent-paprika-c" />
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
                 <div id="crawl-bars" class="mt-6 hidden flex-col gap-3">
                     <label class="font-bold text-bordeaux-c">Sélection des bars</label>
                     <div class="flex flex-col gap-3">
@@ -47,7 +140,7 @@ const barId = Astro.url.searchParams.get('bar');
                             <label class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4">
                                 <span class="font-bold text-bordeaux-c">{bar.nom}</span>
                                 
-                                <input type="checkbox" name="bar" value={bar.id} class="h-5 w-5 accent-paprika-c" />
+                                <input type="checkbox" name="bar" value={bar.id} checked={bar.id === barId} class="h-5 w-5 accent-paprika-c" />
                             </label>
                         ))}
                     </div>
@@ -109,15 +202,68 @@ const barId = Astro.url.searchParams.get('bar');
             <button type="submit" class="rounded-full bg-paprika-c px-6 py-5 text-center font-bold text-white">Créer l’événement</button>
         </form>
 
-        <section id="error-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-6">
-            <div class="w-full max-w-sm rounded-3xl bg-white-c p-6 text-center">
-                <p id="error-message" class="text-lg font-bold text-bordeaux-c"></p>
-                
-                <button id="close-error" class="mt-6 rounded-full bg-paprika-c px-6 py-3 font-bold text-white">OK</button>
-            </div>
-        </section>
     </main>
 </Layout>
 
-<script type="module" src="/src/js/organise-sortie.js"></script>
-<script type="module" src="/src/js/auth-guard.js"></script>
+<script>
+    const form = document.getElementById('sortie-form');
+    const classicBtn = document.getElementById('classic-btn');
+    const crawlBtn = document.getElementById('crawl-btn');
+    const typeInput = document.getElementById('type-sortie');
+    const classicBar = document.getElementById('classic-bar');
+    const crawlBars = document.getElementById('crawl-bars');
+    const participantsInput = document.querySelector('input[name="participants"]');
+    const pointsDisplay = document.getElementById('points-display');
+    const hasPremium = form?.dataset.premium === 'true';
+
+    function calculatePoints(participants) {
+        let points = 30 + participants;
+
+        if (participants >= 20) points = 50;
+
+        if (hasPremium && participants > 20) {
+            points = 50 + ((participants - 20) * 5);
+        }
+
+        return Math.min(points, hasPremium ? 130 : 50);
+    }
+
+    function setType(type) {
+        typeInput.value = type;
+
+        if (type === 'classique') {
+            classicBtn.classList.remove('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+            classicBtn.classList.add('bg-paprika-c', 'text-white', 'border-paprika-c');
+
+            crawlBtn.classList.remove('bg-paprika-c', 'text-white', 'border-paprika-c');
+            crawlBtn.classList.add('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+
+            crawlBars.classList.add('hidden');
+            crawlBars.classList.remove('flex');
+
+            classicBar.classList.remove('hidden');
+            classicBar.classList.add('flex');
+            return;
+        }
+
+        crawlBtn.classList.remove('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+        crawlBtn.classList.add('bg-paprika-c', 'text-white', 'border-paprika-c');
+
+        classicBtn.classList.remove('bg-paprika-c', 'text-white', 'border-paprika-c');
+        classicBtn.classList.add('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+
+        crawlBars.classList.remove('hidden');
+        crawlBars.classList.add('flex');
+
+        classicBar.classList.add('hidden');
+        classicBar.classList.remove('flex');
+    }
+
+    classicBtn?.addEventListener('click', () => setType('classique'));
+    crawlBtn?.addEventListener('click', () => setType('bar crawl'));
+
+    participantsInput?.addEventListener('input', () => {
+        const participants = Number(participantsInput.value) || 0;
+        pointsDisplay.textContent = `+${calculatePoints(participants)}`;
+    });
+</script>

@@ -11,6 +11,53 @@ import Warning from '../assets/tw.svg';
 
 import Argent from '../assets/argent.svg';
 import Temps from '../assets/temps.svg';
+import {
+    createRetourProgramme,
+    getFileUrl,
+    getUserFriends,
+    loadAstroAuth
+} from '../../backend/backend.mjs';
+
+const { pb, user } = await loadAstroAuth(Astro);
+
+if (!user) {
+    return Astro.redirect('/connexion');
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const typeRetour = formData.get('type_retour')?.toString();
+    const conducteurSam = formData.get('conducteur_sam')?.toString();
+
+    if (typeRetour === 'Taxi' || typeRetour === 'VTC') {
+        await createRetourProgramme({
+            utilisateur: user.id,
+            type_retour: typeRetour
+        }, pb);
+
+        return Astro.redirect('/');
+    }
+
+    if (typeRetour === 'SAM' && conducteurSam) {
+        await createRetourProgramme({
+            utilisateur: user.id,
+            type_retour: 'SAM',
+            conducteur_sam: conducteurSam
+        }, pb);
+
+        return Astro.redirect('/');
+    }
+}
+
+const friends = await getUserFriends(user.id, pb).catch(() => []);
+
+const samFriends = friends
+    .map((friend) => (
+        friend.utilisateur1 === user.id
+            ? friend.expand?.utilisateur2
+            : friend.expand?.utilisateur1
+    ))
+    .filter(Boolean);
 ---
 
 <Layout title="Retour programmé" description="Rentre en toute sécurité">
@@ -25,11 +72,10 @@ import Temps from '../assets/temps.svg';
 
         <h3 class="mt-12 text-paprika-c">Choisis ton service</h3>
 
-        <div
-            id="taxi-card"
+        <form
+            method="post"
             class="
                 mt-8
-                cursor-pointer
                 rounded-xl
                 border
                 border-mocha-c
@@ -39,6 +85,8 @@ import Temps from '../assets/temps.svg';
                 active:scale-95
             "
         >
+            <input type="hidden" name="type_retour" value="Taxi" />
+            <button class="w-full text-left" type="submit">
             <div class="flex items-center gap-8 text-marron-c">
                 <Image src={Taxi} alt="" class="h-auto w-18" />
 
@@ -60,13 +108,13 @@ import Temps from '../assets/temps.svg';
                     </div>
                 </div>
             </div>
-        </div>
+            </button>
+        </form>
 
-        <div
-            id="vtc-card"
+        <form
+            method="post"
             class="
                 mt-8
-                cursor-pointer
                 rounded-xl
                 border
                 border-mocha-c
@@ -76,6 +124,8 @@ import Temps from '../assets/temps.svg';
                 active:scale-95
             "
         >
+            <input type="hidden" name="type_retour" value="VTC" />
+            <button class="w-full text-left" type="submit">
             <div class="flex items-center gap-8 text-marron-c">
                 <Image src={Vtc} alt="" class="h-auto w-18" />
 
@@ -97,12 +147,14 @@ import Temps from '../assets/temps.svg';
                     </div>
                 </div>
             </div>
-        </div>
+            </button>
+        </form>
 
-        <div
-            id="sam-card"
+        <a
+            href="#sam-container"
             class="
                 relative
+                block
                 mt-8
                 cursor-pointer
                 rounded-xl
@@ -155,60 +207,64 @@ import Temps from '../assets/temps.svg';
 
                 </div>
             </div>
-        </div>
+        </a>
 
-        <div id="sam-container" class="hidden mt-8">
+        <div id="sam-container" class="mt-8">
             <h3 class="text-paprika-c">Choisis ton conducteur</h3>
 
-            <div id="friends-list" class="mt-4 flex flex-col gap-3"></div>
-        </div>
+            <div id="friends-list" class="mt-4 flex flex-col gap-3">
+                {
+                    samFriends.length > 0 ? (
+                        samFriends.map((friend) => (
+                            <form method="post">
+                                <input type="hidden" name="type_retour" value="SAM" />
+                                <input type="hidden" name="conducteur_sam" value={friend.id} />
+                                <button
+                                    class="
+                                        flex
+                                        w-full
+                                        items-center
+                                        gap-4
+                                        rounded-xl
+                                        border-2
+                                        border-paprika-c
+                                        bg-white-c
+                                        p-4
+                                        text-left
+                                        transition-all
+                                        duration-200
+                                        active:scale-95
+                                    "
+                                >
+                                    <img
+                                        class="
+                                            h-16
+                                            w-16
+                                            shrink-0
+                                            rounded-full
+                                            object-cover
+                                        "
+                                        src={getFileUrl(friend, friend.avatar, pb)}
+                                        alt={friend.username}
+                                    >
 
-        <div class="hidden">
-            <button
-                id="friend-template"
-                class="
-                    w-full
-                    items-center
-                    gap-4
-                    rounded-xl
-                    border-2
-                    border-paprika-c
-                    bg-white-c
-                    p-4
-                    text-left
-                    transition-all
-                    duration-200
-                    active:scale-95
-                "
-            >
-                <img
-                    class="
-                        friend-avatar
-                        h-16
-                        w-16
-                        shrink-0
-                        rounded-full
-                        object-cover
-                    "
-                    src=""
-                    alt=""
-                >
+                                    <div>
+                                        <p class="text-lg font-bold text-paprika-c">{friend.username}</p>
 
-                <div>
-                    <p
-                        class="
-                            friend-username
-                            text-lg
-                            font-bold
-                            text-paprika-c
-                        "
-                    ></p>
-
-                    <small class="text-marron-c">
-                        Conducteur disponible
-                    </small>
-                </div>
-            </button>
+                                        <small class="text-marron-c">
+                                            Conducteur disponible
+                                        </small>
+                                    </div>
+                                </button>
+                            </form>
+                        ))
+                    ) : (
+                        <p class="rounded-xl bg-white-c p-4 text-marron-c">
+                            Tu n'as pas encore d'ami disponible comme conducteur SAM.
+                        </p>
+                    )
+                }
+            </div>
         </div>
 
         <section class="mt-32 rounded-lg bg-white-c p-2">
@@ -229,5 +285,3 @@ import Temps from '../assets/temps.svg';
 
     </main>
 </Layout>
-
-<script type="module" src="/src/js/retour.js"></script>

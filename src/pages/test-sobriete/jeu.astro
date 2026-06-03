@@ -1,5 +1,40 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import {
+    addUserPoints,
+    getQuestionsSobriete,
+    loadAstroAuth
+} from '../../../backend/backend.mjs';
+
+const { pb, user } = await loadAstroAuth(Astro);
+
+if (!user) {
+    return Astro.redirect('/connexion');
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const score = Number(formData.get('score') || 0);
+    const safeScore = Number.isFinite(score)
+        ? Math.max(0, Math.min(Math.trunc(score), 100))
+        : 0;
+
+    await addUserPoints(user.id, safeScore, pb);
+    return new Response(null, { status: 204 });
+}
+
+const questions = (await getQuestionsSobriete(pb))
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 5)
+    .map((question) => ({
+        question: question.question,
+        choix_1: question.choix_1,
+        choix_2: question.choix_2,
+        choix_3: question.choix_3,
+        choix_4: question.choix_4,
+        bonne_reponse: question.bonne_reponse,
+        points: question.points
+    }));
 ---
 
 <Layout title="Défis Sobriété !">
@@ -35,8 +70,15 @@ import Layout from '../../layouts/Layout.astro';
             <button id="next-btn" class="hidden mx-auto mt-8 rounded-full bg-paprika-c px-8 py-4 text-white">
                 Question suivante
             </button>
+
+            <form id="score-form" method="post" class="hidden">
+                <input id="score-input" type="hidden" name="score" value="0" />
+            </form>
         </div>
     </main>
 </Layout>
 
+<script is:inline define:vars={{ questions }}>
+    window.sobrieteQuestions = questions;
+</script>
 <script type="module" src="/src/js/test-sobriete.js"></script>

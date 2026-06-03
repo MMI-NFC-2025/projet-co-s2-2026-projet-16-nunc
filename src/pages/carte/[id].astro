@@ -11,12 +11,13 @@ import Reset from '../../assets/reset.svg';
 import Etoile from '../../assets/etoile.svg';
 import Close from '../../assets/close.svg';
 
-import { getBars, getBarById } from '../../../backend/backend.mjs';
+import { getBars, getBarById, loadAstroAuth } from '../../../backend/backend.mjs';
 import { Image } from 'astro:assets';
 
-const bars = await getBars();
+const { pb } = await loadAstroAuth(Astro);
+const bars = await getBars(pb);
 const { id } = Astro.params;
-const selectedBar = await getBarById(id);
+const selectedBar = await getBarById(id, pb);
 
 if (!selectedBar) {
     return Astro.redirect('/carte');
@@ -31,7 +32,7 @@ if (!selectedBar) {
         </a>
         
         <section class="mt-10 overflow-hidden rounded-3xl border-2 border-paprika-c">
-            <Map />
+            <Map bars={bars} />
         </section>
         
         <section class="mt-12">
@@ -53,7 +54,7 @@ if (!selectedBar) {
                 {
                     bars.map((bar) => (
                         <div class="bar-item" data-distance={bar.distance}>
-                            <BarCard nom={bar.nom} categorie={bar.categorie} distance={bar.distance} note={bar.note} record={bar} />
+                            <BarCard nom={bar.nom} categorie={bar.categorie} distance={bar.distance} note={bar.note} record={bar} pb={pb} />
                         </div>
                     ))
                 }
@@ -64,7 +65,7 @@ if (!selectedBar) {
             <div class="absolute left-1/2 top-52 w-11/12 max-w-xl -translate-x-1/2 overflow-hidden rounded-3xl border-2 border-paprika-c bg-white-c">
                 
                 <div class="relative h-64 overflow-hidden">
-                    <PbImage record={selectedBar} imageField="image" />
+                    <PbImage record={selectedBar} imageField="image" pb={pb} />
                     
                     <a href="/carte" class="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-black/40">
                         <Image src={Close} alt="" class="h-5 w-5" />

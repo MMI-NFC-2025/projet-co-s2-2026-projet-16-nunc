@@ -5,6 +5,28 @@ import Header from '../components/Header.astro';
 import Eye from '../assets/eye-open.svg';
 
 import { Image } from 'astro:assets';
+import {
+    createAuthCookie,
+    createServerPocketBase
+} from '../../backend/backend.mjs';
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const email = formData.get('email')?.toString() || '';
+    const password = formData.get('password')?.toString() || '';
+    const pb = createServerPocketBase(Astro.request);
+
+    try {
+        await pb.collection('users').authWithPassword(email, password);
+        const response = Astro.redirect('/');
+        response.headers.append('Set-Cookie', createAuthCookie(pb));
+        return response;
+    } catch {
+        error = 'Identifiants incorrects';
+    }
+}
 ---
 
 <Layout>
@@ -15,7 +37,7 @@ import { Image } from 'astro:assets';
                 <h3 class="text-paprika-c">Connecte-toi !</h3>
             </div>
 
-            <form id="form-login" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6">
+            <form id="form-login" method="post" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6">
                 <label class="block font-bold">
                     Email
                     <input
@@ -45,7 +67,12 @@ import { Image } from 'astro:assets';
                     </div>
                 </label>
 
-                <div id="retour-login" class="hidden font-semibold px-4 py-3 rounded-xl"></div>
+                <div id="retour-login" class:list={[
+                    'font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700',
+                    { hidden: !error }
+                ]}>
+                    {error}
+                </div>
                 <button type="submit" id="btn-login" class="text-xl w-full mt-4 rounded-full bg-paprika-c py-4 text-white-bk font-bold hover:bg-orange-700 transition">
                     Se connecter
                 </button>

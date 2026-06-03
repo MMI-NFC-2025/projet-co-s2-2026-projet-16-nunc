@@ -1,10 +1,1 @@
-import {
-    isAuthValid
-} from "../../backend/backend.mjs";
-
-if (!isAuthValid()) {
-
-    window.location.href =
-        "/connexion";
-
-}
+// L'authentification est vérifiée côté serveur par les pages Astro.

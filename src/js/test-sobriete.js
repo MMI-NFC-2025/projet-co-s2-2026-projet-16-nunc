@@ -1,12 +1,6 @@
-import {
-    refreshCurrentUser,
-    addUserPoints,
-    getQuestionsSobriete
-} from '../../backend/backend.mjs';
-
 let score = 0;
 let currentQuestion = 0;
-let questions = [];
+let questions = window.sobrieteQuestions || [];
 let hasAnswered = false;
 let pointsAdded = false;
 
@@ -18,14 +12,17 @@ const message = document.getElementById('game-message');
 const nextBtn = document.getElementById('next-btn');
 const scoreDisplay = document.getElementById('score-display');
 const progressBar = document.getElementById('progress-bar');
+const scoreForm = document.getElementById('score-form');
+const scoreInput = document.getElementById('score-input');
 
-questions = await getQuestionsSobriete();
-
-questions = (await getQuestionsSobriete())
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 5);
-
-showQuestion();
+if (questions.length > 0) {
+    showQuestion();
+} else {
+    step.textContent = 'Indisponible';
+    title.textContent = 'Test de sobriété';
+    question.textContent = 'Aucune question disponible pour le moment.';
+    buttons.forEach((button) => button.classList.add('hidden'));
+}
 
 function showQuestion() {
     hasAnswered = false;
@@ -97,10 +94,12 @@ nextBtn.addEventListener('click', async () => {
 });
 
 async function showFinalResult() {
-    const user = await refreshCurrentUser();
-
-    if (user && !pointsAdded) {
-        await addUserPoints(user.id, score);
+    if (!pointsAdded && scoreForm && scoreInput) {
+        scoreInput.value = String(score);
+        await fetch(window.location.href, {
+            method: 'POST',
+            body: new FormData(scoreForm)
+        });
         pointsAdded = true;
     }
 
@@ -120,6 +119,8 @@ async function showFinalResult() {
         message.textContent = 'Résultat moyen';
     } else if (score >= 40) {
         message.textContent = 'Tu peux faire mieux !';
+    } else {
+        message.textContent = 'Points ajoutés à ton compte';
     }
 
     nextBtn.textContent = 'Retour à l’accueil';

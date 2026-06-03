@@ -1,34 +1,39 @@
-<article
-    id="invitation-template"
-    class="hidden rounded-3xl border border-mocha-c bg-white-c p-5"
->
+---
+const {
+    id,
+    sortieId,
+    title = 'Sortie',
+    expediteur = 'Utilisateur'
+} = Astro.props;
+---
 
-    <h4
-        class="invitation-title text-bordeaux-c font-titan"
-    ></h4>
+<article class="rounded-3xl border border-mocha-c bg-white-c p-5">
+
+    <h4 class="text-bordeaux-c font-titan">{title}</h4>
 
     <small>
         Invitation de
-        <span
-            class="invitation-expediteur text-paprika-c"
-        ></span>
+        <span class="text-paprika-c">{expediteur}</span>
     </small>
 
-    <div
-        class="mt-4 flex gap-3"
-    >
+    <div class="mt-4 flex gap-3">
 
-        <button
-            class="accept-btn flex-1 rounded-full bg-paprika-c py-3 text-white"
-        >
+        <form method="post" class="flex-1">
+            <input type="hidden" name="action" value="accept" />
+            <input type="hidden" name="invitationId" value={id} />
+            <input type="hidden" name="sortieId" value={sortieId} />
+            <button class="w-full rounded-full bg-paprika-c py-3 text-white">
             Accepter
-        </button>
+            </button>
+        </form>
 
-        <button
-            class="refuse-btn flex-1 rounded-full border-2 border-paprika-c py-3 text-paprika-c"
-        >
+        <form method="post" class="flex-1">
+            <input type="hidden" name="action" value="refuse" />
+            <input type="hidden" name="invitationId" value={id} />
+            <button class="w-full rounded-full border-2 border-paprika-c py-3 text-paprika-c">
             Refuser
-        </button>
+            </button>
+        </form>
 
     </div>
 

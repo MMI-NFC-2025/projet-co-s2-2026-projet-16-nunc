@@ -1,10 +1,11 @@
 ---
-import { getImageUrl } from '../../backend/backend.mjs';
+import { getImageUrl, loadAstroAuth } from '../../backend/backend.mjs';
 import { Image } from "astro:assets";
 
-const { record, imageField } = Astro.props;
+const { record, imageField, pb } = Astro.props;
 
-const imageURL = await getImageUrl(record, imageField);
+const auth = pb ? { pb } : await loadAstroAuth(Astro);
+const imageURL = await getImageUrl(record, imageField, pb || auth.pb);
 ---
 
 {

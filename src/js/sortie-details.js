@@ -22,10 +22,10 @@ if (currentUser?.id === organisateurId) {
 const saveBtn = document.getElementById('save-btn');
 const deleteBtn = document.getElementById('delete-btn');
 const sortieId = saveBtn?.dataset?.sortieId;
+const participantsList = document.getElementById('participants-list');
 
-if (sortieId) {
+if (sortieId && participantsList?.dataset.rendered !== 'server') {
     const participants = await getSortieParticipants(sortieId);
-    const participantsList = document.getElementById('participants-list');
     const template = document.getElementById('participant-template');
 
     participants.forEach((participant) => {

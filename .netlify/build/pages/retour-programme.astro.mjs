@@ -1,10 +1,11 @@
-import { c as createComponent, a as renderTemplate, r as renderComponent, m as maybeRenderHead } from '../chunks/astro/server_mM6q6Q3f.mjs';
+import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_RQUlbrVw.mjs';
-import { $ as $$Image } from '../chunks/_astro_assets_CdkVV2cw.mjs';
-import { F as Fleche } from '../chunks/fleche_96AuL5ab.mjs';
-import { W as Warning } from '../chunks/tw_CN-x9oWq.mjs';
-import { c as createSvgComponent } from '../chunks/runtime_BTGkwREA.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
+import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
+import { W as Warning } from '../chunks/tw_sVE_cmhm.mjs';
+import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
+import { l as loadAstroAuth, F as createRetourProgramme, f as getUserFriends, d as getFileUrl } from '../chunks/backend_DljU_PTa.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Taxi = new Proxy({"src":"/_astro/taxi.gUQ6ya2u.avif","width":272,"height":272,"format":"avif"}, {
@@ -50,16 +51,40 @@ const Argent = createSvgComponent({"meta":{"src":"/_astro/argent.CZfrI6MT.svg","
 
 const Temps = createSvgComponent({"meta":{"src":"/_astro/temps.BhVIF8X2.svg","width":15,"height":15,"format":"svg"},"attributes":{"width":"15","height":"15","viewBox":"0 0 15 15","fill":"none"},"children":"\n<path d=\"M7.5 2.57812C6.38748 2.57812 5.29995 2.90803 4.37492 3.52611C3.44989 4.14419 2.72892 5.0227 2.30318 6.05053C1.87744 7.07837 1.76604 8.20936 1.98309 9.30051C2.20013 10.3917 2.73586 11.3939 3.52253 12.1806C4.3092 12.9673 5.31148 13.503 6.40262 13.72C7.49376 13.9371 8.62476 13.8257 9.6526 13.3999C10.6804 12.9742 11.5589 12.2532 12.177 11.3282C12.7951 10.4032 13.125 9.31564 13.125 8.20312C13.1233 6.71181 12.5301 5.28206 11.4756 4.22753C10.4211 3.17301 8.99132 2.57983 7.5 2.57812ZM7.5 12.4219C6.66561 12.4219 5.84996 12.1744 5.15619 11.7109C4.46242 11.2473 3.92169 10.5884 3.60239 9.81757C3.28308 9.04669 3.19953 8.19845 3.36231 7.38009C3.5251 6.56173 3.92689 5.81002 4.5169 5.22002C5.1069 4.63002 5.85861 4.22822 6.67697 4.06544C7.49532 3.90266 8.34357 3.9862 9.11445 4.30551C9.88532 4.62482 10.5442 5.16554 11.0078 5.85931C11.4713 6.55308 11.7188 7.36874 11.7188 8.20312C11.7175 9.32163 11.2726 10.394 10.4817 11.1849C9.69084 11.9758 8.6185 12.4206 7.5 12.4219ZM9.63809 5.83066C9.70364 5.89599 9.75565 5.97361 9.79114 6.05907C9.82662 6.14454 9.84489 6.23617 9.84489 6.32871C9.84489 6.42125 9.82662 6.51288 9.79114 6.59835C9.75565 6.68382 9.70364 6.76144 9.63809 6.82676L7.99746 8.46738C7.86537 8.59947 7.68622 8.67368 7.49942 8.67368C7.31261 8.67368 7.13346 8.59947 7.00137 8.46738C6.86928 8.33529 6.79507 8.15614 6.79507 7.96934C6.79507 7.78253 6.86928 7.60338 7.00137 7.47129L8.64199 5.83066C8.70732 5.76511 8.78494 5.7131 8.8704 5.67762C8.95587 5.64213 9.0475 5.62386 9.14004 5.62386C9.23258 5.62386 9.32421 5.64213 9.40968 5.67762C9.49515 5.7131 9.57277 5.76511 9.63809 5.83066ZM5.39063 0.9375C5.39063 0.75102 5.46471 0.572177 5.59657 0.440316C5.72843 0.308454 5.90727 0.234375 6.09375 0.234375H8.90625C9.09273 0.234375 9.27157 0.308454 9.40344 0.440316C9.5353 0.572177 9.60938 0.75102 9.60938 0.9375C9.60938 1.12398 9.5353 1.30282 9.40344 1.43468C9.27157 1.56655 9.09273 1.64062 8.90625 1.64062H6.09375C5.90727 1.64062 5.72843 1.56655 5.59657 1.43468C5.46471 1.30282 5.39063 1.12398 5.39063 0.9375Z\" fill=\"#793008\" />\n"});
 
-var __freeze = Object.freeze;
-var __defProp = Object.defineProperty;
-var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(cooked.slice()) }));
-var _a;
-const $$RetourProgramme = createComponent(($$result, $$props, $$slots) => {
-  return renderTemplate(_a || (_a = __template(["", ' <script type="module" src="/src/js/retour.js"><\/script>'])), renderComponent($$result, "Layout", $$Layout, { "title": "Retour programm\xE9", "description": "Rentre en toute s\xE9curit\xE9" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="px-8 py-10 pb-32"> <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
+const $$Astro = createAstro();
+const $$RetourProgramme = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$RetourProgramme;
+  const { pb, user } = await loadAstroAuth(Astro2);
+  if (!user) {
+    return Astro2.redirect("/connexion");
+  }
+  if (Astro2.request.method === "POST") {
+    const formData = await Astro2.request.formData();
+    const typeRetour = formData.get("type_retour")?.toString();
+    const conducteurSam = formData.get("conducteur_sam")?.toString();
+    if (typeRetour === "Taxi" || typeRetour === "VTC") {
+      await createRetourProgramme({
+        utilisateur: user.id,
+        type_retour: typeRetour
+      }, pb);
+      return Astro2.redirect("/");
+    }
+    if (typeRetour === "SAM" && conducteurSam) {
+      await createRetourProgramme({
+        utilisateur: user.id,
+        type_retour: "SAM",
+        conducteur_sam: conducteurSam
+      }, pb);
+      return Astro2.redirect("/");
+    }
+  }
+  const friends = await getUserFriends(user.id, pb).catch(() => []);
+  const samFriends = friends.map((friend) => friend.utilisateur1 === user.id ? friend.expand?.utilisateur2 : friend.expand?.utilisateur1).filter(Boolean);
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Retour programm\xE9", "description": "Rentre en toute s\xE9curit\xE9" }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="px-8 py-10 pb-32"> <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
 Retour
-</a> <h3 class="mt-12 text-paprika-c">Choisis ton service</h3> <div id="taxi-card" class="
+</a> <h3 class="mt-12 text-paprika-c">Choisis ton service</h3> <form method="post" class="
                 mt-8
-                cursor-pointer
                 rounded-xl
                 border
                 border-mocha-c
@@ -67,9 +92,8 @@ Retour
                 p-3
                 transition-all
                 active:scale-95
-            "> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Taxi, "alt": "", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">Taxi</p> <small class="mt-4 block">Service de taxi local</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">15-25€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">10-15 min</label> </div> </div> </div> </div> </div> <div id="vtc-card" class="
+            "> <input type="hidden" name="type_retour" value="Taxi"> <button class="w-full text-left" type="submit"> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Taxi, "alt": "", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">Taxi</p> <small class="mt-4 block">Service de taxi local</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">15-25€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">10-15 min</label> </div> </div> </div> </div> </button> </form> <form method="post" class="
                 mt-8
-                cursor-pointer
                 rounded-xl
                 border
                 border-mocha-c
@@ -77,8 +101,9 @@ Retour
                 p-3
                 transition-all
                 active:scale-95
-            "> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Vtc, "alt": "", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">VTC premium</p> <small class="mt-4 block">Véhicule avec chauffeur</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">20-35€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">5-10 min</label> </div> </div> </div> </div> </div> <div id="sam-card" class="
+            "> <input type="hidden" name="type_retour" value="VTC"> <button class="w-full text-left" type="submit"> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Vtc, "alt": "", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">VTC premium</p> <small class="mt-4 block">Véhicule avec chauffeur</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">20-35€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">5-10 min</label> </div> </div> </div> </div> </button> </form> <a href="#sam-container" class="
                 relative
+                block
                 mt-8
                 cursor-pointer
                 rounded-xl
@@ -100,36 +125,33 @@ Retour
 Recommandé
 </div> </div> <small class="mt-4 block">
 C’est le conducteur sobre qui vous ramène
-</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">0€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">10-15 min</label> </div> </div> </div> </div> </div> <div id="sam-container" class="hidden mt-8"> <h3 class="text-paprika-c">Choisis ton conducteur</h3> <div id="friends-list" class="mt-4 flex flex-col gap-3"></div> </div> <div class="hidden"> <button id="friend-template" class="
-                    w-full
-                    items-center
-                    gap-4
-                    rounded-xl
-                    border-2
-                    border-paprika-c
-                    bg-white-c
-                    p-4
-                    text-left
-                    transition-all
-                    duration-200
-                    active:scale-95
-                "> <img class="
-                        friend-avatar
-                        h-16
-                        w-16
-                        shrink-0
-                        rounded-full
-                        object-cover
-                    " src="" alt=""> <div> <p class="
-                            friend-username
-                            text-lg
-                            font-bold
-                            text-paprika-c
-                        "></p> <small class="text-marron-c">
+</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">0€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">10-15 min</label> </div> </div> </div> </div> </a> <div id="sam-container" class="mt-8"> <h3 class="text-paprika-c">Choisis ton conducteur</h3> <div id="friends-list" class="mt-4 flex flex-col gap-3"> ${samFriends.length > 0 ? samFriends.map((friend) => renderTemplate`<form method="post"> <input type="hidden" name="type_retour" value="SAM"> <input type="hidden" name="conducteur_sam"${addAttribute(friend.id, "value")}> <button class="
+                                        flex
+                                        w-full
+                                        items-center
+                                        gap-4
+                                        rounded-xl
+                                        border-2
+                                        border-paprika-c
+                                        bg-white-c
+                                        p-4
+                                        text-left
+                                        transition-all
+                                        duration-200
+                                        active:scale-95
+                                    "> <img class="
+                                            h-16
+                                            w-16
+                                            shrink-0
+                                            rounded-full
+                                            object-cover
+                                        "${addAttribute(getFileUrl(friend, friend.avatar, pb), "src")}${addAttribute(friend.username, "alt")}> <div> <p class="text-lg font-bold text-paprika-c">${friend.username}</p> <small class="text-marron-c">
 Conducteur disponible
-</small> </div> </button> </div> <section class="mt-32 rounded-lg bg-white-c p-2"> <div class="flex items-start gap-3"> ${renderComponent($$result2, "Image", $$Image, { "src": Warning, "alt": "", "class": "h-8 w-8 shrink-0" })} <div> <p class="text-paprika-c font-bold">Rappel important</p> <small class="mt-3 text-paprika-c block">
+</small> </div> </button> </form>`) : renderTemplate`<p class="rounded-xl bg-white-c p-4 text-marron-c">
+Tu n'as pas encore d'ami disponible comme conducteur SAM.
+</p>`} </div> </div> <section class="mt-32 rounded-lg bg-white-c p-2"> <div class="flex items-start gap-3"> ${renderComponent($$result2, "Image", $$Image, { "src": Warning, "alt": "", "class": "h-8 w-8 shrink-0" })} <div> <p class="text-paprika-c font-bold">Rappel important</p> <small class="mt-3 text-paprika-c block">
 Profite du moment. Si tu as bu, ne prends pas le volant. Nũnc t’aide à rentrer en sécurité.
-</small> </div> </div> </section> </main> ` }));
+</small> </div> </div> </section> </main> ` })}`;
 }, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/pages/retour-programme.astro", void 0);
 
 const $$file = "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/pages/retour-programme.astro";

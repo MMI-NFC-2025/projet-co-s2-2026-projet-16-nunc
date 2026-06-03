@@ -1,26 +1,26 @@
-import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate, b as createAstro, d as addAttribute } from '../chunks/astro/server_mM6q6Q3f.mjs';
+import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate, b as createAstro, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_RQUlbrVw.mjs';
-import { $ as $$Image } from '../chunks/_astro_assets_CdkVV2cw.mjs';
-import { F as Fleche } from '../chunks/fleche_96AuL5ab.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
+import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { P as Photo } from '../chunks/photo-verre_pUW6spG4.mjs';
-import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_CLkLu4L-.mjs';
-import { O as Orange } from '../chunks/orange_gWVlnvwk.mjs';
+import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_ZVQDZnmQ.mjs';
+import { O as Orange } from '../chunks/orange_Cz3fDFH3.mjs';
 import 'clsx';
-import { i as getAbonnements, j as getAvantages, k as getFaq } from '../chunks/backend_CmHEyYCM.mjs';
+import { l as loadAstroAuth, A as getAbonnements, B as getAvantages, C as getFaq } from '../chunks/backend_DljU_PTa.mjs';
 export { renderers } from '../renderers.mjs';
 
-const $$Astro$1 = createAstro();
+const $$Astro$2 = createAstro();
 const $$AvantageCard = createComponent(($$result, $$props, $$slots) => {
-  const Astro2 = $$result.createAstro($$Astro$1, $$props, $$slots);
+  const Astro2 = $$result.createAstro($$Astro$2, $$props, $$slots);
   Astro2.self = $$AvantageCard;
   const { titre, description } = Astro2.props;
   return renderTemplate`${maybeRenderHead()}<div class="flex items-center gap-4 rounded-xl bg-marron-c p-3"> ${renderComponent($$result, "Image", $$Image, { "src": Orange, "alt": "", "class": "h-10 w-10 shrink-0" })} <div> <p class="text-white-c">${titre}</p> <small class="mt-2 text-white-bk">${description}</small> </div> </div>`;
 }, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/components/AvantageCard.astro", void 0);
 
-const $$Astro = createAstro();
+const $$Astro$1 = createAstro();
 const $$FaqCard = createComponent(($$result, $$props, $$slots) => {
-  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  const Astro2 = $$result.createAstro($$Astro$1, $$props, $$slots);
   Astro2.self = $$FaqCard;
   const {
     question,
@@ -29,10 +29,14 @@ const $$FaqCard = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${maybeRenderHead()}<div> <h4 class="text-marron-c font-bold"> ${question} </h4> <p class="mt-3 text-marron-c"> ${reponse} </p> </div>`;
 }, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/components/FaqCard.astro", void 0);
 
+const $$Astro = createAstro();
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {
-  const abonnements = await getAbonnements();
-  const avantages = await getAvantages();
-  const faq = await getFaq();
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$Index;
+  const { pb } = await loadAstroAuth(Astro2);
+  const abonnements = await getAbonnements(pb);
+  const avantages = await getAvantages(pb);
+  const faq = await getFaq(pb);
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "N\u0168NC Premium", "hideHeader": true }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="pb-32"> <section class="w-full px-6 py-10 bg-linear-to-br from-bordeaux-c via-paprika-c to-yellow-c"> <h2 class="text-center text-white-bk">NŨNC Premium</h2> </section> <div class="px-8 py-10"> <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
 Retour
 </a> <h2 class="mt-15 text-paprika-c">

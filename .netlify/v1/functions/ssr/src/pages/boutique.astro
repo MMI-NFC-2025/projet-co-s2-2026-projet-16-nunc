@@ -5,12 +5,80 @@ import { Image } from 'astro:assets';
 import Trophee from '../assets/profil.svg';
 import Courone from '../assets/courone.svg';
 import Fleche from '../assets/fleche-droite.svg';
+import {
+    acheterCadre,
+    getCadres,
+    getCadresExclusifs,
+    getCadresPremium,
+    getCadresUtilisateur,
+    getFileUrl,
+    getUserById,
+    loadAstroAuth,
+    obtenirCadrePremium
+} from '../../backend/backend.mjs';
+
+const { pb, user: authUser } = await loadAstroAuth(Astro);
+
+if (!authUser) {
+    return Astro.redirect('/connexion');
+}
+
+let message = '';
+let messageError = false;
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action')?.toString();
+    const cadreId = formData.get('cadreId')?.toString();
+
+    try {
+        if (action === 'acheter-cadre' && cadreId) {
+            await acheterCadre(authUser.id, cadreId, pb);
+            message = 'Cadre acheté.';
+        } else if (action === 'obtenir-premium' && cadreId) {
+            const freshUser = await getUserById(authUser.id, pb);
+
+            if (!freshUser.premium) {
+                return Astro.redirect('/premium');
+            }
+
+            await obtenirCadrePremium(authUser.id, cadreId, pb);
+            message = 'Cadre premium ajouté.';
+        }
+    } catch (error) {
+        message = error?.message || "L'achat n'a pas fonctionné.";
+        messageError = true;
+    }
+}
+
+const [user, cadres, inventaire, cadresPremium, cadresExclusifs] = await Promise.all([
+    getUserById(authUser.id, pb),
+    getCadres(pb),
+    getCadresUtilisateur(authUser.id, pb),
+    getCadresPremium(pb),
+    getCadresExclusifs(pb)
+]);
+
+const points = user.points || 0;
+const niveau = Math.floor(points / 250) + 1;
+const maxXp = niveau * 250;
+const progress = maxXp > 0 ? (points / maxXp) * 100 : 0;
+
+const cadresPossedes = new Set(inventaire.map((item) => item.cadre).filter(Boolean));
+const cadresPremiumPossedes = new Set(inventaire.map((item) => item.cadre_premium).filter(Boolean));
 ---
 
 <Layout title="Boutique" hideHeader={true}>
 <main class="pb-32">
 
-<div id="message" class="hidden fixed top-5 left-1/2 z-50 -translate-x-1/2 rounded-2xl px-6 py-4 text-white-bk shadow-lg"></div>
+{message && (
+    <div class:list={[
+        'fixed top-5 left-1/2 z-50 -translate-x-1/2 rounded-2xl px-6 py-4 text-white-bk shadow-lg',
+        messageError ? 'bg-paprika-c' : 'bg-green-600'
+    ]}>
+        {message}
+    </div>
+)}
 
 <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-10 pb-11">
     <div class="flex items-start justify-between">
@@ -28,19 +96,22 @@ import Fleche from '../assets/fleche-droite.svg';
                     <Image src={Trophee} alt="" class="w-6 h-6" />
                 </div>
                 <div>
-                    <h4 id="niveau" class="font-titan leading-none"></h4>
-                    <label id="points" class="mt-1 block text-marron-c"></label>
+                    <h4 id="niveau" class="font-titan leading-none">Niveau {niveau}</h4>
+                    <label id="points" class="mt-1 block text-marron-c">{points} / {maxXp} points</label>
                 </div>
             </div>
 
-            <div id="premium-badge" class="hidden items-center gap-2 rounded-full bg-paprika-c px-4 py-2 text-white-bk">
+            <div id="premium-badge" class:list={[
+                'items-center gap-2 rounded-full bg-paprika-c px-4 py-2 text-white-bk',
+                user.premium ? 'flex' : 'hidden'
+            ]}>
                 <Image src={Courone} alt="" class="h-4 w-4" />
                 Premium
             </div>
         </div>
 
         <div class="mt-6 h-5 bg-white rounded-full overflow-hidden">
-            <div id="progress-bar" class="h-full bg-orange-c rounded-full"></div>
+            <div id="progress-bar" class="h-full bg-orange-c rounded-full" style={`width:${progress}%`}></div>
         </div>
     </div>
 </section>
@@ -58,15 +129,30 @@ import Fleche from '../assets/fleche-droite.svg';
     </a>
 
     <h3 class="text-center text-paprika-c mt-7">Déco Classique</h3>
-    <div id="cadres-list" class="mt-8 grid grid-cols-2 gap-6"></div>
-</section>
+    <div id="cadres-list" class="mt-8 grid grid-cols-2 gap-6">
+        {cadres.map((cadre) => {
+            const possede = cadresPossedes.has(cadre.id);
 
-<article id="cadre-template" class="hidden rounded-xl border border-mocha-c bg-white-c p-4 text-center">
-    <img class="cadre-image mx-auto h-40 w-40 object-contain" src="" alt="" />
-    <p class="cadre-nom mt-4"></p>
-    <h3 class="cadre-prix mt-2 text-paprika-c"></h3>
-    <button class="cadre-bouton mt-4 w-full rounded-full bg-paprika-c px-6 py-3 text-white-bk">Acheter</button>
-</article>
+            return (
+                <article class="rounded-xl border border-mocha-c bg-white-c p-4 text-center">
+                    <img class="cadre-image mx-auto h-40 w-40 object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt="" />
+                    <p class="cadre-nom mt-4">{cadre.nom}</p>
+                    <h3 class="cadre-prix mt-2 text-paprika-c">{cadre.prix} pts</h3>
+
+                    {possede ? (
+                        <button disabled class="cadre-bouton mt-4 w-full rounded-full bg-beige-c px-6 py-3 text-white-bk">Possédé</button>
+                    ) : (
+                        <form method="post">
+                            <input type="hidden" name="action" value="acheter-cadre" />
+                            <input type="hidden" name="cadreId" value={cadre.id} />
+                            <button class="cadre-bouton mt-4 w-full rounded-full bg-paprika-c px-6 py-3 text-white-bk">Acheter</button>
+                        </form>
+                    )}
+                </article>
+            );
+        })}
+    </div>
+</section>
 
 <section class="relative overflow-hidden bg-linear-to-b from-white-bk via-orange-c/70 to-white-bk mt-15">
     <div class=""></div>
@@ -74,30 +160,46 @@ import Fleche from '../assets/fleche-droite.svg';
     <div class="relative px-8">
         <h3 class="text-center text-paprika-c">Place premium</h3>
         <p class="text-center text-bordeaux-c">Réservé aux membres Premium</p>
-        <div id="cadres-premium-list" class="mt-13 grid grid-cols-2 gap-6"></div>
+        <div id="cadres-premium-list" class="mt-13 grid grid-cols-2 gap-6">
+            {cadresPremium.map((cadre) => {
+                const possede = cadresPremiumPossedes.has(cadre.id);
+
+                return (
+                    <article class="rounded-xl border border-paprika-c bg-white-c p-4 text-center">
+                        <img class="cadre-premium-image h-40 mx-auto object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt="" />
+                        <p class="cadre-premium-nom mt-4">{cadre.nom}</p>
+
+                        {possede ? (
+                            <button disabled class="cadre-premium-bouton mt-4 w-full rounded-full bg-beige-c px-6 py-3 text-white-bk text-base">Possédé</button>
+                        ) : user.premium ? (
+                            <form method="post">
+                                <input type="hidden" name="action" value="obtenir-premium" />
+                                <input type="hidden" name="cadreId" value={cadre.id} />
+                                <button class="cadre-premium-bouton mt-4 w-full rounded-full bg-linear-to-r from-bordeaux-c via-paprika-c to-yellow-c px-6 py-3 text-white-bk text-base">Obtenir</button>
+                            </form>
+                        ) : (
+                            <a href="/premium" class="cadre-premium-bouton mt-4 block w-full rounded-full bg-linear-to-r from-bordeaux-c via-paprika-c to-yellow-c px-6 py-3 text-white-bk text-base">Go Premium</a>
+                        )}
+                    </article>
+                );
+            })}
+        </div>
     </div>
 </section>
 
-<article id="cadre-premium-template" class="hidden rounded-xl border border-paprika-c bg-white-c p-4 text-center">
-    <img class="cadre-premium-image h-40 mx-auto object-contain" src="" alt="" />
-    <p class="cadre-premium-nom mt-4"></p>
-    <button class="cadre-premium-bouton mt-4 w-full rounded-full bg-linear-to-r from-bordeaux-c via-paprika-c to-yellow-c px-6 py-3 text-white-bk text-base">Go Premium</button>
-</article>
-
 <section class="px-8">
     <h3 class="mt-15 text-center text-paprika-c">Déco Exclusive</h3>
-    <div id="cadres-exclusifs-list" class="mt-8 grid grid-cols-2 gap-6"></div>
+    <div id="cadres-exclusifs-list" class="mt-8 grid grid-cols-2 gap-6">
+        {cadresExclusifs.map((cadre) => (
+            <article class="rounded-xl border border-mocha-c bg-white-c p-4 text-center">
+                <img class="cadre-exclusif-image h-40 mx-auto object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt="" />
+                <p class="cadre-exclusif-nom mt-4">{cadre.nom}</p>
+                <h3 class="cadre-exclusif-prix mt-2 text-paprika-c">{cadre.prix}€</h3>
+                <button disabled class="cadre-exclusif-bouton mt-4 w-full rounded-full bg-beige-c px-6 py-3 text-white-bk">Bientôt</button>
+            </article>
+        ))}
+    </div>
 </section>
-
-<article id="cadre-exclusif-template" class="hidden rounded-xl border border-mocha-c bg-white-c p-4 text-center">
-    <img class="cadre-exclusif-image h-40 mx-auto object-contain" src="" alt="" />
-    <p class="cadre-exclusif-nom mt-4"></p>
-    <h3 class="cadre-exclusif-prix mt-2 text-paprika-c"></h3>
-    <button class="cadre-exclusif-bouton mt-4 w-full rounded-full bg-paprika-c px-6 py-3 text-white-bk">Acheter</button>
-</article>
 
 </main>
 </Layout>
-
-<script type="module" src="/src/js/auth-guard.js"></script>
-<script type="module" src="/src/js/boutique.js"></script>

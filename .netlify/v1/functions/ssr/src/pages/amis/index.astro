@@ -3,6 +3,90 @@ import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
 
 import Fleche from '../../assets/fleche.svg';
+import {
+    acceptFriendRequest,
+    getFileUrl,
+    getFriendRequests,
+    getFriendship,
+    getPendingFriends,
+    getUserFriends,
+    loadAstroAuth,
+    refuseFriendRequest,
+    searchUsers,
+    sendFriendRequest
+} from '../../../backend/backend.mjs';
+
+const { pb, user } = await loadAstroAuth(Astro);
+
+if (!user) {
+    return Astro.redirect('/connexion');
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action')?.toString();
+    const friendshipId = formData.get('friendshipId')?.toString();
+    const friendId = formData.get('friendId')?.toString();
+
+    if (action === 'accept' && friendshipId) {
+        await acceptFriendRequest(friendshipId, pb);
+        return Astro.redirect('/amis?tab=requests');
+    }
+
+    if (action === 'refuse' && friendshipId) {
+        await refuseFriendRequest(friendshipId, pb);
+        return Astro.redirect('/amis?tab=requests');
+    }
+
+    if (action === 'add' && friendId) {
+        await sendFriendRequest(user.id, friendId, pb);
+        return Astro.redirect('/amis?tab=pending');
+    }
+}
+
+const activeTab = Astro.url.searchParams.get('tab') || 'friends';
+const search = Astro.url.searchParams.get('q')?.trim() || '';
+
+const [friends, requests, pending] = await Promise.all([
+    getUserFriends(user.id, pb).catch(() => []),
+    getFriendRequests(user.id, pb).catch(() => []),
+    getPendingFriends(user.id, pb).catch(() => [])
+]);
+
+const searchResults = search.length >= 2
+    ? await searchUsers(search, user.id, pb)
+        .then(async (users) => {
+            const usersWithFriendship = await Promise.all(
+                users.map(async (person) => ({
+                    person,
+                    friendship: await getFriendship(user.id, person.id, pb)
+                }))
+            );
+
+            return usersWithFriendship
+                .filter(({ friendship }) => !friendship)
+                .map(({ person }) => person);
+        })
+        .catch(() => [])
+    : [];
+
+function avatar(record) {
+    return getFileUrl(record, record?.avatar, pb) || '/favicon.svg';
+}
+
+function tabClass(tab) {
+    return activeTab === tab && search.length < 2
+        ? 'friend-tab rounded-full bg-paprika-c px-4 py-3 text-white'
+        : 'friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c';
+}
+
+const currentFriends = friends
+    .map((friendship) => (
+        friendship.utilisateur1 === user.id
+            ? friendship.expand?.utilisateur2
+            : friendship.expand?.utilisateur1
+    ))
+    .filter(Boolean);
 ---
 
 <Layout title="Listes de tes amis">
@@ -16,61 +100,151 @@ import Fleche from '../../assets/fleche.svg';
             Retour
         </a>
 
-        <input
-            id="search-user"
-            type="text"
-            placeholder="Rechercher un utilisateur"
-            class="mt-8 w-full rounded-2xl border-2 border-mocha-c bg-white-bk p-4 outline-none"
-        />
+        <form id="search-form" method="get">
+            <input
+                id="search-user"
+                name="q"
+                type="text"
+                value={search}
+                placeholder="Rechercher un utilisateur"
+                class="mt-8 w-full rounded-2xl border-2 border-mocha-c bg-white-bk p-4 outline-none"
+            />
+            <button class="sr-only" type="submit">Rechercher</button>
+        </form>
 
         <div class="mt-6 flex gap-3">
-            <button
-                id="tab-friends"
-                class="friend-tab rounded-full bg-paprika-c px-4 py-3 text-white"
-            >
+            <a href="/amis?tab=friends" id="tab-friends" class={tabClass('friends')}>
                 Mes amis
-            </button>
+            </a>
 
-            <button
-                id="tab-requests"
-                class="friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c"
-            >
+            <a href="/amis?tab=requests" id="tab-requests" class={tabClass('requests')}>
                 Demandes
-            </button>
+            </a>
 
-            <button
-                id="tab-pending"
-                class="friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c"
-            >
+            <a href="/amis?tab=pending" id="tab-pending" class={tabClass('pending')}>
                 En attente
-            </button>
+            </a>
         </div>
 
-        <div id="friends-list" class="mt-8 flex flex-col gap-4"></div>
+        <div id="friends-list" class="mt-8 flex flex-col gap-4">
+            {
+                search.length >= 2 ? (
+                    searchResults.length > 0 ? (
+                        searchResults.map((person) => (
+                            <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
+                                <a href={`/amis/${person.id}`} class="flex flex-1 items-center gap-4">
+                                    <img class="h-16 w-16 rounded-full object-cover" src={avatar(person)} alt="" />
+                                    <div>
+                                        <h4 class="font-bold text-bordeaux-c">{person.username}</h4>
+                                        <small class="text-marron-c">Utilisateur</small>
+                                    </div>
+                                </a>
 
-        <article
-            id="user-template"
-            class="hidden w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4"
-        >
-            <img
-                class="user-avatar h-16 w-16 rounded-full object-cover"
-                src=""
-                alt=""
-            />
+                                <form method="post">
+                                    <input type="hidden" name="action" value="add" />
+                                    <input type="hidden" name="friendId" value={person.id} />
+                                    <button class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Ajouter</button>
+                                </form>
+                            </article>
+                        ))
+                    ) : (
+                        <p class="rounded-2xl bg-white-c p-5 text-marron-c">Aucun utilisateur trouvé.</p>
+                    )
+                ) : activeTab === 'requests' ? (
+                    requests.length > 0 ? (
+                        requests.map((request) => {
+                            const sender = request.expand?.utilisateur1;
 
-            <div class="flex-1">
-                <h4 class="user-name font-bold text-bordeaux-c"></h4>
-                <small class="user-status text-marron-c"></small>
-            </div>
+                            return (
+                                <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
+                                    <a href={`/amis/${sender?.id}`} class="flex flex-1 items-center gap-4">
+                                        <img class="h-16 w-16 rounded-full object-cover" src={avatar(sender)} alt="" />
+                                        <div>
+                                            <h4 class="font-bold text-bordeaux-c">{sender?.username || 'Utilisateur'}</h4>
+                                            <small class="text-marron-c">Demande reçue</small>
+                                        </div>
+                                    </a>
 
-            <div class="flex flex-col gap-2">
-                <button class="user-action rounded-full bg-paprika-c px-5 py-2 text-white text-sm"></button>
+                                    <div class="flex flex-col gap-2">
+                                        <form method="post">
+                                            <input type="hidden" name="action" value="accept" />
+                                            <input type="hidden" name="friendshipId" value={request.id} />
+                                            <button class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Accepter</button>
+                                        </form>
 
-                <button class=" user-refuse hidden rounded-full border-2 border-mocha-c px-5 py-2 text-mocha-c text-sm"> Refuser </button>
-            </div>
-        </article>
+                                        <form method="post">
+                                            <input type="hidden" name="action" value="refuse" />
+                                            <input type="hidden" name="friendshipId" value={request.id} />
+                                            <button class="rounded-full border-2 border-mocha-c px-5 py-2 text-sm text-mocha-c">Refuser</button>
+                                        </form>
+                                    </div>
+                                </article>
+                            );
+                        })
+                    ) : (
+                        <p class="rounded-2xl bg-white-c p-5 text-marron-c">Aucune demande reçue.</p>
+                    )
+                ) : activeTab === 'pending' ? (
+                    pending.length > 0 ? (
+                        pending.map((request) => {
+                            const receiver = request.expand?.utilisateur2;
+
+                            return (
+                                <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
+                                    <a href={`/amis/${receiver?.id}`} class="flex flex-1 items-center gap-4">
+                                        <img class="h-16 w-16 rounded-full object-cover" src={avatar(receiver)} alt="" />
+                                        <div>
+                                            <h4 class="font-bold text-bordeaux-c">{receiver?.username || 'Utilisateur'}</h4>
+                                            <small class="text-marron-c">Demande envoyée</small>
+                                        </div>
+                                    </a>
+
+                                    <span class="rounded-full bg-white-bk px-5 py-2 text-sm text-marron-c">En attente</span>
+                                </article>
+                            );
+                        })
+                    ) : (
+                        <p class="rounded-2xl bg-white-c p-5 text-marron-c">Aucune demande en attente.</p>
+                    )
+                ) : (
+                    currentFriends.length > 0 ? (
+                        currentFriends.map((friend) => (
+                            <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
+                                <a href={`/amis/${friend.id}`} class="flex flex-1 items-center gap-4">
+                                    <img class="h-16 w-16 rounded-full object-cover" src={avatar(friend)} alt="" />
+                                    <div>
+                                        <h4 class="font-bold text-bordeaux-c">{friend.username}</h4>
+                                        <small class="text-marron-c">Ami(e)</small>
+                                    </div>
+                                </a>
+
+                                <span class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Ami</span>
+                            </article>
+                        ))
+                    ) : (
+                        <p class="rounded-2xl bg-white-c p-5 text-marron-c">Tu n'as pas encore d'ami(e).</p>
+                    )
+                )
+            }
+        </div>
 
     </main>
 </Layout>
 
-<script type="module" src="/src/js/amis.js"></script>
+<script>
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-user');
+    let searchTimeout;
+
+    searchInput?.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+
+        searchTimeout = setTimeout(() => {
+            const value = searchInput.value.trim();
+
+            if (value.length === 0 || value.length >= 2) {
+                searchForm?.requestSubmit();
+            }
+        }, 400);
+    });
+</script>

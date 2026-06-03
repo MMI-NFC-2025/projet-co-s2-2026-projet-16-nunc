@@ -1,12 +1,12 @@
-import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_mM6q6Q3f.mjs';
+import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { L as Logo } from '../chunks/logo_DJTs1Tov.mjs';
-import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_DwL7enlT.mjs';
+import { L as Logo } from '../chunks/logo_DuaI_3pM.mjs';
+import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_CREC1hDw.mjs';
 import { P as Photo } from '../chunks/photo-verre_pUW6spG4.mjs';
-import { O as Orange } from '../chunks/orange_gWVlnvwk.mjs';
-import { c as createSvgComponent } from '../chunks/runtime_BTGkwREA.mjs';
-import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_CLkLu4L-.mjs';
-import { $ as $$Image } from '../chunks/_astro_assets_CdkVV2cw.mjs';
+import { O as Orange } from '../chunks/orange_Cz3fDFH3.mjs';
+import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
+import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_ZVQDZnmQ.mjs';
+import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Ice = createSvgComponent({"meta":{"src":"/_astro/ice.BaAZsi0e.svg","width":145,"height":143,"format":"svg"},"attributes":{"width":"145","height":"143","viewBox":"0 0 145 143","fill":"none"},"children":"\n<path d=\"M10.3363 53.3177C13.3752 49.5839 14.7776 50.6467 15.0989 51.6448L69.6734 38.9657L101.308 89.0747C105.483 97.3416 103.184 108.15 102.681 119.203C99.5248 121.005 91.886 119.471 85.3488 118.8C52.6848 115.451 38.7663 119.024 34.869 119.165C30.9716 119.306 26.6161 121.889 27.5013 110.176C28.2094 100.805 21.2876 87.7413 17.7381 82.3807C14.0047 74.2488 7.29744 57.0515 10.3363 53.3177Z\" fill=\"white\" />\n<path d=\"M123.207 57.1748C116.659 28.0609 113.312 20.9239 112.004 19.5361C99.6194 30.6398 74.1559 53.2665 73.5633 54.1763C72.9707 55.0862 87.1943 83.244 88.6583 86.4135C90.1224 89.583 100.508 121.896 103.051 118.898C105.593 115.899 118.908 95.8735 120.539 94.7743C122.17 93.6751 137.214 78.0237 133.22 74.4447C129.227 70.8656 124.881 61.4402 123.207 57.1748Z\" fill=\"#FFEAD9\" />\n<path d=\"M62.4733 19.2168C43.464 18.0352 31.4688 29.581 27.8474 35.5016C26.505 39.271 20.137 44.8466 17.1208 47.1632C5.64278 56.0365 14.7124 55.289 20.682 53.8061C42.8827 49.3409 51.9283 53.6189 62.3583 56.0949C72.7883 58.5709 80.8133 54.6996 83.5949 48.6354C86.3766 42.5713 108.543 24.5234 110.763 22.6034C112.539 21.0674 112.237 19.8928 111.864 19.4974C109.254 17.4405 103.582 17.144 98.1825 18.2513C95.6984 18.4653 93.4853 18.3177 91.829 18.6411C82.3148 20.72 68.2943 19.8911 62.4733 19.2168Z\" fill=\"#FFF4EA\" />\n"});

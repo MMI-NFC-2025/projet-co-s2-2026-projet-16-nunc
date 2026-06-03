@@ -9,14 +9,20 @@ import Courone from '../../assets/courone.svg';
 import Calendrier from '../../assets/sortie.svg';
 import Amis from '../../assets/people.svg';
 
-import { getUserById, getFileUrl, getNbSortiesParticipees, getNbSortiesOrganisees, getNbAmis } from '../../../backend/backend.mjs';
+import { getUserById, getFileUrl, getNbSortiesParticipees, getNbSortiesOrganisees, getNbAmis, loadAstroAuth } from '../../../backend/backend.mjs';
 
 const id = Astro.params.id;
+const { pb } = await loadAstroAuth(Astro);
 
-const user = await getUserById(id);
-const nbSorties = await getNbSortiesParticipees(id);
-const nbOrganisations = await getNbSortiesOrganisees(id);
-const nbAmis = await getNbAmis(id);
+const user = await getUserById(id, pb).catch(() => null);
+
+if (!user) {
+    return Astro.redirect('/amis');
+}
+
+const nbSorties = await getNbSortiesParticipees(id, pb);
+const nbOrganisations = await getNbSortiesOrganisees(id, pb);
+const nbAmis = await getNbAmis(id, pb);
 
 const points =
     user.points || 0;
@@ -44,7 +50,7 @@ const dateInscription = new Date(user.created).toLocaleDateString('fr-FR', { mon
         </a>
 
         <div class="mt-4 flex flex-col items-center">
-            <img src={getFileUrl(user, user.avatar)} alt="" class="h-40 w-40 rounded-full object-cover" />
+            <img src={getFileUrl(user, user.avatar, pb)} alt="" class="h-40 w-40 rounded-full object-cover" />
 
             <h3 class="mt-5 text-center text-white-bk">{user.username}</h3>
 

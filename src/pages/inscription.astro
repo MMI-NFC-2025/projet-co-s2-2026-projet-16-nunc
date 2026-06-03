@@ -3,8 +3,40 @@ import Layout from '../layouts/Layout-landingpage.astro';
 
 import Header from '../components/Header.astro';
 import Eye from '../assets/eye-open.svg';
+import EyeClose from '../assets/eye-close.svg';
 
 import { Image } from 'astro:assets';
+import {
+    createAuthCookie,
+    createServerPocketBase
+} from '../../backend/backend.mjs';
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const password = formData.get('password')?.toString() || '';
+    const email = formData.get('email')?.toString() || '';
+    const pb = createServerPocketBase(Astro.request);
+
+    try {
+        await pb.collection('users').create({
+            email,
+            password,
+            passwordConfirm: password,
+            username: formData.get('username')?.toString() || '',
+            nom: formData.get('nom')?.toString() || '',
+            prenom: formData.get('prenom')?.toString() || ''
+        });
+
+        await pb.collection('users').authWithPassword(email, password);
+        const response = Astro.redirect('/');
+        response.headers.append('Set-Cookie', createAuthCookie(pb));
+        return response;
+    } catch (err) {
+        error = err?.data?.message || "Erreur lors de l'inscription.";
+    }
+}
 ---
 
 <Layout>
@@ -15,7 +47,7 @@ import { Image } from 'astro:assets';
                 <h3 class="text-paprika-c">Inscris-toi !</h3>
             </div>
 
-            <form id="form-register" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6">
+            <form id="form-register" method="post" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6">
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <label class="block font-bold">
                         Nom
@@ -76,21 +108,32 @@ import { Image } from 'astro:assets';
                             placeholder="Max 20 caractères"
                             class="w-full rounded-xl border-2 border-yellow-c bg-white-bk font-normal px-4 py-3 pr-14 placeholder:text-mocha-c outline-none focus:border-paprika-c"
                         />
-                        <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2">
+                        <button
+                            type="button"
+                            id="toggle-password"
+                            class="absolute right-4 top-1/2 -translate-y-1/2"
+                            data-open-src={Eye.src}
+                            data-closed-src={EyeClose.src}
+                        >
                             <Image id="eye-icon" src={Eye} alt="" class="w-5 h-5" />
                         </button>
                     </div>
                     <small class="mt-2 block text-mocha-c">Le mot de passe doit contenir au moins 8 caractères.</small>
                 </label>
 
-                <div id="retour-register" class="hidden font-semibold px-4 py-3 rounded-xl"></div>
+                <div id="retour-register" class:list={[
+                    'font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700',
+                    { hidden: !error }
+                ]}>
+                    {error}
+                </div>
 
                 <button
                     type="submit"
                     id="btn-register"
                     class="text-xl w-full mt-4 rounded-full bg-paprika-c py-4 text-white-bk font-bold hover:bg-orange-700 transition"
                 >
-                    Me connecter
+                    S'inscrire
                 </button>
             </form>
 
@@ -101,4 +144,16 @@ import { Image } from 'astro:assets';
     </main>
 </Layout>
 
-<script type="module" src="/src/js/inscription.js"></script>
+<script>
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('toggle-password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    togglePassword?.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        eyeIcon.src = isPassword
+            ? togglePassword.dataset.closedSrc
+            : togglePassword.dataset.openSrc;
+    });
+</script>

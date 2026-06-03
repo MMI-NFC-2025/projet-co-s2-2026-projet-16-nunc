@@ -12,10 +12,33 @@ import Tiktok from '../assets/tiktok.svg';
 import Facebook from '../assets/facebook.svg';
 
 import { Image } from 'astro:assets';
+import { addContact, createServerPocketBase } from '../../backend/backend.mjs';
+
+let retour = '';
+let retourOk = false;
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const pb = createServerPocketBase(Astro.request);
+
+    try {
+        await addContact({
+            nom: formData.get('nom')?.toString() || '',
+            email: formData.get('email')?.toString() || '',
+            sujet: formData.get('sujet')?.toString() || '',
+            message: formData.get('message')?.toString() || ''
+        }, pb);
+
+        retour = 'Message envoyé avec succès.';
+        retourOk = true;
+    } catch {
+        retour = "Erreur lors de l'envoi du message.";
+    }
+}
 ---
 
 <Layout title="Contact">
-    <main class="px-8 py-10">
+    <main class="px-8 py-10 pb-32">
         <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
             <Image src={Fleche} alt="" class="w-4 h-4" />
             Retour
@@ -30,7 +53,7 @@ import { Image } from 'astro:assets';
         </section>
 
         <section class="mt-16 rounded-lg border border-mocha-c bg-white-c px-6 py-8">
-            <form id="contact-form" class="flex flex-col gap-8">
+            <form id="contact-form" method="post" class="flex flex-col gap-8">
                 <label class="block font-bold">
                     Nom complet *
                     <input
@@ -75,7 +98,14 @@ import { Image } from 'astro:assets';
                     ></textarea>
                 </label>
 
-                <div id="retour-contact" class="hidden rounded-lg px-4 py-3 font-semibold"></div>
+                {retour && (
+                    <div id="retour-contact" class:list={[
+                        'rounded-lg px-4 py-3 font-semibold',
+                        retourOk ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    ]}>
+                        {retour}
+                    </div>
+                )}
 
                 <button
                     type="submit"
@@ -153,5 +183,3 @@ import { Image } from 'astro:assets';
         </section>
     </main>
 </Layout>
-
-<script type="module" src="/src/js/contact.js"></script>
