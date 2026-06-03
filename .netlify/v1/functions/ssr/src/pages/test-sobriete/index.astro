@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import Fleche from '../../assets/fleche.svg';
+import Orange from '../../assets/orange.svg';
+import Trophy from '../../assets/img/coupe.avif';
+import Warning from '../../assets/tw.svg';
+import Flechegauche from '../../assets/flecheorange-gauche.svg';
+import Flechedroite from '../../assets/flecheorange-droite.svg';
+---
+
+<Layout title="Test de Sobriété" description="Challenge ton cerveau et vérifie que tu es en forme !">
+    <main class="px-8 py-10 pb-32">
+
+        <a
+            href="/"
+            class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
+        >
+            <Image src={Fleche} alt="" class="h-4 w-4" />
+            Retour
+        </a>
+
+        <section class="mt-9 rounded-3xl border-2 border-mocha-c bg-white-c p-5">
+            <h3 class="text-center text-paprika-c">Comment ça marche ?</h3>
+
+            <div class="mt-5 flex flex-col gap-5">
+
+                <div class="flex items-center gap-5 rounded-3xl bg-white-bk p-2">
+                    <Image src={Orange} alt="" class="h-8 w-8 shrink-0" />
+                    <div>
+                        <p class="font-bold">5 questions rapides</p>
+                        <small class="mt-1 block text-marron-c">
+                            Culture cinématographique
+                        </small>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-5 rounded-3xl bg-white-bk p-2">
+                    <Image src={Orange} alt="" class="h-8 w-8 shrink-0" />
+                    <div>
+                        <p class="font-bold">Gagne des points</p>
+                        <small class="mt-1 block text-marron-c">
+                            Chaque défi réussi te permet de gagner des points
+                        </small>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-5 rounded-3xl bg-white-bk p-2">
+                    <Image src={Orange} alt="" class="h-8 w-8 shrink-0" />
+                    <div>
+                        <p class="font-bold">Obtiens ton résultat</p>
+                        <small class="mt-1 block text-marron-c">
+                            Plus ton score est élevé, plus tu es sobre
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mt-8 rounded-3xl bg-linear-to-r from-paprika-c to-yellow-c px-5 py-5 text-center">
+            <Image src={Trophy} alt="Trophée" class="mx-auto h-13 w-auto" />
+
+            <h3 class="mt-5 text-white">Score maximum :</h3>
+
+            <h3 class="mt-2 text-bordeaux-c">100 points</h3>
+
+            <small class="mt-5 text-white block">
+                Tes points de sobriété s'ajoutent à ton compte !
+            </small>
+        </section>
+
+        <section class="mt-9 rounded-lg bg-white-c p-2">
+            <div class="flex items-start gap-3">
+
+                <Image src={Warning} alt="" class="h-8 w-8 shrink-0" />
+
+                <div>
+                    <p class="text-paprika-c font-bold">Rappel important</p>
+
+                    <small class="mt-3 text-paprika-c block">
+                        Ce test est ludique et ne remplace pas un véritable test
+                        d'alcoolémie. Si tu as bu, ne prends pas le volant.
+                    </small>
+                </div>
+            </div>
+        </section>
+
+        <a
+            href="/test-sobriete/jeu"
+            class="relative mx-auto mt-9 flex w-full items-center justify-center rounded-full bg-paprika-c py-5 text-white"
+        >
+            <span class="absolute inset-y-0 left-4 flex items-center">
+                <Image src={Flechegauche} alt="" class="h-12 w-12" />
+            </span>
+
+            Commencer le test
+
+            <span class="absolute inset-y-0 right-4 flex items-center">
+                <Image src={Flechedroite} alt="" class="h-12 w-12" />
+            </span>
+        </a>
+
+    </main>
+</Layout>

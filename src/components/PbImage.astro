@@ -1,0 +1,21 @@
+---
+import { getImageUrl, loadAstroAuth } from '../../backend/backend.mjs';
+import { Image } from "astro:assets";
+
+const { record, imageField, pb } = Astro.props;
+
+const auth = pb ? { pb } : await loadAstroAuth(Astro);
+const imageURL = await getImageUrl(record, imageField, pb || auth.pb);
+---
+
+{
+    imageURL &&
+    <Image
+        src={imageURL}
+        alt={record.nom || 'Image'}
+        inferSize={false}
+        width={400}
+        height={300}
+        class="h-full w-full object-cover"
+    />
+}

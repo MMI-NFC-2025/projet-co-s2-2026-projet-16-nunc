@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout-landingpage.astro';
+
+import Header from '../components/Header.astro';
+import Eye from '../assets/eye-open.svg';
+
+import { Image } from 'astro:assets';
+import {
+    createAuthCookie,
+    createServerPocketBase
+} from '../../backend/backend.mjs';
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const email = formData.get('email')?.toString() || '';
+    const password = formData.get('password')?.toString() || '';
+    const pb = createServerPocketBase(Astro.request);
+
+    try {
+        await pb.collection('users').authWithPassword(email, password);
+        const response = Astro.redirect('/');
+        response.headers.append('Set-Cookie', createAuthCookie(pb));
+        return response;
+    } catch {
+        error = 'Identifiants incorrects';
+    }
+}
+---
+
+<Layout>
+    <Header title="Connexion" />
+    <main class="flex items-center justify-center px-6 py-10">
+        <section class="w-full max-w-xl">
+            <div class="mb-10 rounded-3xl bg-white-c px-5 py-5">
+                <h3 class="text-paprika-c">Connecte-toi !</h3>
+            </div>
+
+            <form id="form-login" method="post" class="rounded-3xl bg-white-c px-5 py-5 flex flex-col gap-6">
+                <label class="block font-bold">
+                    Email
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        placeholder="Ex : Nunc@participant.fr"
+                        class="mt-2 w-full rounded-xl border-2 border-yellow-c bg-white-bk font-normal px-4 py-3 placeholder:text-mocha-c outline-none focus:border-paprika-c"
+                    />
+                </label>
+
+                <label class="block font-bold">
+                    Mot de passe
+                    <div class="relative mt-2">
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 pr-14 font-normal outline-none focus:border-paprika-c"
+                        />
+
+                        <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2">
+                            <Image id="eye-icon" src={Eye} alt="" class="w-5 h-5" />
+                        </button>
+                    </div>
+                </label>
+
+                <div id="retour-login" class:list={[
+                    'font-semibold px-4 py-3 rounded-xl bg-red-100 text-red-700',
+                    { hidden: !error }
+                ]}>
+                    {error}
+                </div>
+                <button type="submit" id="btn-login" class="text-xl w-full mt-4 rounded-full bg-paprika-c py-4 text-white-bk font-bold hover:bg-orange-700 transition">
+                    Se connecter
+                </button>
+            </form>
+
+            <p class="mt-6 text-center">
+                Pas encore de compte ?
+                <a href="/inscription" class="underline">Inscris-toi</a>
+            </p>
+        </section>
+    </main>
+</Layout>
+
+<script type="module" src="/src/js/connexion.js"></script>

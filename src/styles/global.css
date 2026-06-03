@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+    --font-titan: 'Titan One', cursive;
+    --font-tuffy: 'Tuffy', sans-serif;
+
+    --text-40: 2.5rem;
+    
+    --color-bordeaux-c: #490600;
+    --color-white-c: #fcd4b4;
+    --color-yellow-c: #e99f22;
+    --color-beige-c: #f8bd68;
+    --color-marron-c: #793008;
+    --color-mocha-c: #a07541;
+    --color-orange-c: #d57c04;
+    --color-paprika-c: #da4b05;
+    --color-white-bk: #f6e3d4;
+}
+
+@layer base {
+
+    body {
+        @apply font-tuffy text-bordeaux-c;
+    }
+
+    h1 {
+        @apply font-titan text-yellow-c text-[40px] leading-[35px];
+    }
+
+    h2 {
+        @apply font-titan text-yellow-c text-[36px] leading-[48px];
+    }
+
+    h3 {
+        @apply font-titan text-yellow-c text-[24px] leading-[30px];
+    }
+
+    h4 {
+        @apply font-tuffy font-bold text-[20px] leading-[24px];
+    }
+
+    p {
+        @apply font-tuffy text-[18px] leading-[20px];
+    }
+
+    small {
+        @apply font-tuffy font-normal text-[16px] leading-[24px];
+    }
+
+    label {
+        @apply font-tuffy text-[14px] leading-[18px];
+    }
+
+    button {
+        @apply font-tuffy font-bold text-[18px] leading-[20px];
+    }
+
+    strong {
+        @apply font-bold;
+    }
+
+}
+
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-control,
+.leaflet-marker-pane,
+.leaflet-popup-pane {
+    z-index: 1 !important;
+}

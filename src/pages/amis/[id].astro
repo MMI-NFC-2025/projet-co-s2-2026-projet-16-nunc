@@ -1,0 +1,108 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import Fleche from '../../assets/fleche.svg';
+import Trophee from '../../assets/profil.svg';
+import Courone from '../../assets/courone.svg';
+import Calendrier from '../../assets/sortie.svg';
+import Amis from '../../assets/people.svg';
+
+import { getUserById, getFileUrl, getNbSortiesParticipees, getNbSortiesOrganisees, getNbAmis, loadAstroAuth } from '../../../backend/backend.mjs';
+
+const id = Astro.params.id;
+const { pb } = await loadAstroAuth(Astro);
+
+const user = await getUserById(id, pb).catch(() => null);
+
+if (!user) {
+    return Astro.redirect('/amis');
+}
+
+const nbSorties = await getNbSortiesParticipees(id, pb);
+const nbOrganisations = await getNbSortiesOrganisees(id, pb);
+const nbAmis = await getNbAmis(id, pb);
+
+const points =
+    user.points || 0;
+
+const niveau =
+    Math.floor(points / 250) + 1;
+
+const maxXp =
+    niveau * 250;
+
+const currentXp =
+    points;
+
+const progress =
+    (currentXp / maxXp) * 100;
+
+const dateInscription = new Date(user.created).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+---
+
+<Layout title={`Profil de ${user.username}`} hideHeader={true}>
+    <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16">
+        <a href="/" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk">
+            <Image src={Fleche} alt="" class="h-4 w-4" />
+            Retour
+        </a>
+
+        <div class="mt-4 flex flex-col items-center">
+            <img src={getFileUrl(user, user.avatar, pb)} alt="" class="h-40 w-40 rounded-full object-cover" />
+
+            <h3 class="mt-5 text-center text-white-bk">{user.username}</h3>
+
+            {user.premium && (
+                <div class="mt-3 flex items-center gap-2 rounded-full bg-white-c/40 px-5 py-2 font-bold text-white-bk">
+                    <Image src={Courone} alt="" class="h-4 w-4" />
+                    Premium
+                </div>
+            )}
+
+            <small class="mt-2 text-white-c">Membre depuis {dateInscription}</small>
+        </div>
+
+        <div class="mt-7 rounded-3xl bg-white-c p-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-beige-c flex items-center justify-center shrink-0">
+                        <Image src={Trophee} alt="" class="w-6 h-6" />
+                    </div>
+
+                    <div>
+                        <h4 class="font-titan leading-none">Niveau {niveau}</h4>
+                        <small class="mt-1 block text-marron-c">{currentXp} / {maxXp} points</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 h-5 bg-white rounded-full overflow-hidden">
+                <div class="h-full bg-orange-c rounded-full" style={`width:${progress}%`}></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="mt-8 grid grid-cols-3 gap-4 px-6">
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Calendrier class="mx-auto h-7 w-7 text-paprika-c" />
+            <h4 class="mt-4 font-titan">{nbSorties}</h4>
+            <small class="mt-2 block text-marron-c">Sorties</small>
+        </article>
+
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Trophee class="mx-auto h-7 w-7 text-paprika-c" />
+            <h4 class="mt-4 font-titan">{nbOrganisations}</h4>
+            <small class="mt-2 block text-marron-c">Organiser</small>
+        </article>
+
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Amis class="mx-auto h-7 w-7 text-paprika-c" />
+            <h4 class="mt-4 font-titan">{nbAmis}</h4>
+            <small class="mt-2 block text-marron-c">Ami(e)s</small>
+        </article>
+    </div>
+</Layout>
+
+<script type="module" src="/src/js/auth-guard.js"></script>

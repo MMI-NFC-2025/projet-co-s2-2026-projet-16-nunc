@@ -1,0 +1,119 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import Fleche from '../../assets/fleche.svg';
+import Photo from '../../assets/img/photo-verre.avif';
+import Flechegauche from '../../assets/flecheorange-gauche.svg';
+import Flechedroite from '../../assets/flecheorange-droite.svg';
+
+import Card from '../../components/AvantageCard.astro';
+import FaqCard from '../../components/FaqCard.astro';
+
+import { getAbonnements, getAvantages, getFaq, loadAstroAuth } from '../../../backend/backend.mjs';
+
+const { pb } = await loadAstroAuth(Astro);
+const abonnements = await getAbonnements(pb);
+const avantages = await getAvantages(pb);
+const faq = await getFaq(pb);
+---
+
+<Layout title="NŨNC Premium" hideHeader={true}>
+<main class="pb-32">
+
+    <section class="w-full px-6 py-10 bg-linear-to-br from-bordeaux-c via-paprika-c to-yellow-c">
+        <h2 class="text-center text-white-bk">NŨNC Premium</h2>
+    </section>
+
+    <div class="px-8 py-10">
+        <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+            <Image src={Fleche} alt="" class="h-4 w-4" />
+            Retour
+        </a>
+
+        <h2 class="mt-15 text-paprika-c">
+            Parce que les tournées <span class="text-orange-c">gratuites</span>, ça ne se refuse pas.
+        </h2>
+
+        <section class="relative -mx-8 mt-2">
+            <div class="relative h-120 overflow-hidden">
+                <Image src={Photo} alt="" class="absolute inset-0 h-full w-full object-cover opacity-70" />
+                <div class="absolute inset-0 bg-linear-to-b from-white-bk via-transparent to-white-bk"></div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <div class="relative rounded-2xl border-2 border-yellow-c bg-white-c p-6">
+                <div class="absolute -top-16 right-4 rounded-full bg-yellow-c px-5 py-2 font-bold text-base text-white">
+                    Populaire
+                </div>
+
+                <h2 class="text-center text-paprika-c">Choisis ton abonnement</h2>
+
+                <div class="mt-10 flex justify-center gap-3">
+                    {
+                        abonnements.map((abonnement) => (
+                            <button
+                                class={
+                                    abonnement.type === 'Mensuel'
+                                        ? 'w-45 h-45 rounded-xl bg-linear-to-br from-bordeaux-c via-paprika-c to-yellow-c p-7 flex flex-col items-center justify-center'
+                                        : 'w-45 h-45 rounded-xl border border-yellow-c bg-white-bk p-7 flex flex-col items-center justify-center'
+                                }
+                            >
+                                <small class={abonnement.type === 'Mensuel' ? 'text-center font-bold text-white-bk' : 'text-center font-bold text-marron-c'}>
+                                    {abonnement.type}
+                                </small>
+
+                                <h3 class={abonnement.type === 'Mensuel' ? 'mt-2 min-h-2 text-center text-white-bk' : 'mt-2 min-h-2 text-center text-marron-c'}>
+                                    {abonnement.prix}€
+                                </h3>
+
+                                <small class={abonnement.type === 'Mensuel' ? 'text-center text-white-bk' : 'text-center text-marron-c'}>
+                                    /{abonnement.duree}
+                                </small>
+                            </button>
+                        ))
+                    }
+                </div>
+
+                <a href="/premium/paiement" class="relative mx-auto mt-10 flex w-full items-center justify-center rounded-full bg-paprika-c py-5 text-white">
+                    <span class="absolute inset-y-0 left-4 flex items-center">
+                        <Image src={Flechegauche} alt="" class="h-12 w-12" />
+                    </span>
+
+                    S'abonner maintenant
+
+                    <span class="absolute inset-y-0 right-4 flex items-center">
+                        <Image src={Flechedroite} alt="" class="h-12 w-12" />
+                    </span>
+                </a>
+            </div>
+        </section>
+
+        <section class="mt-16">
+            <h3 class="text-center text-paprika-c">Le kit du parfait fêtard</h3>
+            <div class="mt-8 space-y-6">
+                {
+                    avantages.map((avantage) => (
+                        <Card titre={avantage.titre} description={avantage.description} />
+                    ))
+                }
+            </div>
+        </section>
+
+        <section class="mt-16">
+            <div class="rounded-2xl border-2 border-yellow-c bg-white-c p-8">
+                <h3 class="text-paprika-c">Questions fréquentes</h3>
+                <div class="mt-10 space-y-10">
+                    {
+                        faq.map((item) => (
+                            <FaqCard question={item.question} reponse={item.reponse} />
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+</Layout>

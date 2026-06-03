@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import Fleche from '../assets/fleche.svg';
+import Trophee from '../assets/profil.svg';
+import Courone from '../assets/courone.svg';
+import Calendrier from '../assets/sortie.svg';
+import Amis from '../assets/people.svg';
+import Power from '../assets/power.svg';
+import Edit from '../assets/edit.svg';
+import {
+    createClearAuthCookie,
+    getFileUrl,
+    getNbAmis,
+    getNbSortiesOrganisees,
+    getNbSortiesParticipees,
+    getUserById,
+    loadAstroAuth,
+    updateAvatar
+} from '../../backend/backend.mjs';
+
+const { pb, user: currentUser } = await loadAstroAuth(Astro);
+
+if (!currentUser) {
+    return Astro.redirect('/connexion');
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action')?.toString();
+    const avatar = formData.get('avatar');
+
+    if (action === 'logout') {
+        const response = Astro.redirect('/connexion');
+        response.headers.append('Set-Cookie', createClearAuthCookie());
+        return response;
+    }
+
+    if (action === 'avatar' && avatar instanceof File && avatar.size > 0) {
+        await updateAvatar(currentUser.id, avatar, pb);
+    }
+
+    return Astro.redirect('/profil');
+}
+
+const user = await getUserById(currentUser.id, pb);
+const points = user.points || 0;
+const niveau = Math.floor(points / 250) + 1;
+const maxXp = niveau * 250;
+const progress = maxXp > 0 ? (points / maxXp) * 100 : 0;
+const dateInscription = new Date(user.created).toLocaleDateString('fr-FR', {
+    month: 'long',
+    year: 'numeric'
+});
+
+const [nbSorties, nbOrganisations, nbAmis] = await Promise.all([
+    getNbSortiesParticipees(user.id, pb),
+    getNbSortiesOrganisees(user.id, pb),
+    getNbAmis(user.id, pb)
+]);
+---
+
+<Layout title="Mon profil" hideHeader={true}>
+    <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16">
+        <div class="flex items-start justify-between">
+            <a href="/" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk">
+                <Image src={Fleche} alt="" class="h-4 w-4" />
+                Retour
+            </a>
+
+            <form method="post">
+                <input type="hidden" name="action" value="logout" />
+                <button type="submit" class="flex h-12 w-12 items-center justify-center rounded-full bg-white-bk/50">
+                    <Image src={Power} alt="Déconnexion" class="h-7 w-7" />
+                </button>
+            </form>
+        </div>
+
+        <div class="mt-4 flex flex-col items-center">
+            <form id="avatar-form" method="post" enctype="multipart/form-data" class="relative mt-4">
+                <input type="hidden" name="action" value="avatar" />
+                <img id="avatar" src={getFileUrl(user, user.avatar, pb)} alt="" class="h-40 w-40 rounded-full object-cover" />
+
+                <input id="avatar-input" name="avatar" type="file" accept="image/*" class="hidden" />
+
+                <label for="avatar-input" class="absolute top-1 right-1 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white-c">
+                    <Image src={Edit} alt="Modifier la photo" class="h-6 w-6" />
+                </label>
+            </form>
+
+            <h3 id="username" class="mt-5 text-center text-white-bk">{user.username}</h3>
+
+            <div id="premium-badge" class:list={[
+                'mt-3 flex items-center gap-2 rounded-full bg-white-c/40 px-5 py-2 font-bold text-white-bk',
+                { hidden: !user.premium }
+            ]}>
+                <Image src={Courone} alt="" class="h-4 w-4" />
+                Premium
+            </div>
+
+            <small id="date-inscription" class="mt-2 text-white-c">Membre depuis {dateInscription}</small>
+        </div>
+
+        <div class="mt-7 rounded-3xl bg-white-c p-6">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-beige-c flex items-center justify-center">
+                    <Image src={Trophee} alt="" class="w-6 h-6" />
+                </div>
+
+                <div>
+                    <h4 id="niveau" class="font-titan leading-none">Niveau {niveau}</h4>
+                    <small id="points" class="mt-1 block text-marron-c">{points} / {maxXp} points</small>
+                </div>
+            </div>
+
+            <div class="mt-8 h-5 bg-white rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-orange-c rounded-full" style={`width:${progress}%`}></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="mt-8 grid grid-cols-3 gap-4 px-6">
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Calendrier class="mx-auto h-7 w-7 text-paprika-c" />
+            <h4 id="nb-sorties" class="mt-4 font-titan">{nbSorties}</h4>
+            <small class="mt-2 block text-marron-c">Sorties</small>
+        </article>
+
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Trophee class="mx-auto h-7 w-7 text-paprika-c" />
+            <h4 id="nb-organisations" class="mt-4 font-titan">{nbOrganisations}</h4>
+            <small class="mt-2 block text-marron-c">Organiser</small>
+        </article>
+
+        <article class="rounded-2xl border border-beige-c bg-white-c p-5 text-center">
+            <Amis class="mx-auto h-7 w-7 text-paprika-c" />
+            <h4 id="nb-amis" class="mt-4 font-titan">{nbAmis}</h4>
+            <small class="mt-2 block text-marron-c">Ami(e)s</small>
+        </article>
+    </div>
+</Layout>
+
+<script>
+    const avatarInput = document.getElementById('avatar-input');
+    const avatarForm = document.getElementById('avatar-form');
+
+    avatarInput?.addEventListener('change', () => {
+        avatarForm?.requestSubmit();
+    });
+</script>

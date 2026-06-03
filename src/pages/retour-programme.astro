@@ -1,0 +1,287 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+import { Image } from 'astro:assets';
+
+import Fleche from '../assets/fleche.svg';
+import Taxi from '../assets/img/taxi.avif';
+import Vtc from '../assets/img/vtc.avif';
+import Sam from '../assets/img/sam.avif';
+import Warning from '../assets/tw.svg';
+
+import Argent from '../assets/argent.svg';
+import Temps from '../assets/temps.svg';
+import {
+    createRetourProgramme,
+    getFileUrl,
+    getUserFriends,
+    loadAstroAuth
+} from '../../backend/backend.mjs';
+
+const { pb, user } = await loadAstroAuth(Astro);
+
+if (!user) {
+    return Astro.redirect('/connexion');
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const typeRetour = formData.get('type_retour')?.toString();
+    const conducteurSam = formData.get('conducteur_sam')?.toString();
+
+    if (typeRetour === 'Taxi' || typeRetour === 'VTC') {
+        await createRetourProgramme({
+            utilisateur: user.id,
+            type_retour: typeRetour
+        }, pb);
+
+        return Astro.redirect('/');
+    }
+
+    if (typeRetour === 'SAM' && conducteurSam) {
+        await createRetourProgramme({
+            utilisateur: user.id,
+            type_retour: 'SAM',
+            conducteur_sam: conducteurSam
+        }, pb);
+
+        return Astro.redirect('/');
+    }
+}
+
+const friends = await getUserFriends(user.id, pb).catch(() => []);
+
+const samFriends = friends
+    .map((friend) => (
+        friend.utilisateur1 === user.id
+            ? friend.expand?.utilisateur2
+            : friend.expand?.utilisateur1
+    ))
+    .filter(Boolean);
+---
+
+<Layout title="Retour programmé" description="Rentre en toute sécurité">
+    <main class="px-8 py-10 pb-32">
+        <a
+            href="/"
+            class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"
+        >
+            <Image src={Fleche} alt="" class="h-4 w-4" />
+            Retour
+        </a>
+
+        <h3 class="mt-12 text-paprika-c">Choisis ton service</h3>
+
+        <form
+            method="post"
+            class="
+                mt-8
+                rounded-xl
+                border
+                border-mocha-c
+                bg-white-c
+                p-3
+                transition-all
+                active:scale-95
+            "
+        >
+            <input type="hidden" name="type_retour" value="Taxi" />
+            <button class="w-full text-left" type="submit">
+            <div class="flex items-center gap-8 text-marron-c">
+                <Image src={Taxi} alt="" class="h-auto w-18" />
+
+                <div class="flex-1">
+                    <p class="font-bold">Taxi</p>
+
+                    <small class="mt-4 block">Service de taxi local</small>
+
+                    <div class="mt-1 flex items-center gap-6">
+                        <div class="flex items-center gap-2">
+                            <Image src={Argent} alt="" class="h-4 w-4" />
+                            <label class="font-bold">15-25€</label>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <Image src={Temps} alt="" class="h-4 w-4" />
+                            <label class="font-bold">10-15 min</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </button>
+        </form>
+
+        <form
+            method="post"
+            class="
+                mt-8
+                rounded-xl
+                border
+                border-mocha-c
+                bg-white-c
+                p-3
+                transition-all
+                active:scale-95
+            "
+        >
+            <input type="hidden" name="type_retour" value="VTC" />
+            <button class="w-full text-left" type="submit">
+            <div class="flex items-center gap-8 text-marron-c">
+                <Image src={Vtc} alt="" class="h-auto w-18" />
+
+                <div class="flex-1">
+                    <p class="font-bold">VTC premium</p>
+
+                    <small class="mt-4 block">Véhicule avec chauffeur</small>
+
+                    <div class="mt-1 flex items-center gap-6">
+                        <div class="flex items-center gap-2">
+                            <Image src={Argent} alt="" class="h-4 w-4" />
+                            <label class="font-bold">20-35€</label>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <Image src={Temps} alt="" class="h-4 w-4" />
+                            <label class="font-bold">5-10 min</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </button>
+        </form>
+
+        <a
+            href="#sam-container"
+            class="
+                relative
+                block
+                mt-8
+                cursor-pointer
+                rounded-xl
+                border
+                border-mocha-c
+                bg-white-c
+                p-3
+                transition-all
+                active:scale-95
+            "
+        >
+            <div class="flex items-center gap-8 text-marron-c">
+                <Image src={Sam} alt="" class="h-auto w-18" />
+
+                <div class="flex-1">
+
+                    <div class="flex items-start justify-between gap-4">
+                        <p class="font-bold">Conducteur SAM</p>
+
+                        <div
+                            class="
+                                rounded-full
+                                bg-green-100
+                                px-3
+                                py-1
+                                text-xs
+                                text-green-700
+                                whitespace-nowrap
+                            "
+                        >
+                            Recommandé
+                        </div>
+                    </div>
+
+                    <small class="mt-4 block">
+                        C’est le conducteur sobre qui vous ramène
+                    </small>
+
+                    <div class="mt-1 flex items-center gap-6">
+                        <div class="flex items-center gap-2">
+                            <Image src={Argent} alt="" class="h-4 w-4" />
+                            <label class="font-bold">0€</label>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <Image src={Temps} alt="" class="h-4 w-4" />
+                            <label class="font-bold">10-15 min</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </a>
+
+        <div id="sam-container" class="mt-8">
+            <h3 class="text-paprika-c">Choisis ton conducteur</h3>
+
+            <div id="friends-list" class="mt-4 flex flex-col gap-3">
+                {
+                    samFriends.length > 0 ? (
+                        samFriends.map((friend) => (
+                            <form method="post">
+                                <input type="hidden" name="type_retour" value="SAM" />
+                                <input type="hidden" name="conducteur_sam" value={friend.id} />
+                                <button
+                                    class="
+                                        flex
+                                        w-full
+                                        items-center
+                                        gap-4
+                                        rounded-xl
+                                        border-2
+                                        border-paprika-c
+                                        bg-white-c
+                                        p-4
+                                        text-left
+                                        transition-all
+                                        duration-200
+                                        active:scale-95
+                                    "
+                                >
+                                    <img
+                                        class="
+                                            h-16
+                                            w-16
+                                            shrink-0
+                                            rounded-full
+                                            object-cover
+                                        "
+                                        src={getFileUrl(friend, friend.avatar, pb)}
+                                        alt={friend.username}
+                                    >
+
+                                    <div>
+                                        <p class="text-lg font-bold text-paprika-c">{friend.username}</p>
+
+                                        <small class="text-marron-c">
+                                            Conducteur disponible
+                                        </small>
+                                    </div>
+                                </button>
+                            </form>
+                        ))
+                    ) : (
+                        <p class="rounded-xl bg-white-c p-4 text-marron-c">
+                            Tu n'as pas encore d'ami disponible comme conducteur SAM.
+                        </p>
+                    )
+                }
+            </div>
+        </div>
+
+        <section class="mt-32 rounded-lg bg-white-c p-2">
+            <div class="flex items-start gap-3">
+
+                <Image src={Warning} alt="" class="h-8 w-8 shrink-0" />
+
+                <div>
+                    <p class="text-paprika-c font-bold">Rappel important</p>
+
+                    <small class="mt-3 text-paprika-c block">
+                        Profite du moment. Si tu as bu, ne prends pas le volant. Nũnc t’aide à rentrer en sécurité.
+                    </small>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+</Layout>

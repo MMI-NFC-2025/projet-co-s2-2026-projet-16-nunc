@@ -1,0 +1,175 @@
+---
+import Layout from '../layouts/Layout-user.astro';
+
+import HomeSortieCard from '../components/HomeSortieCard.astro';
+import Carte from '../assets/carte.svg';
+import Amis from '../assets/people.svg';
+import Test from '../assets/test.svg';
+import Retour from '../assets/retour.svg';
+import Fleche from '../assets/fleche-droite.svg';
+import Boutique from '../assets/sac.svg';
+import Courone from '../assets/courone.svg';
+import { getUserSorties, loadAstroAuth } from '../../backend/backend.mjs';
+
+const { pb, user } = await loadAstroAuth(Astro);
+const participations = user
+    ? await getUserSorties(user.id, pb).catch(() => [])
+    : [];
+
+const maintenant = new Date();
+const prochainesSorties = participations
+    .filter((participation) => {
+        const sortie = participation.expand?.sortie;
+        if (!sortie?.date || !sortie?.heure) return false;
+
+        const dateSortie = new Date(`${sortie.date.substring(0, 10)}T${sortie.heure}`);
+        return dateSortie >= maintenant;
+    })
+    .sort((a, b) => {
+        const sortieA = a.expand.sortie;
+        const sortieB = b.expand.sortie;
+        const dateA = new Date(`${sortieA.date.substring(0, 10)}T${sortieA.heure}`);
+        const dateB = new Date(`${sortieB.date.substring(0, 10)}T${sortieB.heure}`);
+        return dateA - dateB;
+    })
+    .slice(0, 2);
+
+function formatSortieDate(sortie) {
+    return new Date(sortie.date).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+function getSortieBarName(sortie) {
+    return sortie.expand?.bar?.[0]?.nom || sortie.expand?.bar?.nom || 'Bar';
+}
+
+const cardClass = `
+    aspect-square
+    rounded-3xl
+    border-2
+    border-dashed
+    border-paprika-c
+    bg-white-c
+    flex
+    flex-col
+    items-center
+    justify-center
+    text-center
+    p-5
+`;
+---
+
+<Layout title="Accueil">
+    <main class="px-8 py-10 pb-32">
+
+        <section class="pb-11">
+            <div class="grid grid-cols-2 gap-6">
+
+                <a href="/carte" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-orange-c flex items-center justify-center">
+                        <Carte class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Bars à proximité</small>
+                </a>
+
+                <a href="/amis" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-paprika-c flex items-center justify-center">
+                        <Amis class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Listes d'ami(e)s</small>
+                </a>
+
+                <a href="/test-sobriete" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-beige-c flex items-center justify-center">
+                        <Test class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Test de sobriété</small>
+                </a>
+
+                <a href="/retour-programme" class={cardClass}>
+                    <div class="w-14 h-14 rounded-full bg-marron-c flex items-center justify-center">
+                        <Retour class="w-8 h-8 text-white" />
+                    </div>
+                    <small class="mt-3 font-bold">Retour programmé</small>
+                </a>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="flex items-center justify-between">
+                <h3 class="text-paprika-c">Prochaines sorties</h3>
+                <a href="/sortie" class="text-marron-c">Voir tout</a>
+            </div>
+
+            <div id="home-sorties" class="mt-8 flex flex-col gap-5">
+                {
+                    prochainesSorties.length > 0 ? (
+                        prochainesSorties.map((participation) => {
+                            const sortie = participation.expand.sortie;
+
+                            return (
+                                <a href={`/sortie/${sortie.id}`}>
+                                    <HomeSortieCard
+                                        titre={sortie.titre}
+                                        date={formatSortieDate(sortie)}
+                                        bar={getSortieBarName(sortie)}
+                                        participants={`${sortie.participants} participants`}
+                                    />
+                                </a>
+                            );
+                        })
+                    ) : (
+                        <div class="rounded-3xl border border-paprika-c bg-white-c p-5">
+                            <p class="font-bold text-bordeaux-c">Aucune sortie prévue</p>
+                            <small class="mt-2 block text-marron-c">Organise une nouvelle sortie pour la voir ici.</small>
+                        </div>
+                    )
+                }
+            </div>
+        </section>
+
+        <section class="mt-13">
+            <div class="flex flex-col gap-8">
+                <a
+                    href="/premium"
+                    class="flex items-center justify-between rounded-3xl bg-linear-to-br from-paprika-c to-yellow-c px-7 py-7 gap-4"
+                >
+                    <div>
+                        <div class="flex items-center gap-4">
+                            <Courone class="h-7 w-7" />
+                            <h3 class="text-white-bk">Pass Premium</h3>
+                        </div>
+
+                        <small class="text-white-bk">
+                            Profite de réductions exclusives et d'avantages illimités
+                        </small>
+                    </div>
+
+                    <Fleche class="h-14 w-14" />
+                </a>
+
+                <a
+                    href="/boutique"
+                    class="flex items-center justify-between rounded-3xl border border-marron-c bg-beige-c px-7 py-7 gap-8"
+                >
+                    <div>
+                        <div class="flex items-center gap-4">
+                            <Boutique class="h-7 w-7" />
+                            <h3 class="text-bordeaux-c">Boutique</h3>
+                        </div>
+
+                        <small class="text-marron-c ">
+                            Personnalise ton profil avec des badges exclusifs
+                        </small>
+                    </div>
+
+                    <Fleche class="h-14 w-14 text-bordeaux-c" />
+                </a>
+            </div>
+        </section>
+    </main>
+</Layout>

@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+import Fleche from '../assets/fleche.svg';
+import Flechegauche from '../assets/flecheorange-gauche.svg';
+import Flechedroite from '../assets/flecheorange-droite.svg';
+import Mail from '../assets/mail.svg';
+import Telephone from '../assets/telephone.svg';
+import Localisation from '../assets/carte.svg';
+import Instagram from '../assets/instagram.svg';
+import Tiktok from '../assets/tiktok.svg';
+import Facebook from '../assets/facebook.svg';
+
+import { Image } from 'astro:assets';
+import { addContact, createServerPocketBase } from '../../backend/backend.mjs';
+
+let retour = '';
+let retourOk = false;
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const pb = createServerPocketBase(Astro.request);
+
+    try {
+        await addContact({
+            nom: formData.get('nom')?.toString() || '',
+            email: formData.get('email')?.toString() || '',
+            sujet: formData.get('sujet')?.toString() || '',
+            message: formData.get('message')?.toString() || ''
+        }, pb);
+
+        retour = 'Message envoyé avec succès.';
+        retourOk = true;
+    } catch {
+        retour = "Erreur lors de l'envoi du message.";
+    }
+}
+---
+
+<Layout title="Contact">
+    <main class="px-8 py-10 pb-32">
+        <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+            <Image src={Fleche} alt="" class="w-4 h-4" />
+            Retour
+        </a>
+
+        <section class="mt-16">
+            <h2 class="text-paprika-c">Contactez-nous</h2>
+            <p class="mt-6 max-w-md">
+                Une question, une suggestion ou besoin d'aide ? N'hésitez pas à nous contacter.
+                Notre équipe vous répondra dans les plus brefs délais.
+            </p>
+        </section>
+
+        <section class="mt-16 rounded-lg border border-mocha-c bg-white-c px-6 py-8">
+            <form id="contact-form" method="post" class="flex flex-col gap-8">
+                <label class="block font-bold">
+                    Nom complet *
+                    <input
+                        type="text"
+                        name="nom"
+                        required
+                        placeholder="Votre nom"
+                        class="mt-4 w-full rounded-lg border border-yellow-c bg-white-bk px-5 py-4 font-normal placeholder:text-marron-c outline-none focus:border-paprika-c"
+                    />
+                </label>
+
+                <label class="block font-bold">
+                    Email *
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                        placeholder="votre.email@exemple.com"
+                        class="mt-4 w-full rounded-lg border border-yellow-c bg-white-bk px-5 py-4 font-normal placeholder:text-marron-c outline-none focus:border-paprika-c"
+                    />
+                </label>
+
+                <label class="block font-bold">
+                    Sujet *
+                    <input
+                        type="text"
+                        name="sujet"
+                        required
+                        placeholder="Le sujet de votre message"
+                        class="mt-4 w-full rounded-lg border border-yellow-c bg-white-bk px-5 py-4 font-normal placeholder:text-marron-c outline-none focus:border-paprika-c"
+                    />
+                </label>
+
+                <label class="block font-bold">
+                    Message *
+                    <textarea
+                        name="message"
+                        required
+                        placeholder="Écrivez votre message ici..."
+                        rows="7"
+                        class="mt-4 w-full resize-none rounded-lg border border-yellow-c bg-white-bk px-5 py-4 font-normal placeholder:text-marron-c outline-none focus:border-paprika-c"
+                    ></textarea>
+                </label>
+
+                {retour && (
+                    <div id="retour-contact" class:list={[
+                        'rounded-lg px-4 py-3 font-semibold',
+                        retourOk ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    ]}>
+                        {retour}
+                    </div>
+                )}
+
+                <button
+                    type="submit"
+                    id="btn-contact"
+                    class="relative mx-auto mt-2 flex w-72 items-center justify-center rounded-full bg-paprika-c py-4 text-white-bk"
+                >
+                    <span class="absolute inset-y-0 left-4 flex items-center">
+                        <Image src={Flechegauche} alt="" class="h-12 w-12" />
+                    </span>
+                    Envoyer le message
+                    <span class="absolute inset-y-0 right-4 flex items-center">
+                        <Image src={Flechedroite} alt="" class="h-12 w-12" />
+                    </span>
+                </button>
+            </form>
+        </section>
+
+        <section class="mt-16 flex flex-col gap-12">
+            <article class="flex items-start gap-6 rounded-2xl bg-white-c px-8 py-6">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-c">
+                    <Image src={Mail} alt="" class="h-6 w-6" />
+                </div>
+
+                <div>
+                    <p class="font-bold">Email</p>
+                    <small class="mt-1 block leading-relaxed text-marron-c">contact@nunc.app</small>
+                    <small class="block text-marron-c">support@nunc.app</small>
+                </div>
+            </article>
+
+            <article class="flex items-start gap-6 rounded-2xl bg-white-c px-8 py-6">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-c">
+                    <Image src={Telephone} alt="" class="h-6 w-6" />
+                </div>
+
+                <div>
+                    <p class="font-bold">Téléphone</p>
+                    <small class="mt-1 block leading-relaxed text-marron-c">+33 1 23 45 67 89</small>
+                    <label class="block text-marron-c">Du lundi au vendredi, 9h - 18h</label>
+                </div>
+            </article>
+
+            <article class="flex items-start gap-6 rounded-2xl bg-white-c px-8 py-6">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-c">
+                    <Localisation class="h-6 w-6 text-white" />
+                </div>
+
+                <div>
+                    <p class="font-bold">Adresse</p>
+                    <small class="mt-1 block leading-relaxed text-marron-c">123 Avenue des Champs-Élysées</small>
+                    <small class="block text-marron-c">75008 Paris, France</small>
+                </div>
+            </article>
+        </section>
+
+        <section class="mt-15 rounded-2xl bg-beige-c px-12 py-6 text-center">
+            <h3 class="text-bordeaux-c">Réseaux sociaux</h3>
+            <small class="mt-3 block leading-relaxed">
+                Suivez-nous pour rester informé des dernières nouveautés !
+            </small>
+            
+            <div class="mt-4 flex justify-center gap-4">
+                <a href="/" class="flex h-15 w-15 items-center justify-center rounded-2xl bg-paprika-c">
+                    <Instagram class="h-11 w-11 text-white" />
+                </a>
+
+                <a href="/" class="flex h-15 w-15 items-center justify-center rounded-2xl bg-paprika-c">
+                    <Tiktok class="h-11 w-11 text-white" />
+                </a>
+
+                <a href="/" class="flex h-15 w-15 items-center justify-center rounded-2xl bg-paprika-c">
+                    <Facebook class="h-11 w-11 text-white" />
+                </a>
+            </div>
+        </section>
+    </main>
+</Layout>

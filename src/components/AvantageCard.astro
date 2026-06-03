@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+
+import Orange from '../assets/orange.svg';
+
+const { titre, description } = Astro.props;
+---
+
+<div class="flex items-center gap-4 rounded-xl bg-marron-c p-3">
+    <Image
+        src={Orange}
+        alt=""
+        class="h-10 w-10 shrink-0"
+    />
+
+    <div>
+        <p class="text-white-c">{titre}</p>
+        <small class="mt-2 text-white-bk">{description}</small>
+    </div>
+</div>

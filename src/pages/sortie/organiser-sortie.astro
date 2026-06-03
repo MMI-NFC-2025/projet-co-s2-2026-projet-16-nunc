@@ -1,0 +1,269 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Fleche from '../../assets/fleche.svg';
+import Position from '../../assets/carte.svg';
+import Group from '../../assets/people.svg';
+import Coupe from '../../assets/img/coupe.avif';
+import { Image } from 'astro:assets';
+import {
+    addParticipantSortie,
+    addUserPoints,
+    createSortie,
+    getBars,
+    getUserById,
+    loadAstroAuth
+} from '../../../backend/backend.mjs';
+
+const { pb, user: authUser } = await loadAstroAuth(Astro);
+
+if (!authUser) {
+    return Astro.redirect('/connexion');
+}
+
+const user = await getUserById(authUser.id, pb).catch(() => authUser);
+const bars = await getBars(pb);
+const barId = Astro.url.searchParams.get('bar');
+let error = '';
+
+function calculatePoints(participants, hasPremium) {
+    let points = 30 + participants;
+
+    if (participants >= 20) points = 50;
+
+    if (hasPremium && participants > 20) {
+        points = 50 + ((participants - 20) * 5);
+    }
+
+    return Math.min(points, hasPremium ? 130 : 50);
+}
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const participants = Number(formData.get('participants'));
+    const hasPremium = Boolean(user?.premium);
+    const type = String(formData.get('type') || 'classique');
+    const defaultBar = String(formData.get('defaultBar') || '').trim();
+    const classicBar = String(formData.get('classicBar') || '').trim();
+    const selectedBars = formData
+        .getAll('bar')
+        .map((id) => String(id || '').trim())
+        .filter(Boolean);
+
+    const sortieBars = type === 'classique'
+        ? [defaultBar || classicBar].filter(Boolean)
+        : selectedBars;
+
+    if (!Number.isFinite(participants) || participants < 1) {
+        error = 'Indique un nombre de participants valide.';
+    } else if (!hasPremium && participants > 20) {
+        error = 'Sans abonnement Premium, la limite est de 20 participants.';
+    } else if (sortieBars.length === 0) {
+        error = 'Vous devez sélectionner au moins un bar.';
+    } else {
+        const points = calculatePoints(participants, hasPremium);
+        const result = await createSortie({
+            titre: String(formData.get('titre') || '').trim(),
+            description: String(formData.get('description') || '').trim(),
+            date: String(formData.get('date') || ''),
+            heure: String(formData.get('heure') || ''),
+            participants,
+            type,
+            organisateur: user.id,
+            bar: sortieBars,
+            points
+        }, pb);
+
+        if (result.success) {
+            await addParticipantSortie(result.sortie.id, user.id, 'Organisateur', 'Accepté', pb);
+            await addUserPoints(user.id, points, pb);
+
+            return Astro.redirect(`/sortie/${result.sortie.id}`);
+        }
+
+        error = 'Une erreur est survenue lors de la création de la sortie.';
+    }
+}
+---
+
+<Layout title="Organiser une sortie" description="Créer un nouvel événement">
+    <main class="px-8 py-10 pb-32">
+        <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+            <Image src={Fleche} alt="" class="w-4 h-4" />
+            Retour
+        </a>
+
+        <form id="sortie-form" method="post" class="mt-10 flex flex-col gap-8" data-premium={user?.premium ? 'true' : 'false'}>
+            <input type="hidden" name="defaultBar" value={barId || ''} />
+            <input type="hidden" name="type" id="type-sortie" value="classique" />
+
+            {error && (
+                <section class="rounded-3xl bg-white-c p-5 text-center font-bold text-bordeaux-c">
+                    {error}
+                </section>
+            )}
+
+            <section class="rounded-3xl bg-white-c p-4">
+                <h3 class="text-paprika-c">Type d’événement</h3>
+
+                <div class="mt-7 flex gap-10">
+                    <button type="button" id="classic-btn" class="flex flex-1 flex-col items-center justify-center rounded-3xl border-3 border-paprika-c bg-paprika-c px-4 py-4 text-white">
+                        <Position class="h-6 w-6" />
+                        <label class="mt-4">Sortie classique</label>
+                        <label class="text-center">Un seul bar</label>
+                    </button>
+
+                    <button type="button" id="crawl-btn" class="flex flex-1 flex-col items-center justify-center rounded-3xl border-3 border-yellow-c bg-white-bk px-4 py-4 text-yellow-c">
+                        <Group class="h-6 w-6" />
+                        <label class="mt-4">Bar Crawl</label>
+                        <label class="mt-2 text-center">Plusieurs bars</label>
+                    </button>
+                </div>
+
+                <div id="classic-bar" class="mt-6 flex flex-col gap-3">
+                    <label class="font-bold text-bordeaux-c">Bar de la sortie</label>
+                    <div class="flex flex-col gap-3">
+                        {bars.map((bar) => (
+                            <label class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4">
+                                <span class="font-bold text-bordeaux-c">{bar.nom}</span>
+
+                                <input type="radio" name="classicBar" value={bar.id} checked={bar.id === barId} class="h-5 w-5 accent-paprika-c" />
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
+                <div id="crawl-bars" class="mt-6 hidden flex-col gap-3">
+                    <label class="font-bold text-bordeaux-c">Sélection des bars</label>
+                    <div class="flex flex-col gap-3">
+                        {bars.map((bar) => (
+                            
+                            <label class="flex items-center justify-between rounded-2xl border-2 border-yellow-c bg-white-bk px-5 py-4">
+                                <span class="font-bold text-bordeaux-c">{bar.nom}</span>
+                                
+                                <input type="checkbox" name="bar" value={bar.id} checked={bar.id === barId} class="h-5 w-5 accent-paprika-c" />
+                            </label>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section class="rounded-3xl bg-white-c p-6">
+                <div>
+                    <small class="font-bold">Titre de l'événement</small>
+                    <input 
+                    type="text" 
+                    name="titre" 
+                    placeholder="Ex: Afterwork du vendredi" 
+                    required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
+                </div>
+
+                <div class="mt-4">
+                    <small class="font-bold">Description (optionnel)</small>
+                    <textarea 
+                    name="description" 
+                    placeholder="Décris ton événement..." 
+                    class="mt-3 h-16 w-full resize-none rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"></textarea>
+                </div>
+
+                <div class="mt-4 flex gap-4">
+                    <div class="flex-1">
+                        <small class="font-bold">Date</small>
+                        <input type="date" 
+                        name="date" 
+                        required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
+                    </div>
+                    
+                    <div class="flex-1">
+                        <small class="font-bold">Heure</small>
+                        <input type="time" 
+                        name="heure" 
+                        required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <small class="font-bold">Nombre de participants</small>
+                    <input 
+                    type="number" 
+                    name="participants" 
+                    placeholder="Max 20 sans Premium" 
+                    required class="mt-3 w-full rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none" />
+                </div>
+            </section>
+
+            <section class="flex items-center justify-between rounded-3xl bg-linear-to-r from-paprika-c to-yellow-c px-8 py-3 text-white">
+                <div>
+                    <label class="text-white">Points estimés pour cet événement</label>
+                    <h2 id="points-display" class="text-white">+30</h2>
+                </div>
+                <Image src={Coupe} alt="" class="h-17 w-17" />
+            </section>
+
+            <button type="submit" class="rounded-full bg-paprika-c px-6 py-5 text-center font-bold text-white">Créer l’événement</button>
+        </form>
+
+    </main>
+</Layout>
+
+<script>
+    const form = document.getElementById('sortie-form');
+    const classicBtn = document.getElementById('classic-btn');
+    const crawlBtn = document.getElementById('crawl-btn');
+    const typeInput = document.getElementById('type-sortie');
+    const classicBar = document.getElementById('classic-bar');
+    const crawlBars = document.getElementById('crawl-bars');
+    const participantsInput = document.querySelector('input[name="participants"]');
+    const pointsDisplay = document.getElementById('points-display');
+    const hasPremium = form?.dataset.premium === 'true';
+
+    function calculatePoints(participants) {
+        let points = 30 + participants;
+
+        if (participants >= 20) points = 50;
+
+        if (hasPremium && participants > 20) {
+            points = 50 + ((participants - 20) * 5);
+        }
+
+        return Math.min(points, hasPremium ? 130 : 50);
+    }
+
+    function setType(type) {
+        typeInput.value = type;
+
+        if (type === 'classique') {
+            classicBtn.classList.remove('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+            classicBtn.classList.add('bg-paprika-c', 'text-white', 'border-paprika-c');
+
+            crawlBtn.classList.remove('bg-paprika-c', 'text-white', 'border-paprika-c');
+            crawlBtn.classList.add('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+
+            crawlBars.classList.add('hidden');
+            crawlBars.classList.remove('flex');
+
+            classicBar.classList.remove('hidden');
+            classicBar.classList.add('flex');
+            return;
+        }
+
+        crawlBtn.classList.remove('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+        crawlBtn.classList.add('bg-paprika-c', 'text-white', 'border-paprika-c');
+
+        classicBtn.classList.remove('bg-paprika-c', 'text-white', 'border-paprika-c');
+        classicBtn.classList.add('bg-white-bk', 'text-yellow-c', 'border-yellow-c');
+
+        crawlBars.classList.remove('hidden');
+        crawlBars.classList.add('flex');
+
+        classicBar.classList.add('hidden');
+        classicBar.classList.remove('flex');
+    }
+
+    classicBtn?.addEventListener('click', () => setType('classique'));
+    crawlBtn?.addEventListener('click', () => setType('bar crawl'));
+
+    participantsInput?.addEventListener('input', () => {
+        const participants = Number(participantsInput.value) || 0;
+        pointsDisplay.textContent = `+${calculatePoints(participants)}`;
+    });
+</script>

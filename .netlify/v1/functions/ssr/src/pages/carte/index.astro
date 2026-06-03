@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+import Map from '../../components/Map.astro';
+import BarCard from '../../components/BarCard.astro';
+import Fleche from '../../assets/fleche.svg';
+import Filtre from '../../assets/filtre.svg';
+import Reset from '../../assets/reset.svg';
+
+import { getBars, loadAstroAuth } from '../../../backend/backend.mjs';
+import { Image } from 'astro:assets';
+
+const { pb } = await loadAstroAuth(Astro);
+const bars = await getBars(pb);
+---
+
+<Layout title="Carte des bars" description="Il y a 5 bars proche de toi">
+    <main class="px-5 py-10 pb-32">
+        <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+            <Image src={Fleche} alt="" class="h-4 w-4" />
+            Retour
+        </a>
+        <section class="mt-10 overflow-hidden rounded-3xl border-2 border-paprika-c">
+            <Map bars={bars} />
+        </section>
+        
+        <section class="mt-12">
+            <div class="flex items-center justify-between">
+                <h3 class="text-paprika-c">Tous les bars</h3>
+                
+                <div class="flex items-center gap-3">
+                    <button id="reset-btn">
+                        <Image src={Reset} alt="" class="h-6 w-6" />
+                    </button>
+                    
+                    <button id="filter-btn" class="flex h-16 w-16 items-center justify-center rounded-full bg-white-c">
+                        <Image src={Filtre} alt="" class="h-7 w-7" />
+                    </button>
+                </div>
+            </div>
+            <div id="bars-list" class="mt-4 flex flex-col gap-4">
+                {
+                    bars.map((bar) => (
+                        <div class="bar-item" data-distance={bar.distance}>
+                            <BarCard 
+                            nom={bar.nom} 
+                            categorie={bar.categorie} 
+                            distance={bar.distance} 
+                            note={bar.note} 
+                            record={bar}
+                            pb={pb} />
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+    </main>
+</Layout>
+
+<script type="module" src="/src/js/filtre.js"></script>
