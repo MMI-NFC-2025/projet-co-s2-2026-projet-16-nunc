@@ -1,0 +1,7 @@
+import { c as createSvgComponent } from './runtime_BTGkwREA.mjs';
+
+const Flechegauche = createSvgComponent({"meta":{"src":"/_astro/flecheorange-gauche.BWFAFhaM.svg","width":50,"height":50,"format":"svg"},"attributes":{"width":"50","height":"50","viewBox":"0 0 50 50","fill":"none"},"children":"\n<path d=\"M8.39819 32.5133C8.82996 35.689 11.3766 35.1597 12.5959 34.4981C20.5116 31.443 37.2664 24.9826 40.9604 23.5815C44.6543 22.1804 42.4995 21.2464 40.9604 20.9545C41.0083 20.1139 37.1824 18.6583 35.2635 18.0356C34.4959 17.2884 17.0335 15.7005 8.39819 15C7.05493 16.4945 6.95898 19.281 7.07891 20.4875C7.07891 23.2429 7.95843 23.5815 8.39819 23.4064C6.91101 24.6206 6.89901 26.0528 7.07891 26.6171L8.39819 32.5133Z\" fill=\"#E99F22\" />\n"});
+
+const Flechedroite = createSvgComponent({"meta":{"src":"/_astro/flecheorange-droite.Doi64nAw.svg","width":50,"height":50,"format":"svg"},"attributes":{"width":"50","height":"50","viewBox":"0 0 50 50","fill":"none"},"children":"\n<path d=\"M41.6018 32.5133C41.17 35.689 38.6234 35.1597 37.4041 34.4981C29.4884 31.443 12.7336 24.9826 9.03964 23.5815C5.34566 22.1804 7.50048 21.2464 9.03964 20.9545C8.99166 20.1139 12.8176 18.6583 14.7365 18.0356C15.5041 17.2884 32.9665 15.7005 41.6018 15C42.9451 16.4945 43.041 19.281 42.9211 20.4875C42.9211 23.2429 42.0416 23.5815 41.6018 23.4064C43.089 24.6206 43.101 26.0528 42.9211 26.6171L41.6018 32.5133Z\" fill=\"#E99F22\" />\n"});
+
+export { Flechegauche as F, Flechedroite as a };
