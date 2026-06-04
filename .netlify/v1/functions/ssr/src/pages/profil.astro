@@ -166,14 +166,14 @@ const cadresInventaire = inventaireCadres
         </div>
 
         {cadresInventaire.length > 0 ? (
-            <div class="mt-5 grid grid-cols-2 gap-4">
+            <div class="mt-8 grid grid-cols-2 gap-6">
                 {cadresInventaire.map((item) => (
                     <form method="post">
                         <input type="hidden" name="action" value="equip-cadre" />
                         <input type="hidden" name="inventaireId" value={item.id} />
                         <button class:list={[
-                            'relative flex min-h-68 w-full flex-col rounded-2xl border bg-white-c p-4 text-center',
-                            item.equipe ? 'border-3 border-paprika-c' : 'border border-beige-c'
+                            'relative w-full rounded-xl border bg-white-c p-4 text-center',
+                            item.equipe ? 'border-3 border-paprika-c' : 'border border-mocha-c'
                         ]}>
                             {item.equipe && (
                                 <span class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-paprika-c text-white-bk">
@@ -181,16 +181,14 @@ const cadresInventaire = inventaireCadres
                                 </span>
                             )}
 
-                            <div class="mx-auto flex h-36 w-36 items-center justify-center overflow-hidden rounded-xl bg-white-bk">
-                                <img
-                                    src={getFileUrl(item.cadre, item.cadre.image, pb)}
-                                    alt={`Cadre ${item.cadre.nom}`}
-                                    loading="lazy"
-                                    class="h-full w-full object-contain"
-                                />
-                            </div>
+                            <img
+                                src={getFileUrl(item.cadre, item.cadre.image, pb)}
+                                alt={`Cadre ${item.cadre.nom}`}
+                                loading="lazy"
+                                class="mx-auto h-40 w-40 object-contain"
+                            />
 
-                            <p class="mt-4 font-bold text-bordeaux-c">{item.cadre.nom}</p>
+                            <p class="mt-4">{item.cadre.nom}</p>
                             <small class="mt-1 block text-marron-c">
                                 {item.type === 'premium' ? 'Cadre premium' : 'Cadre classique'}
                             </small>

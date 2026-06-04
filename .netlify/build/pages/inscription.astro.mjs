@@ -1,6 +1,6 @@
 import { c as createComponent, a as renderTemplate, d as addAttribute, r as renderComponent, b as createAstro, m as maybeRenderHead } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_PrEBqyXV.mjs';
+import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_CV5JwpaY.mjs';
 import { $ as $$Header } from '../chunks/Header_BASlXZdf.mjs';
 import { E as Eye } from '../chunks/eye-open_8-RQuacV.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';

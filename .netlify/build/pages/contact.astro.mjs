@@ -1,6 +1,6 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_Dj7x1RIw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_ZVQDZnmQ.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';

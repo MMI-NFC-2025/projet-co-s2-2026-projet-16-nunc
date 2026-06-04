@@ -1,6 +1,6 @@
 import { c as createComponent, a as renderTemplate, d as addAttribute, f as defineScriptVars, r as renderComponent, b as createAstro, m as maybeRenderHead } from '../../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../../chunks/Layout_Dj7x1RIw.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_ir9QOgyR.mjs';
 import { l as loadAstroAuth, K as addUserPoints, V as getQuestionsSobriete } from '../../chunks/backend_DoxzlLrY.mjs';
 export { renderers } from '../../renderers.mjs';
 
