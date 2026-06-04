@@ -102,7 +102,7 @@ const cadresPremiumPossedes = new Set(inventaire.map((item) => item.cadre_premiu
             </div>
 
             <div id="premium-badge" class:list={[
-                'items-center gap-2 rounded-full bg-paprika-c px-4 py-2 text-white-bk',
+                'items-center gap-2 rounded-full bg-paprika-c px-4 py-2 text-white-bk whitespace-nowrap',
                 user.premium ? 'flex' : 'hidden'
             ]}>
                 <Image src={Courone} alt="" class="h-4 w-4" />
@@ -117,27 +117,31 @@ const cadresPremiumPossedes = new Set(inventaire.map((item) => item.cadre_premiu
 </section>
 
 <section class="px-8">
-    <a href="/premium" class="mt-8 flex items-center justify-between rounded-3xl bg-linear-to-br from-paprika-c to-yellow-c px-7 py-7 gap-4">
-        <div>
+    <a href="/premium" class="mt-8 flex items-center justify-between gap-4 rounded-3xl bg-linear-to-br from-paprika-c to-yellow-c px-7 py-7">
+        <div class="min-w-0">
             <div class="flex items-center gap-4">
-                <Courone class="h-7 w-7" />
-                <h3 class="text-white-bk">Pass Premium</h3>
+                <Courone class="h-7 w-7 shrink-0" />
+                <h3 class="whitespace-nowrap text-white-bk">Pass Premium</h3>
             </div>
             <small class="text-white-bk">Profite de réductions exclusives et d'avantages illimités</small>
         </div>
-        <Fleche class="h-14 w-14" />
+        <Fleche class="h-14 w-14 shrink-0" />
     </a>
 
     <h3 class="text-center text-paprika-c mt-7">Déco Classique</h3>
     <div id="cadres-list" class="mt-8 grid grid-cols-2 gap-6">
         {cadres.map((cadre) => {
             const possede = cadresPossedes.has(cadre.id);
+            const prixCadre = user.premium ? Math.ceil(cadre.prix * 0.8) : cadre.prix;
 
             return (
                 <article class="rounded-xl border border-mocha-c bg-white-c p-4 text-center">
                     <img class="cadre-image mx-auto h-40 w-40 object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt={`Cadre ${cadre.nom}`} loading="lazy" />
                     <p class="cadre-nom mt-4">{cadre.nom}</p>
-                    <h3 class="cadre-prix mt-2 text-paprika-c">{cadre.prix} pts</h3>
+                    <h3 class="cadre-prix mt-2 text-paprika-c">{prixCadre} pts</h3>
+                    {user.premium && (
+                        <small class="text-marron-c">au lieu de {cadre.prix} pts</small>
+                    )}
 
                     {possede ? (
                         <button disabled class="cadre-bouton mt-4 w-full rounded-full bg-beige-c px-6 py-3 text-white-bk">Possédé</button>

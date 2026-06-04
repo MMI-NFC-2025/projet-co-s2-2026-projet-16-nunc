@@ -72,8 +72,8 @@ const searchResults = search.length >= 1
 
 function tabClass(tab) {
     return activeTab === tab && search.length < 1
-        ? 'friend-tab rounded-full bg-paprika-c px-4 py-3 text-white'
-        : 'friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c';
+        ? 'friend-tab flex min-h-14 items-center justify-center rounded-full bg-paprika-c px-2 py-2 text-center text-sm leading-tight text-white'
+        : 'friend-tab flex min-h-14 items-center justify-center rounded-full bg-white-c px-2 py-2 text-center text-sm leading-tight text-marron-c';
 }
 
 const currentFriends = friends
@@ -108,7 +108,7 @@ const currentFriends = friends
             <button class="sr-only" type="submit">Rechercher</button>
         </form>
 
-        <div class="mt-6 flex gap-3">
+        <div class="mt-6 grid grid-cols-3 gap-2">
             <a href="/amis?tab=friends" id="tab-friends" class={tabClass('friends')}>
                 Mes amis
             </a>

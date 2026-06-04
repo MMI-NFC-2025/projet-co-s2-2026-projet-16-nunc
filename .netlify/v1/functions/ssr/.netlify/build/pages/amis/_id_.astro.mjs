@@ -1,13 +1,13 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../../chunks/Layout_ir9QOgyR.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_BZCnxHda.mjs';
 import { $ as $$Image } from '../../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../../chunks/fleche_D52W9Oh8.mjs';
 import { T as Trophy, C as Calendrier } from '../../chunks/Menu_BsNEgW-R.mjs';
 import { C as Courone } from '../../chunks/courone_CrdAgGv2.mjs';
 import { A as Amis } from '../../chunks/people_Dj-cI_yv.mjs';
-import { $ as $$UserAvatar } from '../../chunks/UserAvatar_DFp_IEK5.mjs';
-import { l as loadAstroAuth, g as getUserById, a as getNbSortiesParticipees, b as getNbSortiesOrganisees, c as getNbAmis } from '../../chunks/backend_DoxzlLrY.mjs';
+import { $ as $$UserAvatar } from '../../chunks/UserAvatar_yx-d2NS1.mjs';
+import { l as loadAstroAuth, g as getUserById, a as getNbSortiesParticipees, b as getNbSortiesOrganisees, c as getNbAmis } from '../../chunks/backend_CNX6c8lU.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$Astro = createAstro();

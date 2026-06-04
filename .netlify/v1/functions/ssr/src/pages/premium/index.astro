@@ -93,6 +93,11 @@ const faq = await getFaq(pb);
         <section class="mt-16">
             <h3 class="text-center text-paprika-c">Le kit du parfait fêtard</h3>
             <div class="mt-8 space-y-6">
+                <Card
+                    titre="-20% sur la boutique"
+                    description="Réduction exclusive sur tous les articles de la boutique"
+                />
+
                 {
                     avantages.map((avantage) => (
                         <Card titre={avantage.titre} description={avantage.description} />

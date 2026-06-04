@@ -1,10 +1,10 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_CV5JwpaY.mjs';
+import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_RFplN3e3.mjs';
 import { $ as $$Header } from '../chunks/Header_BASlXZdf.mjs';
 import { E as Eye } from '../chunks/eye-open_8-RQuacV.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
-import { x as createServerPocketBase, y as createAuthCookie } from '../chunks/backend_DoxzlLrY.mjs';
+import { x as createServerPocketBase, y as createAuthCookie } from '../chunks/backend_CNX6c8lU.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro();

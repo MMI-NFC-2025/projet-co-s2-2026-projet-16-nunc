@@ -438,9 +438,14 @@ export async function acheterCadre(userId, cadreId, client = pb) {
             .collection('cadres')
             .getOne(cadreId);
 
+    const prixCadre =
+        user.premium
+            ? Math.ceil(cadre.prix * 0.8)
+            : cadre.prix;
+
     if (
         user.points <
-        cadre.prix
+        prixCadre
     ) {
         throw new Error(
             'Pas assez de points'
@@ -467,7 +472,7 @@ export async function acheterCadre(userId, cadreId, client = pb) {
 
     const nextPoints =
         user.points -
-        cadre.prix;
+        prixCadre;
 
     await getPocketBase(client)
         .collection('users')

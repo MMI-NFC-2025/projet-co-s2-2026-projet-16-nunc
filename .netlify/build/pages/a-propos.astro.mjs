@@ -1,6 +1,6 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
+import { $ as $$Layout } from '../chunks/Layout_BZCnxHda.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { L as Logo } from '../chunks/logo_DuaI_3pM.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
@@ -93,7 +93,7 @@ Estelle s'est également occupée de la communication du
                         direction créative. Elle a imaginé l'identité visuelle
                         de NÜNC, notamment le nom, le logo et l'univers
                         graphique de l'application.
-</small> </article> </div> </section> <section class="mt-15"> <div class="rounded-3xl bg-white px-8 py-10 shadow-lg"> <h2 class="text-paprika-c">Crédits & Remerciements</h2> <div class="mt-12"> <h4>Projet Académique</h4> <small class="mt-3 block">
+</small> </article> </div> </section> <section class="mt-15"> <div class="rounded-3xl bg-white px-6 py-10 shadow-lg"> <h3 class="text-paprika-c">Crédits & Remerciements</h3> <div class="mt-12"> <h4>Projet Académique</h4> <small class="mt-3 block">
 Cette application a été développée dans le cadre d'un
                         projet académique en MMI, avec pour objectif de concevoir
                         une plateforme facilitant l'organisation de sorties

@@ -1,14 +1,14 @@
 import { c as createComponent, r as renderComponent, e as renderScript, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
+import { $ as $$Layout } from '../chunks/Layout_BZCnxHda.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { T as Trophy, C as Calendrier } from '../chunks/Menu_BsNEgW-R.mjs';
 import { C as Courone } from '../chunks/courone_CrdAgGv2.mjs';
 import { A as Amis } from '../chunks/people_Dj-cI_yv.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
-import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
-import { l as loadAstroAuth, E as createClearAuthCookie, F as equiperCadreUtilisateur, G as updateAvatar, g as getUserById, a as getNbSortiesParticipees, b as getNbSortiesOrganisees, c as getNbAmis, n as getCadresUtilisateur, t as getFileUrl } from '../chunks/backend_DoxzlLrY.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_yx-d2NS1.mjs';
+import { l as loadAstroAuth, E as createClearAuthCookie, F as equiperCadreUtilisateur, G as updateAvatar, g as getUserById, a as getNbSortiesParticipees, b as getNbSortiesOrganisees, c as getNbAmis, n as getCadresUtilisateur, t as getFileUrl } from '../chunks/backend_CNX6c8lU.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Power = createSvgComponent({"meta":{"src":"/_astro/power.q-kovQPh.svg","width":24,"height":24,"format":"svg"},"attributes":{"width":"24","height":"24","viewBox":"0 0 24 24","fill":"none"},"children":"\n<path d=\"M7 6C5.78639 7.02477 4.91697 8.39771 4.50943 9.93294C4.10189 11.4682 4.17592 13.0915 4.7215 14.5833C5.26708 16.0751 6.25786 17.3632 7.55971 18.2732C8.86156 19.1833 10.4116 19.6714 12 19.6714C13.5884 19.6714 15.1384 19.1833 16.4403 18.2732C17.7421 17.3632 18.7329 16.0751 19.2785 14.5833C19.8241 13.0915 19.8981 11.4682 19.4906 9.93294C19.083 8.39771 18.2136 7.02477 17 6\" stroke=\"#F6E3D4\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\n<path d=\"M12 4V12\" stroke=\"#F6E3D4\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\n"});
