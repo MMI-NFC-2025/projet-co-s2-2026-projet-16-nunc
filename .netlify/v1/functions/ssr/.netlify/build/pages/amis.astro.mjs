@@ -1,10 +1,10 @@
 import { c as createComponent, r as renderComponent, e as renderScript, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
+import { $ as $$Layout } from '../chunks/Layout_BZCnxHda.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
-import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_yx-d2NS1.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
-import { l as loadAstroAuth, d as acceptFriendRequest, r as refuseFriendRequest, s as sendFriendRequest, e as getUserFriends, f as getFriendRequests, h as getPendingFriends, i as searchUsers, j as getFriendship } from '../chunks/backend_DoxzlLrY.mjs';
+import { l as loadAstroAuth, d as acceptFriendRequest, r as refuseFriendRequest, s as sendFriendRequest, e as getUserFriends, f as getFriendRequests, h as getPendingFriends, i as searchUsers, j as getFriendship } from '../chunks/backend_CNX6c8lU.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro();
@@ -50,12 +50,12 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
     return usersWithFriendship.filter(({ friendship }) => !friendship).map(({ person }) => person);
   }).catch(() => []) : [];
   function tabClass(tab) {
-    return activeTab === tab && search.length < 1 ? "friend-tab rounded-full bg-paprika-c px-4 py-3 text-white" : "friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c";
+    return activeTab === tab && search.length < 1 ? "friend-tab flex min-h-14 items-center justify-center rounded-full bg-paprika-c px-2 py-2 text-center text-sm leading-tight text-white" : "friend-tab flex min-h-14 items-center justify-center rounded-full bg-white-c px-2 py-2 text-center text-sm leading-tight text-marron-c";
   }
   const currentFriends = friends.map((friendship) => friendship.utilisateur1 === user.id ? friendship.expand?.utilisateur2 : friendship.expand?.utilisateur1).filter(Boolean);
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Listes de tes amis" }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="px-8 py-10 pb-32"> <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
 Retour
-</a> <form id="search-form" method="get"> <input id="search-user" name="q" type="text"${addAttribute(search, "value")} placeholder="Rechercher un utilisateur" class="mt-8 w-full rounded-2xl border-2 border-mocha-c bg-white-bk p-4 outline-none"> <button class="sr-only" type="submit">Rechercher</button> </form> <div class="mt-6 flex gap-3"> <a href="/amis?tab=friends" id="tab-friends"${addAttribute(tabClass("friends"), "class")}>
+</a> <form id="search-form" method="get"> <input id="search-user" name="q" type="text"${addAttribute(search, "value")} placeholder="Rechercher un utilisateur" class="mt-8 w-full rounded-2xl border-2 border-mocha-c bg-white-bk p-4 outline-none"> <button class="sr-only" type="submit">Rechercher</button> </form> <div class="mt-6 grid grid-cols-3 gap-2"> <a href="/amis?tab=friends" id="tab-friends"${addAttribute(tabClass("friends"), "class")}>
 Mes amis
 </a> <a href="/amis?tab=requests" id="tab-requests"${addAttribute(tabClass("requests"), "class")}>
 Demandes

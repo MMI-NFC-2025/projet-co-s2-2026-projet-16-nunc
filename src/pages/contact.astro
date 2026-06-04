@@ -110,14 +110,14 @@ if (Astro.request.method === 'POST') {
                 <button
                     type="submit"
                     id="btn-contact"
-                    class="relative mx-auto mt-2 flex w-72 items-center justify-center rounded-full bg-paprika-c py-4 text-white-bk"
+                    class="relative mx-auto mt-2 flex w-full max-w-72 items-center justify-center rounded-full bg-paprika-c px-12 py-4 text-center text-white-bk"
                 >
                     <span class="absolute inset-y-0 left-4 flex items-center">
-                        <Image src={Flechegauche} alt="" class="h-12 w-12" />
+                        <Image src={Flechegauche} alt="" class="h-10 w-10" />
                     </span>
                     Envoyer le message
                     <span class="absolute inset-y-0 right-4 flex items-center">
-                        <Image src={Flechedroite} alt="" class="h-12 w-12" />
+                        <Image src={Flechedroite} alt="" class="h-10 w-10" />
                     </span>
                 </button>
             </form>

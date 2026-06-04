@@ -1,12 +1,12 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
-import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
+import { $ as $$Layout } from '../chunks/Layout_BZCnxHda.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_yx-d2NS1.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { W as Warning } from '../chunks/tw_sVE_cmhm.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
-import { l as loadAstroAuth, H as createRetourProgramme, e as getUserFriends } from '../chunks/backend_DoxzlLrY.mjs';
+import { l as loadAstroAuth, H as createRetourProgramme, e as getUserFriends } from '../chunks/backend_CNX6c8lU.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Taxi = new Proxy({"src":"/_astro/taxi.gUQ6ya2u.avif","width":272,"height":272,"format":"avif"}, {

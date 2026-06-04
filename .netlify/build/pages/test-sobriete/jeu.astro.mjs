@@ -1,7 +1,7 @@
 import { c as createComponent, a as renderTemplate, d as addAttribute, f as defineScriptVars, r as renderComponent, b as createAstro, m as maybeRenderHead } from '../../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../../chunks/Layout_ir9QOgyR.mjs';
-import { l as loadAstroAuth, K as addUserPoints, V as getQuestionsSobriete } from '../../chunks/backend_DoxzlLrY.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_BZCnxHda.mjs';
+import { l as loadAstroAuth, K as addUserPoints, V as getQuestionsSobriete } from '../../chunks/backend_CNX6c8lU.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const testSobrieteScript = "/_astro/test-sobriete.B67zwLa9.js";

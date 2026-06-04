@@ -1,7 +1,7 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
 import { L as Logo } from '../chunks/logo_DuaI_3pM.mjs';
-import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_CV5JwpaY.mjs';
+import { $ as $$LayoutLandingpage } from '../chunks/Layout-landingpage_RFplN3e3.mjs';
 import { P as Photo } from '../chunks/photo-verre_pUW6spG4.mjs';
 import { O as Orange } from '../chunks/orange_Cz3fDFH3.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';

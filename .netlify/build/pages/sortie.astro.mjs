@@ -1,11 +1,11 @@
 import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate, d as addAttribute, b as createAstro } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
+import { $ as $$Layout } from '../chunks/Layout_BZCnxHda.mjs';
 import { C as Calendrier, a as Carte } from '../chunks/Menu_BsNEgW-R.mjs';
 import { A as Amis } from '../chunks/people_Dj-cI_yv.mjs';
-import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_yx-d2NS1.mjs';
 import 'clsx';
-import { l as loadAstroAuth, J as addParticipantSortie, Q as acceptInvitation, R as refuseInvitation, S as getUserSorties, T as getUserInvitations } from '../chunks/backend_DoxzlLrY.mjs';
+import { l as loadAstroAuth, J as addParticipantSortie, Q as acceptInvitation, R as refuseInvitation, S as getUserSorties, T as getUserInvitations } from '../chunks/backend_CNX6c8lU.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$2 = createAstro();
