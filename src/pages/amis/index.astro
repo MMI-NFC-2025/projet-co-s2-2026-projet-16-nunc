@@ -127,19 +127,19 @@ const currentFriends = friends
                 search.length >= 1 ? (
                     searchResults.length > 0 ? (
                         searchResults.map((person) => (
-                            <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
-                                <a href={`/amis/${person.id}`} class="flex flex-1 items-center gap-4">
+                            <article class="flex w-full items-center gap-3 rounded-2xl border-2 border-mocha-c bg-white-c p-3">
+                                <a href={`/amis/${person.id}`} class="flex min-w-0 flex-1 items-center gap-3">
                                     <UserAvatar user={person} pb={pb} size="h-16 w-16" />
-                                    <div>
-                                        <h4 class="font-bold text-bordeaux-c">{person.username}</h4>
+                                    <div class="min-w-0">
+                                        <h4 class="break-words font-bold text-bordeaux-c">{person.username}</h4>
                                         <small class="text-marron-c">Utilisateur</small>
                                     </div>
                                 </a>
 
-                                <form method="post">
+                                <form method="post" class="shrink-0">
                                     <input type="hidden" name="action" value="add" />
                                     <input type="hidden" name="friendId" value={person.id} />
-                                    <button class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Ajouter</button>
+                                    <button class="rounded-full bg-paprika-c px-4 py-2 text-sm text-white">Ajouter</button>
                                 </form>
                             </article>
                         ))
@@ -152,26 +152,26 @@ const currentFriends = friends
                             const sender = request.expand?.utilisateur1;
 
                             return (
-                                <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
-                                    <a href={`/amis/${sender?.id}`} class="flex flex-1 items-center gap-4">
+                                <article class="flex w-full items-center gap-3 rounded-2xl border-2 border-mocha-c bg-white-c p-3">
+                                    <a href={`/amis/${sender?.id}`} class="flex min-w-0 flex-1 items-center gap-3">
                                         <UserAvatar user={sender} pb={pb} size="h-16 w-16" />
-                                        <div>
-                                            <h4 class="font-bold text-bordeaux-c">{sender?.username || 'Utilisateur'}</h4>
+                                        <div class="min-w-0">
+                                            <h4 class="break-words font-bold text-bordeaux-c">{sender?.username || 'Utilisateur'}</h4>
                                             <small class="text-marron-c">Demande reçue</small>
                                         </div>
                                     </a>
 
-                                    <div class="flex flex-col gap-2">
+                                    <div class="flex shrink-0 flex-col gap-2">
                                         <form method="post">
                                             <input type="hidden" name="action" value="accept" />
                                             <input type="hidden" name="friendshipId" value={request.id} />
-                                            <button class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Accepter</button>
+                                            <button class="rounded-full bg-paprika-c px-4 py-2 text-sm text-white">Accepter</button>
                                         </form>
 
                                         <form method="post">
                                             <input type="hidden" name="action" value="refuse" />
                                             <input type="hidden" name="friendshipId" value={request.id} />
-                                            <button class="rounded-full border-2 border-mocha-c px-5 py-2 text-sm text-mocha-c">Refuser</button>
+                                            <button class="rounded-full border-2 border-mocha-c px-4 py-2 text-sm text-mocha-c">Refuser</button>
                                         </form>
                                     </div>
                                 </article>
@@ -186,16 +186,16 @@ const currentFriends = friends
                             const receiver = request.expand?.utilisateur2;
 
                             return (
-                                <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
-                                    <a href={`/amis/${receiver?.id}`} class="flex flex-1 items-center gap-4">
+                                <article class="flex w-full items-center gap-3 rounded-2xl border-2 border-mocha-c bg-white-c p-3">
+                                    <a href={`/amis/${receiver?.id}`} class="flex min-w-0 flex-1 items-center gap-3">
                                         <UserAvatar user={receiver} pb={pb} size="h-16 w-16" />
-                                        <div>
-                                            <h4 class="font-bold text-bordeaux-c">{receiver?.username || 'Utilisateur'}</h4>
+                                        <div class="min-w-0">
+                                            <h4 class="break-words font-bold text-bordeaux-c">{receiver?.username || 'Utilisateur'}</h4>
                                             <small class="text-marron-c">Demande envoyée</small>
                                         </div>
                                     </a>
 
-                                    <span class="rounded-full bg-white-bk px-5 py-2 text-sm text-marron-c">En attente</span>
+                                    <span class="shrink-0 whitespace-nowrap rounded-full bg-white-bk px-4 py-2 text-sm text-marron-c">En attente</span>
                                 </article>
                             );
                         })
@@ -205,16 +205,16 @@ const currentFriends = friends
                 ) : (
                     currentFriends.length > 0 ? (
                         currentFriends.map((friend) => (
-                            <article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4">
-                                <a href={`/amis/${friend.id}`} class="flex flex-1 items-center gap-4">
+                            <article class="flex w-full items-center gap-3 rounded-2xl border-2 border-mocha-c bg-white-c p-3">
+                                <a href={`/amis/${friend.id}`} class="flex min-w-0 flex-1 items-center gap-3">
                                     <UserAvatar user={friend} pb={pb} size="h-16 w-16" />
-                                    <div>
-                                        <h4 class="font-bold text-bordeaux-c">{friend.username}</h4>
+                                    <div class="min-w-0">
+                                        <h4 class="break-words font-bold text-bordeaux-c">{friend.username}</h4>
                                         <small class="text-marron-c">Ami(e)</small>
                                     </div>
                                 </a>
 
-                                <span class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Ami</span>
+                                <span class="shrink-0 whitespace-nowrap rounded-full bg-paprika-c px-4 py-2 text-sm text-white">Ami</span>
                             </article>
                         ))
                     ) : (
