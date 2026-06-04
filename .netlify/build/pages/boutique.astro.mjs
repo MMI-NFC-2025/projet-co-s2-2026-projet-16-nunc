@@ -1,6 +1,6 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_DAS6Hu3c.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Dj7x1RIw.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { T as Trophy } from '../chunks/Menu_BsNEgW-R.mjs';
 import { C as Courone } from '../chunks/courone_CrdAgGv2.mjs';

@@ -1,6 +1,6 @@
 import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate, d as addAttribute, b as createAstro } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_DAS6Hu3c.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Dj7x1RIw.mjs';
 import { C as Calendrier, a as Carte } from '../chunks/Menu_BsNEgW-R.mjs';
 import { A as Amis } from '../chunks/people_Dj-cI_yv.mjs';
 import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
