@@ -30,7 +30,7 @@ const $$id = createComponent(async ($$result, $$props, $$slots) => {
   const currentXp = points;
   const progress = currentXp / maxXp * 100;
   const dateInscription = new Date(user.created).toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": `Profil de ${user.username}`, "hideHeader": true }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<main> <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16"> <a href="/amis" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": `Profil de ${user.username}`, "hideHeader": true }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="pb-32"> <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16"> <a href="/amis" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
 Retour
 </a> <div class="mt-4 flex flex-col items-center"> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": user, "pb": pb, "size": "h-40 w-40" })} <h3 class="mt-5 max-w-full break-words px-4 text-center text-white-bk">${user.username}</h3> ${user.premium && renderTemplate`<div class="mt-3 flex items-center gap-2 rounded-full bg-white-c/40 px-5 py-2 font-bold text-white-bk"> ${renderComponent($$result2, "Image", $$Image, { "src": Courone, "alt": "", "class": "h-4 w-4" })}
 Premium
