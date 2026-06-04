@@ -21,7 +21,7 @@ const {
         {user ? (
             <UserAvatar user={user} pb={pb} size="h-19 w-19" />
         ) : (
-            <img class="h-19 w-19 shrink-0 rounded-full object-cover" src={avatar} alt="" />
+            <img class="h-19 w-19 shrink-0 rounded-full object-cover" src={avatar} alt={`Photo de profil de ${organisateur}`} loading="lazy" />
         )}
 
         <div class="flex-1">

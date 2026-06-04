@@ -96,10 +96,16 @@ nextBtn.addEventListener('click', async () => {
 async function showFinalResult() {
     if (!pointsAdded && scoreForm && scoreInput) {
         scoreInput.value = String(score);
-        await fetch(window.location.href, {
+        const response = await fetch(window.location.href, {
             method: 'POST',
             body: new FormData(scoreForm)
         });
+
+        if (!response.ok) {
+            message.textContent = "Impossible d'ajouter les points pour le moment.";
+            return;
+        }
+
         pointsAdded = true;
     }
 

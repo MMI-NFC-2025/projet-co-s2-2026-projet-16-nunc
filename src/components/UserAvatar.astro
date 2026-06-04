@@ -9,7 +9,7 @@ const {
     user,
     pb,
     size = 'h-16 w-16',
-    alt = ''
+    alt = user?.username ? `Photo de profil de ${user.username}` : 'Photo de profil'
 } = Astro.props;
 
 const auth = pb ? { pb } : await loadAstroAuth(Astro);
@@ -26,6 +26,7 @@ const cadreUrl = getFileUrl(cadre, cadre?.image, db);
     <img
         src={avatarUrl}
         alt={alt}
+        loading="lazy"
         class="h-full w-full rounded-full object-cover"
     />
 
@@ -33,6 +34,7 @@ const cadreUrl = getFileUrl(cadre, cadre?.image, db);
         <img
             src={cadreUrl}
             alt=""
+            loading="lazy"
             class="pointer-events-none absolute inset-0 h-full w-full object-contain"
         />
     )}

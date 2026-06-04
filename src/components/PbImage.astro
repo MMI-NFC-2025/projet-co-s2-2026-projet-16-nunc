@@ -12,7 +12,8 @@ const imageURL = await getImageUrl(record, imageField, pb || auth.pb);
     imageURL &&
     <Image
         src={imageURL}
-        alt={record.nom || 'Image'}
+        alt={record.nom ? `Image de ${record.nom}` : 'Image'}
+        loading="lazy"
         inferSize={false}
         width={400}
         height={300}

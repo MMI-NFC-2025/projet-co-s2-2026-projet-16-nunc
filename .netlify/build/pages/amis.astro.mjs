@@ -1,10 +1,10 @@
 import { c as createComponent, r as renderComponent, e as renderScript, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C_63O6nA.mjs';
+import { $ as $$Layout } from '../chunks/Layout_DAS6Hu3c.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
-import { $ as $$UserAvatar } from '../chunks/UserAvatar_CWVrNdg0.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
-import { l as loadAstroAuth, d as acceptFriendRequest, r as refuseFriendRequest, s as sendFriendRequest, e as getUserFriends, f as getFriendRequests, h as getPendingFriends, i as searchUsers, j as getFriendship } from '../chunks/backend_DUp2moCL.mjs';
+import { l as loadAstroAuth, d as acceptFriendRequest, r as refuseFriendRequest, s as sendFriendRequest, e as getUserFriends, f as getFriendRequests, h as getPendingFriends, i as searchUsers, j as getFriendship } from '../chunks/backend_DoxzlLrY.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro();
@@ -40,7 +40,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
     getFriendRequests(user.id, pb).catch(() => []),
     getPendingFriends(user.id, pb).catch(() => [])
   ]);
-  const searchResults = search.length >= 2 ? await searchUsers(search, user.id, pb).then(async (users) => {
+  const searchResults = search.length >= 1 ? await searchUsers(search, user.id, pb).then(async (users) => {
     const usersWithFriendship = await Promise.all(
       users.map(async (person) => ({
         person,
@@ -50,7 +50,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
     return usersWithFriendship.filter(({ friendship }) => !friendship).map(({ person }) => person);
   }).catch(() => []) : [];
   function tabClass(tab) {
-    return activeTab === tab && search.length < 2 ? "friend-tab rounded-full bg-paprika-c px-4 py-3 text-white" : "friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c";
+    return activeTab === tab && search.length < 1 ? "friend-tab rounded-full bg-paprika-c px-4 py-3 text-white" : "friend-tab rounded-full bg-white-c px-4 py-3 text-marron-c";
   }
   const currentFriends = friends.map((friendship) => friendship.utilisateur1 === user.id ? friendship.expand?.utilisateur2 : friendship.expand?.utilisateur1).filter(Boolean);
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Listes de tes amis" }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<main class="px-8 py-10 pb-32"> <a href="/" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white"> ${renderComponent($$result2, "Image", $$Image, { "src": Fleche, "alt": "", "class": "h-4 w-4" })}
@@ -61,7 +61,7 @@ Mes amis
 Demandes
 </a> <a href="/amis?tab=pending" id="tab-pending"${addAttribute(tabClass("pending"), "class")}>
 En attente
-</a> </div> <div id="friends-list" class="mt-8 flex flex-col gap-4"> ${search.length >= 2 ? searchResults.length > 0 ? searchResults.map((person) => renderTemplate`<article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4"> <a${addAttribute(`/amis/${person.id}`, "href")} class="flex flex-1 items-center gap-4"> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": person, "pb": pb, "size": "h-16 w-16" })} <div> <h4 class="font-bold text-bordeaux-c">${person.username}</h4> <small class="text-marron-c">Utilisateur</small> </div> </a> <form method="post"> <input type="hidden" name="action" value="add"> <input type="hidden" name="friendId"${addAttribute(person.id, "value")}> <button class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Ajouter</button> </form> </article>`) : renderTemplate`<p class="rounded-2xl bg-white-c p-5 text-marron-c">Aucun utilisateur trouvé.</p>` : activeTab === "requests" ? requests.length > 0 ? requests.map((request) => {
+</a> </div> <div id="friends-list" class="mt-8 flex flex-col gap-4"> ${search.length >= 1 ? searchResults.length > 0 ? searchResults.map((person) => renderTemplate`<article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4"> <a${addAttribute(`/amis/${person.id}`, "href")} class="flex flex-1 items-center gap-4"> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": person, "pb": pb, "size": "h-16 w-16" })} <div> <h4 class="font-bold text-bordeaux-c">${person.username}</h4> <small class="text-marron-c">Utilisateur</small> </div> </a> <form method="post"> <input type="hidden" name="action" value="add"> <input type="hidden" name="friendId"${addAttribute(person.id, "value")}> <button class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Ajouter</button> </form> </article>`) : renderTemplate`<p class="rounded-2xl bg-white-c p-5 text-marron-c">Aucun utilisateur trouvé.</p>` : activeTab === "requests" ? requests.length > 0 ? requests.map((request) => {
     const sender = request.expand?.utilisateur1;
     return renderTemplate`<article class="flex w-full items-center gap-4 rounded-2xl border-2 border-mocha-c bg-white-c p-4"> <a${addAttribute(`/amis/${sender?.id}`, "href")} class="flex flex-1 items-center gap-4"> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": sender, "pb": pb, "size": "h-16 w-16" })} <div> <h4 class="font-bold text-bordeaux-c">${sender?.username || "Utilisateur"}</h4> <small class="text-marron-c">Demande reçue</small> </div> </a> <div class="flex flex-col gap-2"> <form method="post"> <input type="hidden" name="action" value="accept"> <input type="hidden" name="friendshipId"${addAttribute(request.id, "value")}> <button class="rounded-full bg-paprika-c px-5 py-2 text-sm text-white">Accepter</button> </form> <form method="post"> <input type="hidden" name="action" value="refuse"> <input type="hidden" name="friendshipId"${addAttribute(request.id, "value")}> <button class="rounded-full border-2 border-mocha-c px-5 py-2 text-sm text-mocha-c">Refuser</button> </form> </div> </article>`;
   }) : renderTemplate`<p class="rounded-2xl bg-white-c p-5 text-marron-c">Aucune demande reçue.</p>` : activeTab === "pending" ? pending.length > 0 ? pending.map((request) => {

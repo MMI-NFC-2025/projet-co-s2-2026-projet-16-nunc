@@ -1,13 +1,13 @@
 import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate, b as createAstro, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C_63O6nA.mjs';
+import { $ as $$Layout } from '../chunks/Layout_DAS6Hu3c.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { P as Photo } from '../chunks/photo-verre_pUW6spG4.mjs';
 import { F as Flechegauche, a as Flechedroite } from '../chunks/flecheorange-droite_ZVQDZnmQ.mjs';
 import { O as Orange } from '../chunks/orange_Cz3fDFH3.mjs';
 import 'clsx';
-import { l as loadAstroAuth, A as getAbonnements, B as getAvantages, C as getFaq } from '../chunks/backend_DUp2moCL.mjs';
+import { l as loadAstroAuth, B as getAbonnements, C as getAvantages, D as getFaq } from '../chunks/backend_DoxzlLrY.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$2 = createAstro();
@@ -41,7 +41,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
 Retour
 </a> <h2 class="mt-15 text-paprika-c">
 Parce que les tournées <span class="text-orange-c">gratuites</span>, ça ne se refuse pas.
-</h2> <section class="relative -mx-8 mt-2"> <div class="relative h-120 overflow-hidden"> ${renderComponent($$result2, "Image", $$Image, { "src": Photo, "alt": "", "class": "absolute inset-0 h-full w-full object-cover opacity-70" })} <div class="absolute inset-0 bg-linear-to-b from-white-bk via-transparent to-white-bk"></div> </div> </section> <section class="mt-10"> <div class="relative rounded-2xl border-2 border-yellow-c bg-white-c p-6"> <div class="absolute -top-16 right-4 rounded-full bg-yellow-c px-5 py-2 font-bold text-base text-white">
+</h2> <section class="relative -mx-8 mt-2"> <div class="relative h-120 overflow-hidden"> ${renderComponent($$result2, "Image", $$Image, { "src": Photo, "alt": "", "loading": "lazy", "class": "absolute inset-0 h-full w-full object-cover opacity-70" })} <div class="absolute inset-0 bg-linear-to-b from-white-bk via-transparent to-white-bk"></div> </div> </section> <section class="mt-10"> <div class="relative rounded-2xl border-2 border-yellow-c bg-white-c p-6"> <div class="absolute -top-16 right-4 rounded-full bg-yellow-c px-5 py-2 font-bold text-base text-white">
 Populaire
 </div> <h2 class="text-center text-paprika-c">Choisis ton abonnement</h2> <div class="mt-10 flex justify-center gap-3"> ${abonnements.map((abonnement) => renderTemplate`<button${addAttribute(
     abonnement.type === "Mensuel" ? "w-45 h-45 rounded-xl bg-linear-to-br from-bordeaux-c via-paprika-c to-yellow-c p-7 flex flex-col items-center justify-center" : "w-45 h-45 rounded-xl border border-yellow-c bg-white-bk p-7 flex flex-col items-center justify-center",

@@ -45,7 +45,7 @@ const dateInscription = new Date(user.created).toLocaleDateString('fr-FR', { mon
 
 <Layout title={`Profil de ${user.username}`} hideHeader={true}>
     <section class="bg-linear-to-r from-paprika-c to-yellow-c px-8 pt-7 pb-16">
-        <a href="/" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk">
+        <a href="/amis" class="inline-flex items-center gap-3 rounded-full bg-white-bk/50 px-6 py-3 text-white-bk">
             <Image src={Fleche} alt="" class="h-4 w-4" />
             Retour
         </a>
@@ -53,7 +53,7 @@ const dateInscription = new Date(user.created).toLocaleDateString('fr-FR', { mon
         <div class="mt-4 flex flex-col items-center">
             <UserAvatar user={user} pb={pb} size="h-40 w-40" />
 
-            <h3 class="mt-5 text-center text-white-bk">{user.username}</h3>
+            <h3 class="mt-5 max-w-full break-words px-4 text-center text-white-bk">{user.username}</h3>
 
             {user.premium && (
                 <div class="mt-3 flex items-center gap-2 rounded-full bg-white-c/40 px-5 py-2 font-bold text-white-bk">
