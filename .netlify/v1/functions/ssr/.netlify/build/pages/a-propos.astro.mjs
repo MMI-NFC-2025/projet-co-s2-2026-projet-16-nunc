@@ -1,6 +1,6 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { L as Logo } from '../chunks/logo_DuaI_3pM.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
@@ -76,18 +76,18 @@ Nous avons conçu les maquettes de l'application, en
                             carte interactive et des fonctionnalités de
                             sécurité. Le projet est présenté lors de la
                             soutenance.
-</p> </div> </div> </section> </section> <section class="mt-15"> <h2 class="text-center text-paprika-c">Nos Valeurs</h2> <div class="mt-10 overflow-hidden rounded-3xl bg-white-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Valeurs, "alt": "Valeurs de N\xDCNC", "class": "h-auto w-full" })} </div> <small class="mt-15 block text-center"> <strong>Chez NÜNC</strong>, nous croyons que les meilleures
+</p> </div> </div> </section> </section> <section class="mt-15"> <h2 class="text-center text-paprika-c">Nos Valeurs</h2> <div class="mt-10 overflow-hidden rounded-3xl bg-white-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Valeurs, "alt": "Valeurs de N\xDCNC", "loading": "lazy", "class": "h-auto w-full" })} </div> <small class="mt-15 block text-center"> <strong>Chez NÜNC</strong>, nous croyons que les meilleures
                 soirées se vivent ensemble. Notre application repose sur des
                 valeurs de convivialité, sécurité et innovation, afin d'offrir
                 une expérience simple et agréable. Nous voulons faciliter
                 l'organisation de sorties, encourager la découverte et permettre
                 à chacun de profiter du moment en toute confiance.
-</small> </section> <section class="mt-15"> <h2 class="text-center text-paprika-c">Notre Équipe</h2> <div class="mt-12 flex flex-col gap-16"> <article class="rounded-3xl border border-mocha-c bg-white-c px-6 py-10 text-center"> <div class="flex justify-center"> ${renderComponent($$result2, "Image", $$Image, { "src": Lina, "alt": "Lina Ben Mabrouk", "class": "h-64 w-64 rounded-full object-cover" })} </div> <h3 class="mt-10 text-bordeaux-c">Lina Ben Mabrouk</h3> <small class="mt-2 block">
+</small> </section> <section class="mt-15"> <h2 class="text-center text-paprika-c">Notre Équipe</h2> <div class="mt-12 flex flex-col gap-16"> <article class="rounded-3xl border border-mocha-c bg-white-c px-6 py-10 text-center"> <div class="flex justify-center"> ${renderComponent($$result2, "Image", $$Image, { "src": Lina, "alt": "Portrait de Lina Ben Mabrouk", "loading": "lazy", "class": "h-64 w-64 rounded-full object-cover" })} </div> <h3 class="mt-10 text-bordeaux-c">Lina Ben Mabrouk</h3> <small class="mt-2 block">
 Lina s'est principalement occupée de la communication du
                         projet et du développement de l'application, en veillant
                         à rendre l'expérience claire, efficace et agréable pour
                         les utilisateurs.
-</small> </article> <article class="rounded-3xl border border-mocha-c bg-white-c px-6 py-10 text-center"> <div class="flex justify-center"> ${renderComponent($$result2, "Image", $$Image, { "src": Estelle, "alt": "Estelle Coulon", "class": "h-64 w-64 rounded-full object-cover" })} </div> <h3 class="mt-10 text-bordeaux-c">Estelle Coulon</h3> <small class="mt-2 block">
+</small> </article> <article class="rounded-3xl border border-mocha-c bg-white-c px-6 py-10 text-center"> <div class="flex justify-center"> ${renderComponent($$result2, "Image", $$Image, { "src": Estelle, "alt": "Portrait d'Estelle Coulon", "loading": "lazy", "class": "h-64 w-64 rounded-full object-cover" })} </div> <h3 class="mt-10 text-bordeaux-c">Estelle Coulon</h3> <small class="mt-2 block">
 Estelle s'est également occupée de la communication du
                         projet, avec un rôle central dans le design et la
                         direction créative. Elle a imaginé l'identité visuelle

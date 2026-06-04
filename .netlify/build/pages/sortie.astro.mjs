@@ -1,10 +1,11 @@
-import { c as createComponent, m as maybeRenderHead, d as addAttribute, r as renderComponent, a as renderTemplate, b as createAstro } from '../chunks/astro/server_DwAQ0Pkb.mjs';
+import { c as createComponent, m as maybeRenderHead, r as renderComponent, a as renderTemplate, d as addAttribute, b as createAstro } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
 import { C as Calendrier, a as Carte } from '../chunks/Menu_BsNEgW-R.mjs';
 import { A as Amis } from '../chunks/people_Dj-cI_yv.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
 import 'clsx';
-import { l as loadAstroAuth, H as addParticipantSortie, O as acceptInvitation, P as refuseInvitation, Q as getUserSorties, R as getUserInvitations, d as getFileUrl } from '../chunks/backend_DljU_PTa.mjs';
+import { l as loadAstroAuth, J as addParticipantSortie, Q as acceptInvitation, R as refuseInvitation, S as getUserSorties, T as getUserInvitations } from '../chunks/backend_DoxzlLrY.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$2 = createAstro();
@@ -13,13 +14,15 @@ const $$SortieCard = createComponent(($$result, $$props, $$slots) => {
   Astro2.self = $$SortieCard;
   const {
     avatar = "",
+    user = null,
+    pb = null,
     organisateur = "Utilisateur",
     titre = "",
     date = "",
     bar = "",
     participants = ""
   } = Astro2.props;
-  return renderTemplate`${maybeRenderHead()}<article class="rounded-3xl border border-mocha-c bg-white-c pr-4 pl-2 py-5"> <div class="flex gap-5"> <img class="h-19 w-19 shrink-0 rounded-full object-cover"${addAttribute(avatar, "src")} alt=""> <div class="flex-1"> <h4 class="text-bordeaux-c font-titan">${titre}</h4> <small class="mt-2 font-bold"> <span class="text-lg text-paprika-c">${organisateur}</span>
+  return renderTemplate`${maybeRenderHead()}<article class="rounded-3xl border border-mocha-c bg-white-c pr-4 pl-2 py-5"> <div class="flex gap-5"> ${user ? renderTemplate`${renderComponent($$result, "UserAvatar", $$UserAvatar, { "user": user, "pb": pb, "size": "h-19 w-19" })}` : renderTemplate`<img class="h-19 w-19 shrink-0 rounded-full object-cover"${addAttribute(avatar, "src")}${addAttribute(`Photo de profil de ${organisateur}`, "alt")} loading="lazy">`} <div class="flex-1"> <h4 class="text-bordeaux-c font-titan">${titre}</h4> <small class="mt-2 font-bold"> <span class="text-lg text-paprika-c">${organisateur}</span>
 a créé(e) cet évènement
 </small> <div class="mt-2 flex flex-col"> <small class="flex items-center gap-2"> ${renderComponent($$result, "Calendrier", Calendrier, { "class": "h-4 w-4" })} <span>${date}</span> </small> <small class="flex items-center gap-2"> ${renderComponent($$result, "Carte", Carte, { "class": "h-4 w-4" })} <span>${bar}</span> </small> <small class="flex items-center gap-2"> ${renderComponent($$result, "People", Amis, { "class": "h-4 w-4" })} <span>${participants}</span> </small> </div> </div> </div> </article>`;
 }, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/components/SortieCard.astro", void 0);
@@ -94,7 +97,7 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
     return Array.isArray(organisateur) ? organisateur[0] : organisateur;
   }
   function tabClass(tab) {
-    return activeTab === tab ? "tab-btn flex-1 rounded-2xl bg-paprika-c py-2 px-1 text-base text-white-bk text-center" : "tab-btn flex-1 rounded-2xl py-2 px-1 text-base text-center";
+    return activeTab === tab ? "tab-btn flex h-13 flex-1 items-center justify-center rounded-2xl bg-paprika-c px-3 text-center text-base leading-tight text-white-bk" : "tab-btn flex h-13 flex-1 items-center justify-center rounded-2xl px-3 text-center text-base leading-tight";
   }
   const sortiesTriees = participations.filter((participation) => participation.expand?.sortie).sort((a, b) => getDateSortie(a.expand.sortie) - getDateSortie(b.expand.sortie));
   const sortiesActives = sortiesTriees.filter((participation) => getDateSortie(participation.expand.sortie) >= maintenant);
@@ -109,7 +112,7 @@ Historique
 </a> </div> <section class="mt-8"> ${activeTab === "invitations" ? renderTemplate`<div id="invitations-container" class="flex flex-col gap-8"> ${invitations.length > 0 ? invitations.map((invitation) => renderTemplate`${renderComponent($$result2, "InvitationCard", $$InvitationCard, { "id": invitation.id, "sortieId": invitation.sortie, "title": invitation.expand?.sortie?.titre || "Sortie", "expediteur": invitation.expand?.expediteur?.username || invitation.expand?.expediteur?.email || "Utilisateur" })}`) : renderTemplate`<p class="rounded-3xl bg-white-c p-5 text-marron-c">Aucune invitation en attente.</p>`} </div>` : renderTemplate`<div id="sorties-container" class="flex flex-col gap-8"> ${sortiesAffichees.length > 0 ? sortiesAffichees.map((participation) => {
     const sortie = participation.expand.sortie;
     const organisateur = getOrganisateur(sortie);
-    return renderTemplate`<a${addAttribute(`/sortie/${sortie.id}`, "href")}> ${renderComponent($$result2, "SortieCard", $$SortieCard, { "avatar": getFileUrl(organisateur, organisateur?.avatar, pb), "organisateur": organisateur?.username || "Utilisateur", "titre": sortie.titre || "", "date": formatDateSortie(sortie), "bar": getBarLabel(sortie), "participants": `${sortie.participants || 0} participants` })} </a>`;
+    return renderTemplate`<a${addAttribute(`/sortie/${sortie.id}`, "href")}> ${renderComponent($$result2, "SortieCard", $$SortieCard, { "user": organisateur, "pb": pb, "organisateur": organisateur?.username || "Utilisateur", "titre": sortie.titre || "", "date": formatDateSortie(sortie), "bar": getBarLabel(sortie), "participants": `${sortie.participants || 0} participants` })} </a>`;
   }) : renderTemplate`<p class="rounded-3xl bg-white-c p-5 text-marron-c"> ${activeTab === "history" ? "Aucune sortie pass\xE9e." : "Aucune sortie pr\xE9vue."} </p>`} </div>`} </section> </main> ` })}`;
 }, "/Users/Lina/Documents/GitHub/projet-co-s2-2026-projet-16-nunc/src/pages/sortie/index.astro", void 0);
 

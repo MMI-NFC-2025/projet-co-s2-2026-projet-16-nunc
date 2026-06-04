@@ -80,7 +80,7 @@ import { Image } from 'astro:assets';
         <section class="mt-15">
             <h2 class="text-center text-paprika-c">Nos Valeurs</h2>
             <div class="mt-10 overflow-hidden rounded-3xl bg-white-c">
-                <Image src={Valeurs} alt="Valeurs de NÜNC" class="h-auto w-full" />
+                <Image src={Valeurs} alt="Valeurs de NÜNC" loading="lazy" class="h-auto w-full" />
             </div>
             
             <small class="mt-15 block text-center">
@@ -98,7 +98,7 @@ import { Image } from 'astro:assets';
             <div class="mt-12 flex flex-col gap-16">
                 <article class="rounded-3xl border border-mocha-c bg-white-c px-6 py-10 text-center">
                     <div class="flex justify-center">
-                        <Image src={Lina} alt="Lina Ben Mabrouk" class="h-64 w-64 rounded-full object-cover" />
+                        <Image src={Lina} alt="Portrait de Lina Ben Mabrouk" loading="lazy" class="h-64 w-64 rounded-full object-cover" />
                     </div>
                     
                     <h3 class="mt-10 text-bordeaux-c">Lina Ben Mabrouk</h3>
@@ -112,7 +112,7 @@ import { Image } from 'astro:assets';
 
                 <article class="rounded-3xl border border-mocha-c bg-white-c px-6 py-10 text-center">
                     <div class="flex justify-center">
-                        <Image src={Estelle} alt="Estelle Coulon" class="h-64 w-64 rounded-full object-cover" />
+                        <Image src={Estelle} alt="Portrait d'Estelle Coulon" loading="lazy" class="h-64 w-64 rounded-full object-cover" />
                     </div>
 
                     <h3 class="mt-10 text-bordeaux-c">Estelle Coulon</h3>

@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout-landingpage.astro';
 import Header from '../components/Header.astro';
 import Eye from '../assets/eye-open.svg';
 import EyeClose from '../assets/eye-close.svg';
+import inscriptionScript from '../js/inscription.js?url';
 
 import { Image } from 'astro:assets';
 import {
@@ -26,7 +27,9 @@ if (Astro.request.method === 'POST') {
             passwordConfirm: password,
             username: formData.get('username')?.toString() || '',
             nom: formData.get('nom')?.toString() || '',
-            prenom: formData.get('prenom')?.toString() || ''
+            prenom: formData.get('prenom')?.toString() || '',
+            points: 0,
+            niveau: 1
         });
 
         await pb.collection('users').authWithPassword(email, password);
@@ -111,6 +114,7 @@ if (Astro.request.method === 'POST') {
                         <button
                             type="button"
                             id="toggle-password"
+                            aria-label="Afficher ou masquer le mot de passe"
                             class="absolute right-4 top-1/2 -translate-y-1/2"
                             data-open-src={Eye.src}
                             data-closed-src={EyeClose.src}
@@ -144,16 +148,4 @@ if (Astro.request.method === 'POST') {
     </main>
 </Layout>
 
-<script>
-    const passwordInput = document.getElementById('password');
-    const togglePassword = document.getElementById('toggle-password');
-    const eyeIcon = document.getElementById('eye-icon');
-
-    togglePassword?.addEventListener('click', () => {
-        const isPassword = passwordInput.type === 'password';
-        passwordInput.type = isPassword ? 'text' : 'password';
-        eyeIcon.src = isPassword
-            ? togglePassword.dataset.closedSrc
-            : togglePassword.dataset.openSrc;
-    });
-</script>
+<script type="module" src={inscriptionScript}></script>

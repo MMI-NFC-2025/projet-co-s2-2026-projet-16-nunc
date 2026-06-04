@@ -1,33 +1,24 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_ir9QOgyR.mjs';
 import { $ as $$Image } from '../../chunks/_astro_assets_CVdaBGvQ.mjs';
+import { $ as $$UserAvatar } from '../../chunks/UserAvatar_DFp_IEK5.mjs';
 import { F as Fleche } from '../../chunks/fleche_D52W9Oh8.mjs';
-import { l as loadAstroAuth, J as getSortieById, K as updateSortieById, L as deleteSortieCompletely, M as createInvitation, u as getBars, N as getSortieParticipants, f as getUserFriends, d as getFileUrl } from '../../chunks/backend_DljU_PTa.mjs';
+import { l as loadAstroAuth, L as getSortieById, M as updateSortieById, N as deleteSortieCompletely, O as createInvitation, u as getBars, P as getSortieParticipants, e as getUserFriends } from '../../chunks/backend_DoxzlLrY.mjs';
 export { renderers } from '../../renderers.mjs';
-
-function formatDate(
-    date
-) {
-
-    return new Date(
-        date
-    ).toLocaleDateString(
-        'fr-FR',
-        {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }
-    );
-
-}
 
 const $$Astro = createAstro();
 const prerender = false;
 const $$id = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$id;
+  function formatDate(date) {
+    return new Date(date).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  }
   const { id } = Astro2.params;
   const { pb, user: currentUser } = await loadAstroAuth(Astro2);
   if (!currentUser) {
@@ -84,8 +75,8 @@ const $$id = createComponent(async ($$result, $$props, $$slots) => {
 Retour
 </a> <section class="mt-12 rounded-3xl bg-white-c p-6"> <h3 class="text-paprika-c">Informations sur la sortie</h3> ${sortie.description && renderTemplate`<p class="mt-4">${sortie.description}</p>`} </section> <section class="mt-6 rounded-3xl bg-white-c p-6"> <div class="flex gap-4"> <div class="flex-1"> <small class="font-bold">Date</small> <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2"> ${dateFormatee} </div> </div> <div class="flex-1"> <small class="font-bold">Heure</small> <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2"> ${sortie.heure.replace(":", "h")} </div> </div> </div> <div class="mt-4"> <small class="font-bold">Participants</small> <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2"> ${sortie.participants} </div> </div> <div class="mt-4"> <small class="font-bold">Type</small> <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2"> ${typeFormate} </div> </div> <div class="mt-4"> <small class="font-bold">Bar(s)</small> <div class="mt-2 rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2"> ${nomBars} </div> </div> </section> <section class="mt-6 rounded-3xl bg-white-c p-6"> <h3 class="text-paprika-c">Participants</h3> <div id="participants-list" data-rendered="server" class="mt-4 flex flex-col gap-3"> ${participants.map((participant) => {
     const participantUser = participant.expand?.utilisateur;
-    return renderTemplate`<div class="rounded-3xl border border-yellow-c bg-white-bk p-4"> <div class="flex items-center gap-4"> <img class="participant-avatar h-16 w-16 rounded-full object-cover"${addAttribute(getFileUrl(participantUser, participantUser?.avatar, pb), "src")} alt=""> <div> <p class="participant-name font-bold text-xl">${participantUser?.username || "Utilisateur"}</p> <small class="participant-role text-paprika-c"> ${participant.role === "Organisateur" ? "Organisateur" : "Participant"} </small> </div> </div> </div>`;
-  })} <div id="participant-template" class="hidden rounded-3xl border border-yellow-c bg-white-bk p-4"> <div class="flex items-center gap-4"> <img class="participant-avatar h-16 w-16 rounded-full object-cover" alt=""> <div> <p class="participant-name font-bold text-xl"></p> <small class="participant-role text-paprika-c"></small> </div> </div> </div> </div> </section> <section id="organisateur-panel"${addAttribute([
+    return renderTemplate`<div class="rounded-3xl border border-yellow-c bg-white-bk p-4"> <div class="flex items-center gap-4"> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": participantUser, "pb": pb, "size": "h-16 w-16" })} <div> <p class="participant-name font-bold text-xl">${participantUser?.username || "Utilisateur"}</p> <small class="participant-role text-paprika-c"> ${participant.role === "Organisateur" ? "Organisateur" : "Participant"} </small> </div> </div> </div>`;
+  })} <div id="participant-template" class="hidden rounded-3xl border border-yellow-c bg-white-bk p-4"> <div class="flex items-center gap-4"> <img class="participant-avatar h-16 w-16 rounded-full object-cover" alt="Photo de profil du participant" loading="lazy"> <div> <p class="participant-name font-bold text-xl"></p> <small class="participant-role text-paprika-c"></small> </div> </div> </div> </div> </section> <section id="organisateur-panel"${addAttribute([
     "mt-10 rounded-3xl bg-white-c p-6",
     { hidden: !isOrganisateur }
   ], "class:list")}> <h3 class="text-paprika-c">Modifier la sortie</h3> <form method="post" class="mt-4 flex flex-col gap-4"> <input type="hidden" name="action" value="update"> <input name="date" type="date"${addAttribute(sortie.date.substring(0, 10), "value")} class="rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"> <input name="heure" type="time"${addAttribute(sortie.heure, "value")} class="rounded-lg border-2 border-yellow-c bg-white-bk px-3 py-2 outline-none"> ${isBarCrawl ? renderTemplate`<div id="bar-crawl-container" class="flex flex-col gap-3"> ${allBars.map((bar) => renderTemplate`<label class="

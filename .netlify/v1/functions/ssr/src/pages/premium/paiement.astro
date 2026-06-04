@@ -3,109 +3,87 @@ import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 
 import Fleche from '../../assets/fleche.svg';
+import {
+    activatePremium,
+    getUserById,
+    loadAstroAuth
+} from '../../../backend/backend.mjs';
+
+const { pb, user: authUser } = await loadAstroAuth(Astro);
+
+if (!authUser) {
+    return Astro.redirect('/connexion');
+}
+
+const user = await getUserById(authUser.id, pb);
+
+if (Astro.request.method === 'POST') {
+    await activatePremium(user.id, pb);
+    return Astro.redirect('/profil');
+}
 ---
 
-<Layout title="Paiement Premium">
+<Layout title="Paiement" description="Ceci est une page de démonstraion !">
+<main class="px-8 py-10 pb-32">
 
-    <main class="px-8 py-10">
+    <a href="/premium" class="inline-flex items-center gap-3 rounded-full bg-orange-c/70 px-6 py-3 text-white">
+        <Image src={Fleche} alt="" class="h-4 w-4" />
+        Retour
+    </a>
 
-        <a
-            href="/premium"
-            class="
-                inline-flex
-                items-center
-                gap-3
-                rounded-full
-                bg-orange-c/70
-                px-6
-                py-3
-                text-white
-            "
-        >
-            <Image src={Fleche} alt="" class="h-4 w-4" />
-            Retour
-        </a>
+    <h2 class="mt-12 text-paprika-c">Paiement</h2>
 
-        <h2 class="mt-12 text-paprika-c">
-            Paiement Premium
-        </h2>
+    <div class="mt-8 rounded-3xl border-2 border-yellow-c bg-white-c p-6">
+        <h3>Validation de l'abonnement</h3>
 
-        <div
-            class="
-                mt-8
-                rounded-3xl
-                border-2
-                border-yellow-c
-                bg-white-c
-                p-6
-            "
-        >
-
-            <h3>
-                Démonstration
-            </h3>
-
-            <p class="mt-4">
-                Cette page est une maquette.
-                Aucun paiement réel n'est effectué.
+        {user.premium ? (
+            <div class="mt-4 rounded-2xl bg-white-bk p-4 text-marron-c">
+                Ton compte est déjà Premium.
+            </div>
+        ) : (
+            <p class="mt-4 leading-relaxed">
+                L'étape bancaire est simulée.
             </p>
+        )}
 
+        <form method="post" class="mt-8">
             <input
                 type="text"
+                name="cardNumber"
+                inputmode="numeric"
+                autocomplete="off"
                 placeholder="Numéro de carte"
-                class="
-                    mt-8
-                    w-full
-                    rounded-2xl
-                    border-2
-                    border-mocha-c
-                    p-4
-                "
+                class="w-full rounded-2xl border-2 border-mocha-c bg-white-bk p-4 text-marron-c outline-none focus:border-paprika-c"
             >
 
             <div class="mt-4 flex gap-4">
-
                 <input
                     type="text"
+                    name="expiry"
+                    inputmode="numeric"
+                    autocomplete="off"
                     placeholder="MM/AA"
-                    class="
-                        w-1/2
-                        rounded-2xl
-                        border-2
-                        border-mocha-c
-                        p-4
-                    "
+                    class="w-1/2 rounded-2xl border-2 border-mocha-c bg-white-bk p-4 text-marron-c outline-none focus:border-paprika-c"
                 >
-
                 <input
                     type="text"
+                    name="cvc"
+                    inputmode="numeric"
+                    autocomplete="off"
                     placeholder="CVC"
-                    class="
-                        w-1/2
-                        rounded-2xl
-                        border-2
-                        border-mocha-c
-                        p-4
-                    "
+                    class="w-1/2 rounded-2xl border-2 border-mocha-c bg-white-bk p-4 text-marron-c outline-none focus:border-paprika-c"
                 >
-
             </div>
 
-            <button
-                class="
-                    mt-8
-                    w-full
-                    rounded-full
-                    bg-paprika-c
-                    py-4
-                    text-white
-                "
-            >
-                Payer
+            <small class="mt-3 block text-marron-c">
+                Ces informations ne sont ni vérifiées ni enregistrées : elles servent seulement à simuler l'étape de paiement.
+            </small>
+
+            <button class="mt-8 w-full rounded-full bg-paprika-c py-4 font-bold text-white">
+                {user.premium ? 'Retourner au profil' : 'Activer Premium'}
             </button>
+        </form>
+    </div>
 
-        </div>
-
-    </main>
-
+</main>
 </Layout>

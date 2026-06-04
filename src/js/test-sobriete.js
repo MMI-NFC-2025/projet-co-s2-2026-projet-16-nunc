@@ -3,6 +3,7 @@ let currentQuestion = 0;
 let questions = window.sobrieteQuestions || [];
 let hasAnswered = false;
 let pointsAdded = false;
+let isSavingPoints = false;
 
 const step = document.getElementById('game-step');
 const title = document.getElementById('game-title');
@@ -69,8 +70,9 @@ function checkAnswer(selectedAnswer, current) {
     });
 
     if (selectedAnswer === current.bonne_reponse) {
-        score += current.points;
-        message.textContent = `Bonne réponse ! +${current.points} points`;
+        const previousScore = score;
+        score = Math.min(score + current.points, 100);
+        message.textContent = `Bonne réponse ! +${score - previousScore} points`;
     } else {
         message.textContent = 'Mauvaise réponse';
     }
@@ -94,13 +96,29 @@ nextBtn.addEventListener('click', async () => {
 });
 
 async function showFinalResult() {
-    if (!pointsAdded && scoreForm && scoreInput) {
-        scoreInput.value = String(score);
-        await fetch(window.location.href, {
+    if (isSavingPoints) return;
+
+    if (!pointsAdded && !isSavingPoints && scoreForm && scoreInput) {
+        isSavingPoints = true;
+        pointsAdded = true;
+        nextBtn.disabled = true;
+        scoreInput.value = String(Math.min(score, 100));
+
+        const response = await fetch(window.location.href, {
             method: 'POST',
             body: new FormData(scoreForm)
         });
-        pointsAdded = true;
+
+        if (!response.ok) {
+            pointsAdded = false;
+            isSavingPoints = false;
+            nextBtn.disabled = false;
+            message.textContent = "Impossible d'ajouter les points pour le moment.";
+            return;
+        }
+
+        isSavingPoints = false;
+        nextBtn.disabled = false;
     }
 
     step.textContent = 'Terminé';

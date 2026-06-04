@@ -60,7 +60,7 @@ const [user, cadres, inventaire, cadresPremium, cadresExclusifs] = await Promise
 ]);
 
 const points = user.points || 0;
-const niveau = Math.floor(points / 250) + 1;
+const niveau = user.niveau || Math.floor(points / 250) + 1;
 const maxXp = niveau * 250;
 const progress = maxXp > 0 ? (points / maxXp) * 100 : 0;
 
@@ -135,7 +135,7 @@ const cadresPremiumPossedes = new Set(inventaire.map((item) => item.cadre_premiu
 
             return (
                 <article class="rounded-xl border border-mocha-c bg-white-c p-4 text-center">
-                    <img class="cadre-image mx-auto h-40 w-40 object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt="" />
+                    <img class="cadre-image mx-auto h-40 w-40 object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt={`Cadre ${cadre.nom}`} loading="lazy" />
                     <p class="cadre-nom mt-4">{cadre.nom}</p>
                     <h3 class="cadre-prix mt-2 text-paprika-c">{cadre.prix} pts</h3>
 
@@ -166,7 +166,7 @@ const cadresPremiumPossedes = new Set(inventaire.map((item) => item.cadre_premiu
 
                 return (
                     <article class="rounded-xl border border-paprika-c bg-white-c p-4 text-center">
-                        <img class="cadre-premium-image h-40 mx-auto object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt="" />
+                        <img class="cadre-premium-image h-40 mx-auto object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt={`Cadre premium ${cadre.nom}`} loading="lazy" />
                         <p class="cadre-premium-nom mt-4">{cadre.nom}</p>
 
                         {possede ? (
@@ -192,7 +192,7 @@ const cadresPremiumPossedes = new Set(inventaire.map((item) => item.cadre_premiu
     <div id="cadres-exclusifs-list" class="mt-8 grid grid-cols-2 gap-6">
         {cadresExclusifs.map((cadre) => (
             <article class="rounded-xl border border-mocha-c bg-white-c p-4 text-center">
-                <img class="cadre-exclusif-image h-40 mx-auto object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt="" />
+                <img class="cadre-exclusif-image h-40 mx-auto object-contain" src={getFileUrl(cadre, cadre.image, pb)} alt={`Cadre exclusif ${cadre.nom}`} loading="lazy" />
                 <p class="cadre-exclusif-nom mt-4">{cadre.nom}</p>
                 <h3 class="cadre-exclusif-prix mt-2 text-paprika-c">{cadre.prix}€</h3>
                 <button disabled class="cadre-exclusif-bouton mt-4 w-full rounded-full bg-beige-c px-6 py-3 text-white-bk">Bientôt</button>

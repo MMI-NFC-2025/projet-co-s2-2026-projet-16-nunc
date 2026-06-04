@@ -5,7 +5,6 @@ import InvitationCard from '../../components/InvitationCard.astro';
 import {
     acceptInvitation,
     addParticipantSortie,
-    getFileUrl,
     getUserInvitations,
     getUserSorties,
     loadAstroAuth,
@@ -73,8 +72,8 @@ function getOrganisateur(sortie) {
 
 function tabClass(tab) {
     return activeTab === tab
-        ? 'tab-btn flex-1 rounded-2xl bg-paprika-c py-2 px-1 text-base text-white-bk text-center'
-        : 'tab-btn flex-1 rounded-2xl py-2 px-1 text-base text-center';
+        ? 'tab-btn flex h-13 flex-1 items-center justify-center rounded-2xl bg-paprika-c px-3 text-center text-base leading-tight text-white-bk'
+        : 'tab-btn flex h-13 flex-1 items-center justify-center rounded-2xl px-3 text-center text-base leading-tight';
 }
 
 const sortiesTriees = participations
@@ -136,7 +135,8 @@ const sortiesAffichees = activeTab === 'history' ? sortiesPassees : sortiesActiv
                                     return (
                                         <a href={`/sortie/${sortie.id}`}>
                                             <SortieCard
-                                                avatar={getFileUrl(organisateur, organisateur?.avatar, pb)}
+                                                user={organisateur}
+                                                pb={pb}
                                                 organisateur={organisateur?.username || 'Utilisateur'}
                                                 titre={sortie.titre || ''}
                                                 date={formatDateSortie(sortie)}

@@ -5,6 +5,7 @@ import {
     getQuestionsSobriete,
     loadAstroAuth
 } from '../../../backend/backend.mjs';
+import testSobrieteScript from '../../js/test-sobriete.js?url';
 
 const { pb, user } = await loadAstroAuth(Astro);
 
@@ -19,7 +20,12 @@ if (Astro.request.method === 'POST') {
         ? Math.max(0, Math.min(Math.trunc(score), 100))
         : 0;
 
-    await addUserPoints(user.id, safeScore, pb);
+    const pointsAdded = await addUserPoints(user.id, safeScore, pb);
+
+    if (!pointsAdded) {
+        return new Response('Impossible d’ajouter les points', { status: 500 });
+    }
+
     return new Response(null, { status: 204 });
 }
 
@@ -32,8 +38,8 @@ const questions = (await getQuestionsSobriete(pb))
         choix_2: question.choix_2,
         choix_3: question.choix_3,
         choix_4: question.choix_4,
-        bonne_reponse: question.bonne_reponse,
-        points: question.points
+        bonne_reponse: Number(question.bonne_reponse),
+        points: Number(question.points || 0)
     }));
 ---
 
@@ -81,4 +87,4 @@ const questions = (await getQuestionsSobriete(pb))
 <script is:inline define:vars={{ questions }}>
     window.sobrieteQuestions = questions;
 </script>
-<script type="module" src="/src/js/test-sobriete.js"></script>
+<script type="module" src={testSobrieteScript}></script>

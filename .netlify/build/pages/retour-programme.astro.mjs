@@ -1,11 +1,12 @@
 import { c as createComponent, r as renderComponent, a as renderTemplate, b as createAstro, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_DwAQ0Pkb.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_C0Mj2Fxw.mjs';
+import { $ as $$Layout } from '../chunks/Layout_ir9QOgyR.mjs';
+import { $ as $$UserAvatar } from '../chunks/UserAvatar_DFp_IEK5.mjs';
 import { $ as $$Image } from '../chunks/_astro_assets_CVdaBGvQ.mjs';
 import { F as Fleche } from '../chunks/fleche_D52W9Oh8.mjs';
 import { W as Warning } from '../chunks/tw_sVE_cmhm.mjs';
 import { c as createSvgComponent } from '../chunks/runtime_5L0uaKXh.mjs';
-import { l as loadAstroAuth, F as createRetourProgramme, f as getUserFriends, d as getFileUrl } from '../chunks/backend_DljU_PTa.mjs';
+import { l as loadAstroAuth, H as createRetourProgramme, e as getUserFriends } from '../chunks/backend_DoxzlLrY.mjs';
 export { renderers } from '../renderers.mjs';
 
 const Taxi = new Proxy({"src":"/_astro/taxi.gUQ6ya2u.avif","width":272,"height":272,"format":"avif"}, {
@@ -92,7 +93,7 @@ Retour
                 p-3
                 transition-all
                 active:scale-95
-            "> <input type="hidden" name="type_retour" value="Taxi"> <button class="w-full text-left" type="submit"> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Taxi, "alt": "", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">Taxi</p> <small class="mt-4 block">Service de taxi local</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">15-25€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">10-15 min</label> </div> </div> </div> </div> </button> </form> <form method="post" class="
+            "> <input type="hidden" name="type_retour" value="Taxi"> <button class="w-full text-left" type="submit"> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Taxi, "alt": "Taxi", "loading": "lazy", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">Taxi</p> <small class="mt-4 block">Service de taxi local</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">15-25€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">10-15 min</label> </div> </div> </div> </div> </button> </form> <form method="post" class="
                 mt-8
                 rounded-xl
                 border
@@ -101,7 +102,7 @@ Retour
                 p-3
                 transition-all
                 active:scale-95
-            "> <input type="hidden" name="type_retour" value="VTC"> <button class="w-full text-left" type="submit"> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Vtc, "alt": "", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">VTC premium</p> <small class="mt-4 block">Véhicule avec chauffeur</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">20-35€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">5-10 min</label> </div> </div> </div> </div> </button> </form> <a href="#sam-container" class="
+            "> <input type="hidden" name="type_retour" value="VTC"> <button class="w-full text-left" type="submit"> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Vtc, "alt": "VTC premium", "loading": "lazy", "class": "h-auto w-18" })} <div class="flex-1"> <p class="font-bold">VTC premium</p> <small class="mt-4 block">Véhicule avec chauffeur</small> <div class="mt-1 flex items-center gap-6"> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Argent, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">20-35€</label> </div> <div class="flex items-center gap-2"> ${renderComponent($$result2, "Image", $$Image, { "src": Temps, "alt": "", "class": "h-4 w-4" })} <label class="font-bold">5-10 min</label> </div> </div> </div> </div> </button> </form> <a href="#sam-container" class="
                 relative
                 block
                 mt-8
@@ -113,7 +114,7 @@ Retour
                 p-3
                 transition-all
                 active:scale-95
-            "> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Sam, "alt": "", "class": "h-auto w-18" })} <div class="flex-1"> <div class="flex items-start justify-between gap-4"> <p class="font-bold">Conducteur SAM</p> <div class="
+            "> <div class="flex items-center gap-8 text-marron-c"> ${renderComponent($$result2, "Image", $$Image, { "src": Sam, "alt": "Conducteur SAM", "loading": "lazy", "class": "h-auto w-18" })} <div class="flex-1"> <div class="flex items-start justify-between gap-4"> <p class="font-bold">Conducteur SAM</p> <div class="
                                 rounded-full
                                 bg-green-100
                                 px-3
@@ -139,13 +140,7 @@ C’est le conducteur sobre qui vous ramène
                                         transition-all
                                         duration-200
                                         active:scale-95
-                                    "> <img class="
-                                            h-16
-                                            w-16
-                                            shrink-0
-                                            rounded-full
-                                            object-cover
-                                        "${addAttribute(getFileUrl(friend, friend.avatar, pb), "src")}${addAttribute(friend.username, "alt")}> <div> <p class="text-lg font-bold text-paprika-c">${friend.username}</p> <small class="text-marron-c">
+                                    "> ${renderComponent($$result2, "UserAvatar", $$UserAvatar, { "user": friend, "pb": pb, "size": "h-16 w-16", "alt": friend.username })} <div> <p class="text-lg font-bold text-paprika-c">${friend.username}</p> <small class="text-marron-c">
 Conducteur disponible
 </small> </div> </button> </form>`) : renderTemplate`<p class="rounded-xl bg-white-c p-4 text-marron-c">
 Tu n'as pas encore d'ami disponible comme conducteur SAM.

@@ -1,0 +1,41 @@
+---
+import {
+    getCadreEquipeUtilisateur,
+    getFileUrl,
+    loadAstroAuth
+} from '../../backend/backend.mjs';
+
+const {
+    user,
+    pb,
+    size = 'h-16 w-16',
+    alt = user?.username ? `Photo de profil de ${user.username}` : 'Photo de profil'
+} = Astro.props;
+
+const auth = pb ? { pb } : await loadAstroAuth(Astro);
+const db = pb || auth.pb;
+const cadreEquipe = user?.id
+    ? await getCadreEquipeUtilisateur(user.id, db)
+    : null;
+const cadre = cadreEquipe?.expand?.cadre || cadreEquipe?.expand?.cadre_premium;
+const avatarUrl = getFileUrl(user, user?.avatar, db) || '/favicon.svg';
+const cadreUrl = getFileUrl(cadre, cadre?.image, db);
+---
+
+<div class={`relative shrink-0 ${size}`}>
+    <img
+        src={avatarUrl}
+        alt={alt}
+        loading="lazy"
+        class="h-full w-full rounded-full object-cover"
+    />
+
+    {cadreUrl && (
+        <img
+            src={cadreUrl}
+            alt=""
+            loading="lazy"
+            class="pointer-events-none absolute inset-0 h-full w-full object-contain"
+        />
+    )}
+</div>

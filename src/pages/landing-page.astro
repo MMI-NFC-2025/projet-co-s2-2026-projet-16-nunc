@@ -20,13 +20,44 @@ import { Image } from 'astro:assets';
 ---
 
 <Layout title="Inscription">
-    <section class="mt-10 relative">
-        <Image src={Logo} alt="Logo" class="w-64 h-auto mx-auto" />
+    <section class="mt-10 relative lg:mx-auto lg:grid lg:min-h-screen lg:max-w-none lg:grid-cols-2 lg:items-center lg:gap-24 lg:overflow-hidden lg:px-20 lg:pt-40">
+        <Image src={Logo} alt="Logo" class="w-64 h-auto mx-auto lg:absolute lg:left-1/2 lg:top-6 lg:w-80 lg:-translate-x-1/2" />
         
-        <div class="relative h-136 overflow-hidden">
+        <span class="hidden lg:block lg:absolute lg:-left-20 lg:bottom-15">
+            <Image src={Orange} alt="" class="lg:w-56 lg:h-56" />
+        </span>
+
+        <span class="hidden lg:block lg:absolute lg:left-40 lg:bottom-8">
+            <Image src={Ice} alt="" class="lg:w-28 lg:h-28 lg:-rotate-12" />
+        </span>
+
+        <span class="hidden lg:block lg:absolute lg:left-80 lg:bottom-40">
+            <Image src={Ice} alt="" class="lg:w-18 lg:h-18 lg:-rotate-180" />
+        </span>
+
+        <div class="hidden lg:block">
+            <p class="max-w-2xl text-xl leading-relaxed">
+                Découvrez les meilleurs bars autour de vous, organisez vos sorties entre amis et profitez de la soirée en toute sérénité.
+            </p>
+
+            <h1 class="mt-14 text-bordeaux-c lg:max-w-3xl lg:text-6xl lg:leading-tight">
+                Le futur de vos<br />
+                soirées, <span class="text-yellow-c">maintenant</span>.
+            </h1>
+
+            <a href="/connexion" class="relative mt-12 flex w-120 items-center justify-center rounded-full bg-paprika-c py-6 text-3xl font-titan text-white-c">
+                Télécharger l'app
+
+                <span class="absolute right-8 inset-y-0 flex items-center">
+                    <Image src={Flechegauche} alt="" class="w-14 h-14" />
+                </span>
+            </a>
+        </div>
+
+        <div class="relative h-136 overflow-hidden lg:mt-14 lg:h-160 lg:overflow-visible">
             <Image
             src={Photo}
-            alt=""
+            alt="Verre de cocktail pendant une soirée"
             class="
                 absolute
                 inset-0
@@ -34,6 +65,8 @@ import { Image } from 'astro:assets';
                 w-full
                 object-cover
                 opacity-70
+                lg:rounded-3xl
+                lg:opacity-100
                 "
                 />
                 
@@ -45,20 +78,21 @@ import { Image } from 'astro:assets';
                 from-white-bk
                 via-transparent
                 to-white-bk
+                lg:hidden
                 "
                 ></div>
 
-            <span class="absolute -right-16 top-40">
-                <Image src={Orange} alt="" class="w-40 h-40 -rotate-45" />
+            <span class="absolute -right-16 top-40 lg:-right-60 lg:-top-6">
+                <Image src={Orange} alt="" class="w-40 h-40 -rotate-45 lg:w-72 lg:h-72" />
             </span>
 
-            <div class="absolute top-20 w-full flex justify-center px-11">
+            <div class="absolute top-20 w-full flex justify-center px-11 lg:hidden">
                 <p class="text-center max-w-sm">
                     Découvrez les meilleurs bars autour de vous, organisez vos sorties entre amis et profitez de la soirée en toute sérénité.
                 </p>
             </div>
 
-            <div class="absolute bottom-24 w-full flex justify-center">
+            <div class="absolute bottom-24 w-full flex justify-center lg:hidden">
                 <a href="/connexion" class="relative bg-paprika-c text-white-bk rounded-full w-72 py-4 flex items-center justify-center">
                     Télécharger l'app
 
@@ -73,109 +107,117 @@ import { Image } from 'astro:assets';
         </div>
     </section>
 
-    <section class="mt-2 px-6 text-left">
+    <section class="mt-2 px-6 text-left lg:hidden">
         <h1 class="text-bordeaux-c">Le future de vos soirées, 
           <span class="text-yellow-c">maintenant</span>.
         </h1>
     </section>
 
-    <section class="mt-30">
-        <h2 class="text-paprika-c mb-6 text-center">Fonctionnalités</h2>
+    <section class="mt-30 lg:mx-auto lg:mt-10 lg:max-w-6xl lg:px-8">
+        <h2 class="text-paprika-c mb-6 text-center lg:text-5xl">Fonctionnalités</h2>
 
-        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
-            <Image src={Bar} alt="" class="w-full h-36 object-cover" />
-            <div class="bg-beige-c p-5">
-                <h3>Map interactive des bars</h3>
-                <p class="mt-3">
+        <div class="lg:mt-14 lg:grid lg:grid-cols-3 lg:justify-items-center lg:gap-18">
+        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-lg lg:mt-0 lg:flex lg:max-w-xs lg:flex-col lg:rounded-bl-4xl">
+            <Image src={Bar} alt="Façade lumineuse d'un bar" loading="lazy" class="w-full h-36 object-cover lg:h-44" />
+            <div class="bg-beige-c p-5 lg:flex-1 lg:p-7">
+                <h3 class="lg:text-3xl lg:leading-none lg:text-bordeaux-c">Map interactive des bars</h3>
+                <p class="mt-3 lg:text-xl lg:leading-tigh">
                   Découvrez tous les bars autour de vous avec notre carte interactive.
                 </p>
             </div>
         </div>
 
-        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-br-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
-            <Image src={Voiture} alt="" class="w-full h-36 object-cover" />
-            <div class="bg-white-c p-5">
-                <h3>Retour programmé</h3>
-                <p class="mt-3">
+        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-br-3xl shadow-lg lg:mt-0 lg:flex lg:max-w-xs lg:flex-col lg:rounded-br-4xl">
+            <Image src={Voiture} alt="Voiture devant un bar de nuit" loading="lazy" class="w-full h-36 object-cover lg:h-44" />
+            <div class="bg-white-c p-5 lg:flex-1 lg:p-7">
+                <h3 class="lg:text-3xl lg:leading-none lg:text-marron-c">Retour programmé</h3>
+                <p class="mt-3 lg:text-xl lg:leading-tight lg:text-marron-c">
                   Rentrez en toute sécurité avec notre application.
                 </p>
             </div>
         </div>
-        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-[-2px_7px_5px_0_rgba(0,0,0,0.15)]">
-            <Image src={Sortie} alt="" class="w-full h-36 object-cover" />
-            <div class="bg-beige-c p-5">
-                <h3>Organisation de sorties</h3>
-                <p class="mt-3">
+        <div class="mt-15 max-w-2xs mx-auto overflow-hidden rounded-t-3xl rounded-bl-3xl shadow-lg lg:mt-0 lg:flex lg:max-w-xs lg:flex-col lg:rounded-bl-4xl">
+            <Image src={Sortie} alt="Partie de billard dans un bar" loading="lazy" class="w-full h-36 object-cover lg:h-44" />
+            <div class="bg-beige-c p-5 lg:flex-1 lg:p-7">
+                <h3 class="lg:text-3xl lg:leading-none lg:text-bordeaux-c">Organisation de sortie</h3>
+                <p class="mt-3 lg:text-xl lg:leading-tight">
                   Organisez vos soirées, envoyez des invitations et gérez vos événements en quelques cliques.
                 </p>
             </div>
         </div>
+        </div>
     </section>
 
-    <section class="relative overflow-hidden bg-linear-to-b from-white-bk via-beige-c to-white-bk">
-        <div class="relative">
-            <div class="mt-20 mb-30 relative w-80 mx-auto h-44">
-                <Image src={Orange} alt="" class="w-40 h-40 mx-auto" />
+    <section class="relative overflow-hidden bg-linear-to-b from-white-bk via-beige-c to-white-bk lg:mt-18">
+        <div class="relative lg:mx-auto lg:max-w-none lg:px-24 lg:pb-26">
+            <div class="mt-20 mb-30 relative w-80 mx-auto h-44 lg:mb-16 lg:h-76 lg:w-full lg:max-w-6xl">
+                <Image src={Orange} alt="" class="w-40 h-40 mx-auto lg:absolute lg:left-10 lg:top-0 lg:w-55 lg:h-55" />
 
-                <span class="absolute -left-10 top-30">
-                    <Image src={Ice} alt="" class="w-36 h-36 -rotate-12" />
+                <span class="absolute -left-10 top-30 lg:left-55 lg:top-24">
+                    <Image src={Ice} alt="" class="w-36 h-36 -rotate-12 lg:w-24 lg:h-24 lg:-rotate-160" />
                 </span>
 
-                <span class="absolute -right-2 top-20">
-                    <Image src={Ice} alt="" class="w-20 h-20 -rotate-180" />
+                <span class="absolute -right-2 top-20 lg:right-50 lg:-top-15">
+                    <Image src={Ice} alt="" class="w-20 h-20 -rotate-180 lg:w-50 lg:h-50 lg:-rotate-8" />
                 </span>
             </div>
 
-            <div class="mt-20 mx-6 relative overflow-hidden rounded-4xl">
-                <Image src={Points} alt="" class="w-full h-80 object-cover" />
-                <span class="absolute -bottom-3 left-0 p-6">
-                    <h3 class="text-white-bk">Chaque sortie te fait progresser</h3>
-                    <p class="mt-3 text-white-bk">
+            <div class="lg:grid lg:grid-cols-5 lg:items-center lg:gap-10">
+            <div class="mt-20 mx-6 relative overflow-hidden rounded-4xl lg:col-span-2 lg:mx-0 lg:mt-0">
+                <Image src={Points} alt="Téléphone utilisé pendant une sortie" loading="lazy" class="w-full h-80 object-cover lg:h-96" />
+                <span class="absolute -bottom-3 left-0 p-6 lg:p-8">
+                    <h3 class="text-white-bk lg:text-3xl lg:leading-none">Chaque sortie te fait progresser</h3>
+                    <p class="mt-3 text-white-bk lg:text-2xl lg:leading-tight">
                       Gagne des points, monte de niveau et débloque des exclusivités.
                     </p>
                 </span>
             </div>
 
-            <div class="mt-10 flex justify-center">
-                <Image src={Zeste} alt="" class="w-full h-8" />
+            <div class="mt-10 flex justify-center lg:-mt-18">
+                <Image src={Zeste} alt="" class="w-full h-8 lg:w-28" />
             </div>
 
-            <div class="mt-10 mb-20 mx-6 relative overflow-hidden rounded-4xl">
-                <Image src={Niveau} alt="" class="w-full h-80 object-cover" />
-                <span class="absolute -bottom-3 left-0 p-6">
-                    <h3 class="text-white-bk">Monte de niveau</h3>
-                    <p class="mt-3 text-white-bk">
+            <div class="mt-10 mb-20 mx-6 relative overflow-hidden rounded-4xl lg:col-span-2 lg:mx-0 lg:mb-0 lg:mt-0">
+                <Image src={Niveau} alt="Personne utilisant son téléphone" loading="lazy" class="w-full h-80 object-cover lg:h-96" />
+                <span class="absolute -bottom-3 left-0 p-6 lg:p-8">
+                    <h3 class="text-white-bk lg:text-3xl lg:leading-none">Monte de niveau</h3>
+                    <p class="mt-3 text-white-bk lg:text-2xl lg:leading-tight">
                       Plus tu participes aux sorties, plus ton niveau augmente et ton profil se démarque.
                     </p>
                 </span>
             </div>
+            </div>
         </div>
     </section>
 
-    <section class="mt-16 mb-20 mx-6 rounded-4xl bg-linear-to-br from-yellow-c via-paprika-c to-beige-c px-6 py-10">
-        <h2 class="text-white text-center leading-none">Ta prochaine soirée commence maintenant</h2>
-        <p class="mt-8 px-3 text-center text-white-bk">
-          Organise tes sorties, découvre les meilleurs bars et profite du moment avec tes amis.
-        </p>
+    <section class="relative z-10 mt-16 mb-20 mx-6 lg:mx-auto lg:mt-12 lg:mb-28 lg:max-w-6xl">
+        <div class="flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-linear-to-br from-yellow-c via-paprika-c to-beige-c px-6 py-10 lg:min-h-160 lg:rounded-4xl lg:px-28 lg:py-18">
+            <h2 class="text-white text-center leading-none lg:mx-auto lg:max-w-3xl lg:text-5xl lg:leading-tight">Ta prochaine soirée commence maintenant</h2>
+            <p class="mt-8 px-3 text-center text-white-bk lg:mx-auto lg:mt-10 lg:max-w-3xl">
+            Organise tes sorties, découvre les meilleurs bars et profite du moment avec tes amis.
+            </p>
 
-        <div class="mt-12 flex justify-center text-marron-c">
-            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-3 flex items-center gap-4">
-                <Image src={Google} alt="" class="w-10 h-10 shrink-0" />
-                <div class="flex flex-col justify-center text-left">
-                    <small>Télécharge sur</small>
-                    <h3 class="text-marron-c">Google Play</h3>
-                </div>
-            </a>
-        </div>
+            <div class="lg:mt-14 lg:flex lg:justify-center lg:gap-14">
+            <div class="mt-12 flex justify-center text-marron-c lg:mt-0">
+                <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-3 flex items-center gap-4">
+                    <Image src={Google} alt="" class="w-10 h-10 shrink-0" />
+                    <div class="flex flex-col justify-center text-left">
+                        <small>Télécharge sur</small>
+                        <h3 class="text-marron-c">Google Play</h3>
+                    </div>
+                </a>
+            </div>
 
-        <div class="mt-6 flex justify-center text-marron-c">
-            <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-3 flex items-center gap-4">
-                <Image src={Apple} alt="" class="w-10 h-10 shrink-0" />
-                <div class="flex flex-col justify-center text-left">
-                    <small>Télécharge sur</small>
-                    <h3 class="text-marron-c">App Store</h3>
-                </div>
-            </a>
+            <div class="mt-6 flex justify-center text-marron-c lg:mt-0">
+                <a href="/" class="w-60 h-16 rounded-lg bg-white-bk p-3 flex items-center gap-4">
+                    <Image src={Apple} alt="" class="w-10 h-10 shrink-0" />
+                    <div class="flex flex-col justify-center text-left">
+                        <small>Télécharge sur</small>
+                        <h3 class="text-marron-c">App Store</h3>
+                    </div>
+                </a>
+            </div>
+            </div>
         </div>
     </section>
 </Layout>

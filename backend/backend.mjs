@@ -3,56 +3,12 @@ import PocketBase from 'pocketbase';
 const pocketBaseUrl = 'https://pbnunc.linabenmabrouk.fr';
 const pb = new PocketBase(pocketBaseUrl);
 
-export const pocketbaseCollections = Object.freeze({
-    users: 'users',
-    abonnement: 'abonnement',
-    amis: 'amis',
-    avantages: 'avantages',
-    bars: 'bars',
-    cadres: 'cadres',
-    cadresExclusifs: 'cadres_exclusifs',
-    cadresPremium: 'cadres_premium',
-    contact: 'contact',
-    faq: 'faq',
-    inventaireCadres: 'inventaire_cadres',
-    invitations: 'invitations',
-    participantsSortie: 'participants_sortie',
-    questionsSobriete: 'questions_sobriete',
-    retoursProgrammes: 'retours_programmes',
-    sorties: 'sorties',
-    souscription: 'souscription'
-});
-
 export function getPocketBase(client = pb) {
     return client || pb;
 }
 
-export function pocketbaseRoutes(client = pb) {
-    const db = getPocketBase(client);
-
-    return Object.fromEntries(
-        Object.entries(pocketbaseCollections).map(([key, collection]) => [
-            key,
-            db.collection(collection)
-        ])
-    );
-}
-
 function collection(name, client = pb) {
     return getPocketBase(client).collection(name);
-}
-
-if (typeof document !== 'undefined') {
-    pb.authStore.loadFromCookie(document.cookie);
-
-    pb.authStore.onChange(() => {
-        document.cookie = pb.authStore.exportToCookie({
-            sameSite: 'Lax',
-            secure: window.location.protocol === 'https:',
-            path: '/',
-            maxAge: 60 * 60 * 24 * 30
-        });
-    });
 }
 
 export function createServerPocketBase(request) {
@@ -89,7 +45,7 @@ export async function loadAstroAuth(Astro) {
 
     if (serverPb.authStore.isValid) {
         try {
-            const authData = await serverPb.collection(pocketbaseCollections.users).authRefresh();
+            const authData = await serverPb.collection('users').authRefresh();
             user = authData?.record || serverPb.authStore.record;
             Astro.response.headers.append('Set-Cookie', createAuthCookie(serverPb));
         } catch {
@@ -105,7 +61,7 @@ export async function loadAstroAuth(Astro) {
 }
 
 export async function addContact(data, client = pb) {
-    return await collection(pocketbaseCollections.contact, client).create(data);
+    return await collection('contact', client).create(data);
 }
 
 export async function addNewUser(data) {
@@ -137,7 +93,7 @@ export function clearAuth() {
 }
 
 export async function getBars(client = pb) {
-    return await collection(pocketbaseCollections.bars, client).getFullList({ sort: 'created' });
+    return await collection('bars', client).getFullList({ sort: 'created' });
 }
 
 export async function getImageUrl(record, imageField, client = pb) {
@@ -147,7 +103,7 @@ export async function getImageUrl(record, imageField, client = pb) {
 
 export async function getBarById(id, client = pb) {
     try {
-        return await collection(pocketbaseCollections.bars, client).getOne(id);
+        return await collection('bars', client).getOne(id);
     } catch (error) {
         console.error('Error fetching bar by ID:', error);
         return null;
@@ -158,12 +114,12 @@ export async function getUsersByIds(ids, client = pb) {
     if (!ids || ids.length === 0) return [];
 
     const filter = ids.map(id => `id="${id}"`).join(' || ');
-    return await collection(pocketbaseCollections.users, client).getFullList({ filter });
+    return await collection('users', client).getFullList({ filter });
 }
 
 export async function createSortie(data, client = pb) {
     try {
-        const sortie = await collection(pocketbaseCollections.sorties, client).create(data);
+        const sortie = await collection('sorties', client).create(data);
         return { success: true, sortie };
     } catch (error) {
         return { success: false, error };
@@ -171,7 +127,7 @@ export async function createSortie(data, client = pb) {
 }
 
 export async function addParticipantSortie(sortieId, utilisateurId, role = 'Organisateur', etat = 'Accepté', client = pb) {
-    return await collection(pocketbaseCollections.participantsSortie, client).create({
+    return await collection('participants_sortie', client).create({
         sortie: sortieId,
         utilisateur: utilisateurId,
         role,
@@ -181,7 +137,7 @@ export async function addParticipantSortie(sortieId, utilisateurId, role = 'Orga
 
 export async function getSortieById(id, client = pb) {
     try {
-        return await collection(pocketbaseCollections.sorties, client).getOne(id, {
+        return await collection('sorties', client).getOne(id, {
             expand: 'organisateur,bar'
         });
     } catch {
@@ -190,7 +146,7 @@ export async function getSortieById(id, client = pb) {
 }
 
 export async function getUserSorties(userId, client = pb) {
-    return await collection(pocketbaseCollections.participantsSortie, client).getFullList({
+    return await collection('participants_sortie', client).getFullList({
         sort: '-created',
         filter: `utilisateur="${userId}"`,
         expand: 'sortie,sortie.bar,sortie.organisateur'
@@ -198,40 +154,40 @@ export async function getUserSorties(userId, client = pb) {
 }
 
 export async function getSortieParticipants(sortieId, client = pb) {
-    return await collection(pocketbaseCollections.participantsSortie, client).getFullList({
+    return await collection('participants_sortie', client).getFullList({
         filter: `sortie="${sortieId}"`,
         expand: 'utilisateur'
     });
 }
 
 export async function getAllSorties(client = pb) {
-    return await collection(pocketbaseCollections.participantsSortie, client).getFullList({
+    return await collection('participants_sortie', client).getFullList({
         expand: 'sortie,sortie.bar,sortie.organisateur'
     });
 }
 
 export async function updateSortieById(id, data, client = pb) {
-    return await collection(pocketbaseCollections.sorties, client).update(id, data);
+    return await collection('sorties', client).update(id, data);
 }
 
 export async function deleteSortieCompletely(sortieId, client = pb) {
-    const participations = await collection(pocketbaseCollections.participantsSortie, client).getFullList({
+    const participations = await collection('participants_sortie', client).getFullList({
         filter: `sortie="${sortieId}"`
     });
 
     for (const participation of participations) {
-        await collection(pocketbaseCollections.participantsSortie, client).delete(participation.id);
+        await collection('participants_sortie', client).delete(participation.id);
     }
 
-    await collection(pocketbaseCollections.sorties, client).delete(sortieId);
+    await collection('sorties', client).delete(sortieId);
 }
 
 export async function getAllUsers(client = pb) {
-    return await collection(pocketbaseCollections.users, client).getFullList({ sort: 'username' });
+    return await collection('users', client).getFullList({ sort: 'username' });
 }
 
 export async function createInvitation(data, client = pb) {
-    const existingInvitation = await collection(pocketbaseCollections.invitations, client)
+    const existingInvitation = await collection('invitations', client)
         .getFirstListItem(
             `sortie="${data.sortie}" && destinataire="${data.destinataire}"`,
             { requestKey: null }
@@ -240,30 +196,30 @@ export async function createInvitation(data, client = pb) {
 
     if (existingInvitation) return null;
 
-    return await collection(pocketbaseCollections.invitations, client).create(data);
+    return await collection('invitations', client).create(data);
 }
 
 export async function getUserInvitations(userId, client = pb) {
-    return await collection(pocketbaseCollections.invitations, client).getFullList({
+    return await collection('invitations', client).getFullList({
         filter: `destinataire="${userId}" && statut="en attente"`,
         expand: 'sortie,expediteur,destinataire'
     });
 }
 
 export async function acceptInvitation(invitationId, client = pb) {
-    return await collection(pocketbaseCollections.invitations, client).update(invitationId, {
+    return await collection('invitations', client).update(invitationId, {
         statut: 'acceptee'
     });
 }
 
 export async function refuseInvitation(invitationId, client = pb) {
-    return await collection(pocketbaseCollections.invitations, client).update(invitationId, {
+    return await collection('invitations', client).update(invitationId, {
         statut: 'refusee'
     });
 }
 
 export async function getUserFriends(userId, client = pb) {
-    return await collection(pocketbaseCollections.amis, client).getFullList({
+    return await collection('amis', client).getFullList({
         filter: `statut="Accepter" && (utilisateur1="${userId}" || utilisateur2="${userId}")`,
         expand: 'utilisateur1,utilisateur2'
     });
@@ -273,16 +229,18 @@ export async function refreshCurrentUser(client = pb) {
     const db = getPocketBase(client);
     const user = db.authStore.record;
     if (!user) return null;
-    return await collection(pocketbaseCollections.users, db).getOne(user.id);
+    return await collection('users', db).getOne(user.id);
 }
 
 export async function addUserPoints(userId, pointsToAdd, client = pb) {
     try {
-        const user = await collection(pocketbaseCollections.users, client).getOne(userId);
+        const user = await collection('users', client).getOne(userId);
         const currentPoints = user.points || 0;
+        const nextPoints = Math.max(0, currentPoints + pointsToAdd);
 
-        await collection(pocketbaseCollections.users, client).update(userId, {
-            points: currentPoints + pointsToAdd
+        await collection('users', client).update(userId, {
+            points: nextPoints,
+            niveau: getLevel(nextPoints)
         });
 
         return true;
@@ -293,11 +251,11 @@ export async function addUserPoints(userId, pointsToAdd, client = pb) {
 }
 
 export async function createRetourProgramme(data, client = pb) {
-    return await collection(pocketbaseCollections.retoursProgrammes, client).create(data);
+    return await collection('retours_programmes', client).create(data);
 }
 
 export function getLevel(points) {
-    return Math.floor(points / 250) + 1;
+    return Math.max(1, Math.floor((points || 0) / 250) + 1);
 }
 
 export function getLevelData(points) {
@@ -312,19 +270,25 @@ export function getLevelData(points) {
 }
 
 export async function getAbonnements(client = pb) {
-    return await collection(pocketbaseCollections.abonnement, client).getFullList({
+    return await collection('abonnement', client).getFullList({
         expand: 'avantage'
     });
 }
 
+export async function activatePremium(userId, client = pb) {
+    return await collection('users', client).update(userId, {
+        premium: true
+    });
+}
+
 export async function getAvantages(client = pb) {
-    return await collection(pocketbaseCollections.avantages, client).getFullList({
+    return await collection('avantages', client).getFullList({
         sort: 'created'
     });
 }
 
 export async function getFaq(client = pb) {
-    return await collection(pocketbaseCollections.faq, client).getFullList({
+    return await collection('faq', client).getFullList({
         sort: 'created'
     });
 }
@@ -335,7 +299,7 @@ export function getFileUrl(record, filename, client = pb) {
 }
 
 export async function getQuestionsSobriete(client = pb) {
-    return await collection(pocketbaseCollections.questionsSobriete, client).getFullList({
+    return await collection('questions_sobriete', client).getFullList({
         sort: 'ordre'
     });
 }
@@ -343,28 +307,28 @@ export async function getQuestionsSobriete(client = pb) {
 export async function searchUsers(username, currentUserId, client = pb) {
     const term = String(username || '').replaceAll('"', '\\"');
 
-    return await collection(pocketbaseCollections.users, client).getFullList({
-        filter: `(username ~ "${term}" || nom ~ "${term}" || prenom ~ "${term}" || email ~ "${term}") && id != "${currentUserId}"`,
+    return await collection('users', client).getFullList({
+        filter: `username ~ "${term}" && id != "${currentUserId}"`,
         sort: 'username'
     });
 }
 
 export async function getFriendRequests(userId, client = pb) {
-    return await collection(pocketbaseCollections.amis, client).getFullList({
+    return await collection('amis', client).getFullList({
         filter: `statut="En attente" && utilisateur2="${userId}"`,
         expand: 'utilisateur1,utilisateur2'
     });
 }
 
 export async function getPendingFriends(userId, client = pb) {
-    return await collection(pocketbaseCollections.amis, client).getFullList({
+    return await collection('amis', client).getFullList({
         filter: `statut="En attente" && utilisateur1="${userId}"`,
         expand: 'utilisateur1,utilisateur2'
     });
 }
 
 export async function sendFriendRequest(userId, friendId, client = pb) {
-    const existing = await collection(pocketbaseCollections.amis, client)
+    const existing = await collection('amis', client)
         .getFirstListItem(
             `(utilisateur1="${userId}" && utilisateur2="${friendId}") || (utilisateur1="${friendId}" && utilisateur2="${userId}")`,
             { requestKey: null }
@@ -373,7 +337,7 @@ export async function sendFriendRequest(userId, friendId, client = pb) {
 
     if (existing) return null;
 
-    return await collection(pocketbaseCollections.amis, client).create({
+    return await collection('amis', client).create({
         utilisateur1: userId,
         utilisateur2: friendId,
         statut: 'En attente'
@@ -381,19 +345,19 @@ export async function sendFriendRequest(userId, friendId, client = pb) {
 }
 
 export async function acceptFriendRequest(friendshipId, client = pb) {
-    return await collection(pocketbaseCollections.amis, client).update(friendshipId, {
+    return await collection('amis', client).update(friendshipId, {
         statut: 'Accepter'
     });
 }
 
 export async function refuseFriendRequest(friendshipId, client = pb) {
-    return await collection(pocketbaseCollections.amis, client).update(friendshipId, {
+    return await collection('amis', client).update(friendshipId, {
         statut: 'Refuser'
     });
 }
 
 export async function getFriendship(userId, otherUserId, client = pb) {
-    return await collection(pocketbaseCollections.amis, client)
+    return await collection('amis', client)
         .getFirstListItem(
             `(utilisateur1="${userId}" && utilisateur2="${otherUserId}") || (utilisateur1="${otherUserId}" && utilisateur2="${userId}")`,
             { requestKey: null }
@@ -402,12 +366,12 @@ export async function getFriendship(userId, otherUserId, client = pb) {
 }
 
 export async function getUserById(id, client = pb) {
-    return await collection(pocketbaseCollections.users, client).getOne(id);
+    return await collection('users', client).getOne(id);
 }
 
 export async function getNbSortiesParticipees(userId, client = pb) {
 
-    const result = await collection(pocketbaseCollections.participantsSortie, client)
+    const result = await collection('participants_sortie', client)
         .getFullList({
             filter: `utilisateur="${userId}"`
         });
@@ -418,7 +382,7 @@ export async function getNbSortiesParticipees(userId, client = pb) {
 
 export async function getNbSortiesOrganisees(userId, client = pb) {
 
-    const result = await collection(pocketbaseCollections.sorties, client)
+    const result = await collection('sorties', client)
         .getFullList({
             filter: `organisateur="${userId}"`
         });
@@ -429,7 +393,7 @@ export async function getNbSortiesOrganisees(userId, client = pb) {
 
 export async function getNbAmis(userId, client = pb) {
 
-    const result = await collection(pocketbaseCollections.amis, client)
+    const result = await collection('amis', client)
         .getFullList({
             filter: `
                 statut="Accepter"
@@ -447,7 +411,7 @@ export async function getNbAmis(userId, client = pb) {
 }
 
 export async function updateAvatar(userId, file, client = pb) {
-    return await collection(pocketbaseCollections.users, client).update(userId, {
+    return await collection('users', client).update(userId, {
         avatar: file
     });
 }
@@ -455,7 +419,7 @@ export async function updateAvatar(userId, file, client = pb) {
 export async function getCadres(client = pb) {
 
     return await getPocketBase(client)
-        .collection(pocketbaseCollections.cadres)
+        .collection('cadres')
         .getFullList({
             sort: 'prix'
         });
@@ -466,12 +430,12 @@ export async function acheterCadre(userId, cadreId, client = pb) {
 
     const user =
         await getPocketBase(client)
-            .collection(pocketbaseCollections.users)
+            .collection('users')
             .getOne(userId);
 
     const cadre =
         await getPocketBase(client)
-            .collection(pocketbaseCollections.cadres)
+            .collection('cadres')
             .getOne(cadreId);
 
     if (
@@ -486,7 +450,7 @@ export async function acheterCadre(userId, cadreId, client = pb) {
     const dejaPossede =
         await getPocketBase(client)
             .collection(
-                pocketbaseCollections.inventaireCadres
+                'inventaire_cadres'
             )
             .getFullList({
                 filter:
@@ -501,20 +465,25 @@ export async function acheterCadre(userId, cadreId, client = pb) {
         );
     }
 
+    const nextPoints =
+        user.points -
+        cadre.prix;
+
     await getPocketBase(client)
-        .collection(pocketbaseCollections.users)
+        .collection('users')
         .update(
             userId,
             {
                 points:
-                    user.points -
-                    cadre.prix
+                    nextPoints,
+                niveau:
+                    getLevel(nextPoints)
             }
         );
 
     await getPocketBase(client)
         .collection(
-            pocketbaseCollections.inventaireCadres
+            'inventaire_cadres'
         )
         .create({
             utilisateur:
@@ -534,20 +503,54 @@ export async function getCadresUtilisateur(
 
     return await getPocketBase(client)
         .collection(
-            pocketbaseCollections.inventaireCadres
+            'inventaire_cadres'
         )
         .getFullList({
             filter:
-                `utilisateur="${userId}"`
+                `utilisateur="${userId}"`,
+            expand:
+                'cadre,cadre_premium'
         });
 
+}
+
+export async function getCadreEquipeUtilisateur(userId, client = pb) {
+    return await getPocketBase(client)
+        .collection('inventaire_cadres')
+        .getFirstListItem(
+            `utilisateur="${userId}" && equipe=true`,
+            {
+                expand: 'cadre,cadre_premium',
+                requestKey: null
+            }
+        )
+        .catch(() => null);
+}
+
+export async function equiperCadreUtilisateur(userId, inventaireId, client = pb) {
+    const inventaire = await getCadresUtilisateur(userId, client);
+    const selected = inventaire.find((item) => item.id === inventaireId);
+
+    if (!selected) {
+        throw new Error('Cadre introuvable');
+    }
+
+    for (const item of inventaire) {
+        await getPocketBase(client)
+            .collection('inventaire_cadres')
+            .update(item.id, {
+                equipe: item.id === inventaireId
+            });
+    }
+
+    return true;
 }
 
 export async function getCadresPremium(client = pb) {
 
     return await getPocketBase(client)
         .collection(
-            pocketbaseCollections.cadresPremium
+            'cadres_premium'
         )
         .getFullList();
 
@@ -561,7 +564,7 @@ export async function obtenirCadrePremium(
 
     const dejaPossede =
         await getPocketBase(client).collection(
-            pocketbaseCollections.inventaireCadres
+            'inventaire_cadres'
         ).getFirstListItem(
             `utilisateur="${userId}" && cadre_premium="${cadrePremiumId}"`
         ).catch(
@@ -575,7 +578,7 @@ export async function obtenirCadrePremium(
     }
 
     await getPocketBase(client).collection(
-        pocketbaseCollections.inventaireCadres
+        'inventaire_cadres'
     ).create({
         utilisateur: userId,
         cadre_premium: cadrePremiumId,
@@ -587,7 +590,7 @@ export async function obtenirCadrePremium(
 export async function getCadresExclusifs(client = pb) {
 
     return await getPocketBase(client).collection(
-        pocketbaseCollections.cadresExclusifs
+        'cadres_exclusifs'
     ).getFullList({
         sort: 'nom'
     });

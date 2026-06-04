@@ -40,11 +40,11 @@ if (!selectedBar) {
                 <h3 class="text-paprika-c">Tous les bars</h3>
                 
                 <div class="flex items-center gap-3">
-                    <button id="reset-btn">
+                    <button id="reset-btn" aria-label="Réinitialiser le tri des bars">
                         <Image src={Reset} alt="" class="h-6 w-6" />
                     </button>
                     
-                    <button id="filter-btn" class="flex h-16 w-16 items-center justify-center rounded-full bg-white-c">
+                    <button id="filter-btn" aria-label="Trier les bars par distance" class="flex h-16 w-16 items-center justify-center rounded-full bg-white-c">
                         <Image src={Filtre} alt="" class="h-7 w-7" />
                     </button>
                 </div>
@@ -61,13 +61,13 @@ if (!selectedBar) {
             </div>
         </section>
         
-        <section class="fixed inset-0 z-50 bg-black/30">
-            <div class="absolute left-1/2 top-52 w-11/12 max-w-xl -translate-x-1/2 overflow-hidden rounded-3xl border-2 border-paprika-c bg-white-c">
+        <section class="fixed inset-0 z-50 overflow-y-auto bg-black/30 px-5 pt-36 pb-32">
+            <div class="mx-auto max-w-xl overflow-hidden rounded-3xl border-2 border-paprika-c bg-white-c">
                 
                 <div class="relative h-64 overflow-hidden">
                     <PbImage record={selectedBar} imageField="image" pb={pb} />
                     
-                    <a href="/carte" class="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-black/40">
+                    <a href="/carte" aria-label="Fermer la fiche du bar" class="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-black/40">
                         <Image src={Close} alt="" class="h-5 w-5" />
                     </a>
                 </div>
@@ -109,4 +109,21 @@ if (!selectedBar) {
     </main>
 </Layout>
 
-<script type="module" src="/src/js/filtre.js"></script>
+<script>
+    const filterBtn = document.getElementById('filter-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const barsList = document.getElementById('bars-list');
+    const originalBars = barsList ? Array.from(barsList.querySelectorAll('.bar-item')) : [];
+
+    filterBtn?.addEventListener('click', () => {
+        const sortedBars = [...originalBars].sort((a, b) => {
+            return Number(a.dataset.distance || 0) - Number(b.dataset.distance || 0);
+        });
+
+        sortedBars.forEach((bar) => barsList?.appendChild(bar));
+    });
+
+    resetBtn?.addEventListener('click', () => {
+        originalBars.forEach((bar) => barsList?.appendChild(bar));
+    });
+</script>

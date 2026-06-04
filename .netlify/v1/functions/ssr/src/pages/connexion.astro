@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout-landingpage.astro';
 
 import Header from '../components/Header.astro';
 import Eye from '../assets/eye-open.svg';
+import EyeClose from '../assets/eye-close.svg';
 
 import { Image } from 'astro:assets';
 import {
@@ -61,7 +62,7 @@ if (Astro.request.method === 'POST') {
                             class="w-full rounded-xl border-2 border-yellow-c bg-white-bk px-4 py-3 pr-14 font-normal outline-none focus:border-paprika-c"
                         />
 
-                        <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2">
+                        <button type="button" id="toggle-password" aria-label="Afficher ou masquer le mot de passe" class="absolute right-4 top-1/2 -translate-y-1/2">
                             <Image id="eye-icon" src={Eye} alt="" class="w-5 h-5" />
                         </button>
                     </div>
@@ -85,5 +86,3 @@ if (Astro.request.method === 'POST') {
         </section>
     </main>
 </Layout>
-
-<script type="module" src="/src/js/connexion.js"></script>
